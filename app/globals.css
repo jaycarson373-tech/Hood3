@@ -16,7 +16,7 @@
   --panel-soft: rgba(205, 255, 27, 0.08);
   --line: rgba(216, 255, 86, 0.18);
   --line-strong: rgba(216, 255, 86, 0.36);
-  --shadow: 0 24px 80px rgba(0, 0, 0, 0.36);
+  --shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
 }
 
 @theme inline {
@@ -39,6 +39,7 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
   margin: 0;
+  overflow-x: hidden;
 }
 
 button,
@@ -72,6 +73,8 @@ h1 {
   font-size: 74px;
   font-weight: 880;
   line-height: 0.88;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 
 h2 {
@@ -101,30 +104,34 @@ h3 {
 }
 
 .market-strip {
-  border-bottom: 1px solid rgba(216, 255, 86, 0.12);
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  margin: 0 auto;
-  max-width: 1280px;
-  min-height: 62px;
-  width: calc(100% - 44px);
+  background: var(--green);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+  min-height: 36px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.market-strip__track {
+  animation: hood3-conveyor 28s linear infinite;
+  display: flex;
+  width: max-content;
+  will-change: transform;
 }
 
 .market-strip__item {
-  align-content: center;
-  border-right: 1px solid rgba(216, 255, 86, 0.12);
-  display: grid;
-  gap: 3px;
-  min-width: 0;
-  padding: 10px 14px;
+  align-items: center;
+  border-right: 1px solid rgba(255, 255, 255, 0.28);
+  display: flex;
+  gap: 9px;
+  min-height: 36px;
+  min-width: 255px;
+  padding: 5px 18px;
 }
 
 .market-strip__item:last-child {
   border-right: 0;
 }
 
-.market-strip__item span,
-.market-strip__item small,
 .landing-stat span,
 .landing-stat small,
 .flywheel-steps span,
@@ -146,12 +153,42 @@ h3 {
   line-height: 1.25;
 }
 
+.market-strip__item span,
+.market-strip__item small {
+  color: #ffffff;
+  display: inline;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1.1;
+  text-shadow: 0 1px 2px rgba(5, 8, 5, 0.55);
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .market-strip__item strong {
-  color: var(--green);
+  color: #ffffff;
   font-family: var(--font-geist-mono), monospace;
-  font-size: 17px;
+  font-size: 14px;
   line-height: 1.05;
   overflow-wrap: anywhere;
+  text-shadow: 0 1px 2px rgba(5, 8, 5, 0.68);
+  white-space: nowrap;
+}
+
+@keyframes hood3-conveyor {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .market-strip__track {
+    animation: none;
+  }
 }
 
 .main-nav {
@@ -436,6 +473,8 @@ h3 {
 .panel,
 .feature-card,
 .how-card,
+.automation-card,
+.terminal-panel,
 .thesis-card,
 .risk-card,
 .source-panel,
@@ -929,6 +968,148 @@ h3 {
   padding: 10px 12px;
 }
 
+.automation-section {
+  display: grid;
+  gap: 18px;
+  margin-top: 18px;
+  padding: 22px;
+}
+
+.section-copy {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 760;
+  line-height: 1.55;
+  margin-top: -10px;
+  max-width: 880px;
+}
+
+.automation-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.automation-card {
+  display: grid;
+  gap: 12px;
+  min-height: 176px;
+  padding: 18px;
+}
+
+.automation-card span {
+  align-items: center;
+  background: var(--green);
+  border-radius: 999px;
+  color: #050805;
+  display: inline-flex;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  font-weight: 950;
+  height: 28px;
+  justify-content: center;
+  width: 42px;
+}
+
+.automation-card p {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 760;
+  line-height: 1.5;
+}
+
+.terminal-panel {
+  background: #050805;
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+}
+
+.terminal-head {
+  align-items: center;
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.terminal-head svg {
+  color: var(--green);
+}
+
+.terminal-log {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.terminal-row {
+  align-items: start;
+  background: rgba(255, 255, 255, 0.025);
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 12px;
+  grid-template-columns: 92px 98px 84px minmax(0, 1fr);
+  padding: 14px;
+}
+
+.terminal-row:first-child {
+  border-top: 0;
+}
+
+.terminal-row span,
+.terminal-row strong,
+.terminal-row em {
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 850;
+  line-height: 1.25;
+}
+
+.terminal-row span {
+  color: var(--muted);
+}
+
+.terminal-row strong {
+  color: var(--green);
+}
+
+.terminal-row em {
+  background: rgba(216, 255, 0, 0.14);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: #f7ffe7;
+  justify-self: start;
+  padding: 4px 8px;
+}
+
+.terminal-row p {
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 780;
+  line-height: 1.45;
+}
+
+.terminal-row small {
+  color: var(--muted);
+  display: block;
+  font-size: 12px;
+  font-weight: 760;
+  line-height: 1.45;
+  margin-top: 4px;
+}
+
+.terminal-row a {
+  color: var(--green);
+  font-weight: 900;
+}
+
+.terminal-status {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 760;
+}
+
 .how-section {
   margin-top: 18px;
   padding: 22px;
@@ -1077,9 +1258,8 @@ h3 {
 }
 
 @media (max-width: 1040px) {
-  .market-strip {
-    grid-template-columns: repeat(5, minmax(180px, 1fr));
-    overflow-x: auto;
+  .market-strip__item {
+    min-width: 230px;
   }
 
   .main-nav,
@@ -1106,7 +1286,8 @@ h3 {
   .landing-stat-row,
   .feature-grid,
   .thesis-grid,
-  .how-grid {
+  .how-grid,
+  .automation-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1122,14 +1303,13 @@ h3 {
 
 @media (max-width: 720px) {
   h1 {
-    font-size: 48px;
+    font-size: 44px;
   }
 
   h2 {
     font-size: 27px;
   }
 
-  .market-strip,
   .main-nav,
   .content-band,
   .site-footer,
@@ -1159,6 +1339,7 @@ h3 {
   .feature-grid,
   .thesis-grid,
   .how-grid,
+  .automation-grid,
   .flywheel-visual,
   .flywheel-steps,
   .account-readout,
@@ -1166,6 +1347,10 @@ h3 {
   .risk-cards,
   .two-controls,
   .compliance-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .terminal-row {
     grid-template-columns: 1fr;
   }
 
@@ -1187,7 +1372,8 @@ h3 {
 
 @media (max-width: 430px) {
   h1 {
-    font-size: 42px;
+    font-size: 34px;
+    line-height: 0.96;
   }
 
   .hero-actions,

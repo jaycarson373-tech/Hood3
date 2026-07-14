@@ -14,18 +14,16 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hood3-nlt-flywheel.sufficientlev.chatgpt.site"),
-  title: "Hood3 | HOODX Native Leverage",
-  description:
-    "A cinematic Hood3 site for HOODX burns, SOL bridge flow, and a fee-backed HOOD long dashboard.",
+  title: "Hood3 | Native Leverage Terminal",
+  description: "Hood3 automation dashboard for NLT receipts, HOODX burns, and a fee-backed HOOD long.",
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",
     apple: "/favicon.png",
   },
   openGraph: {
-    title: "Hood3 | HOODX Native Leverage",
-    description:
-      "A cinematic Hood3 site for HOODX burns, SOL bridge flow, and a fee-backed HOOD long dashboard.",
+    title: "Hood3 | Native Leverage Terminal",
+    description: "Hood3 automation dashboard for NLT receipts, HOODX burns, and a fee-backed HOOD long.",
     images: ["/hood3-logo.png"],
   },
 };

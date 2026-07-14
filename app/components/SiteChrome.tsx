@@ -4,16 +4,20 @@ import { ExternalLink } from "lucide-react";
 import { sourceLinks, topMetrics } from "../data";
 
 export function SiteHeader() {
+  const conveyorMetrics = [...topMetrics, ...topMetrics];
+
   return (
     <header className="site-header">
       <div className="market-strip" aria-label="Hood3 live desk snapshot">
-        {topMetrics.map((metric) => (
-          <div className="market-strip__item" key={metric.label}>
-            <span>{metric.label}</span>
-            <strong>{metric.value}</strong>
-            <small>{metric.detail}</small>
-          </div>
-        ))}
+        <div className="market-strip__track">
+          {conveyorMetrics.map((metric, index) => (
+            <div className="market-strip__item" key={`${metric.label}-${index}`}>
+              <span>{metric.label}</span>
+              <strong>{metric.value}</strong>
+              <small>{metric.detail}</small>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="main-nav">

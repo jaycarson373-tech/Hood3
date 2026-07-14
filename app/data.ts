@@ -24,30 +24,44 @@ export type ThesisPoint = {
   icon: LucideIcon;
 };
 
+export type AutomationStep = {
+  label: string;
+  title: string;
+  text: string;
+};
+
+export type TerminalEvent = {
+  stamp: string;
+  stage: string;
+  status: string;
+  action: string;
+  detail: string;
+};
+
 export const topMetrics: Metric[] = [
   {
     label: "Current position",
-    value: "LONG HOOD",
-    detail: "3.0x cross target",
+    value: "NO POSITION",
+    detail: "wallet not connected",
   },
   {
     label: "Size",
-    value: "$1.06M",
-    detail: "9,450 HOOD",
+    value: "$0",
+    detail: "0 HOOD",
   },
   {
     label: "Total SOL bridged",
-    value: "12,840 SOL",
-    detail: "NLT fee rail",
+    value: "0 SOL",
+    detail: "claim rail idle",
   },
   {
     label: "HOODX price",
-    value: "$1.184",
-    detail: "+4.8% 24h",
+    value: "$0.0000",
+    detail: "not trading yet",
   },
   {
     label: "Total burnt",
-    value: "428.9K",
+    value: "0",
     detail: "HOODX retired",
   },
 ];
@@ -55,18 +69,18 @@ export const topMetrics: Metric[] = [
 export const landingStats: Metric[] = [
   {
     label: "Fee run-rate",
-    value: "$26.3K",
-    detail: "monthly model",
+    value: "$0",
+    detail: "awaiting live flow",
   },
   {
     label: "NLT backing",
-    value: "$1.0631",
+    value: "$0.0000",
     detail: "per token",
   },
   {
     label: "Burn route",
-    value: "30%",
-    detail: "post-margin flow",
+    value: "0%",
+    detail: "not active yet",
   },
 ];
 
@@ -111,20 +125,53 @@ export const thesisPoints: ThesisPoint[] = [
 
 export const howItWorks = [
   {
-    title: "Bridge SOL",
-    text: "Users bridge SOL into the Hood3 fee rail. The dashboard models the bridge, HOODX price, burn count, and collateral runway.",
+    title: "Claim every 15 minutes",
+    text: "A Supabase scheduled worker claims eligible fee flow on a fixed 15-minute cadence and writes each attempt to the Hood3 terminal.",
   },
   {
-    title: "Route fees",
-    text: "Protocol fees split between margin, buy-and-burn, and reserves. Governance can change the allocation and leverage caps.",
+    title: "Send to Hyperliquid",
+    text: "Claimed SOL is routed to the configured Hyperliquid wallet, with transaction hashes stored before the next automation stage runs.",
   },
   {
-    title: "Hold HOOD long",
-    text: "The linked Hyperliquid account is read-only. If a HOOD position exists, the dashboard publishes notional size and PnL.",
+    title: "Convert to perp collateral",
+    text: "The next execution stage sells SOL to USDC, transfers collateral into the perp account, and records the settlement details.",
   },
   {
-    title: "Publish NLT backing",
-    text: "NLT displays the long notional, backing per token, refill rate, and margin stress so users can understand the flywheel.",
+    title: "Scale the HOOD long",
+    text: "The executor opens or adds to the HOOD long, then publishes NLT backing. NLT means Native Leverage Token flywheel.",
+  },
+];
+
+export const automationSteps: AutomationStep[] = [
+  {
+    label: "01",
+    title: "Auto claim",
+    text: "Supabase cron triggers every 15 minutes and logs claim status before funds move.",
+  },
+  {
+    label: "02",
+    title: "Auto send",
+    text: "Claimed SOL routes to the configured Hyperliquid wallet and posts a scan link.",
+  },
+  {
+    label: "03",
+    title: "Auto swap",
+    text: "SOL-to-USDC execution is staged for the collateral account after wallet wiring is live.",
+  },
+  {
+    label: "04",
+    title: "Auto long",
+    text: "USDC moves to the perp account and the executor scales the HOOD long inside risk limits.",
+  },
+];
+
+export const terminalEvents: TerminalEvent[] = [
+  {
+    stamp: "WAITING",
+    stage: "SYSTEM",
+    status: "IDLE",
+    action: "No live transactions yet",
+    detail: "Connect Supabase to stream claims, transfers, swaps, perp deposits, HOOD orders, and burns here.",
   },
 ];
 
@@ -185,8 +232,8 @@ export const homePillars = [
     icon: Flame,
   },
   {
-    title: "Read-only by default",
-    text: "The account link reads public Hyperliquid state only. No signing, custody, or order placement exists in this prototype.",
+    title: "Automation with receipts",
+    text: "The execution rail keeps private keys server-side while the site publishes every claim, transfer, swap, order, and burn event.",
     icon: ShieldCheck,
   },
 ];

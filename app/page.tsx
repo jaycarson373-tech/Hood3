@@ -14,8 +14,8 @@ export default function Home() {
           <p className="eyebrow">HOODX native leverage terminal</p>
           <h1>Hood3</h1>
           <p className="hero-lede">
-            Hood3 turns protocol flow into a transparent NLT flywheel: bridge SOL, route fees, expand a HOOD long, burn
-            HOODX, and publish the position like a professional onchain desk.
+            Hood3 turns protocol flow into a transparent NLT flywheel: claim fees, route SOL, fund Hyperliquid, expand a
+            HOOD long, burn HOODX, and publish the receipts like a professional onchain desk.
           </p>
 
           <div className="hero-actions">
@@ -35,8 +35,8 @@ export default function Home() {
 
         <div className="hero-command">
           <span>Desk mode</span>
-          <strong>Fee-backed long exposure</strong>
-          <small>Brand system: lime, black, and high-contrast data</small>
+          <strong>Automation rail ready</strong>
+          <small>Zeroed until live Supabase events arrive</small>
         </div>
       </section>
 
@@ -56,8 +56,8 @@ export default function Home() {
           <h2>A cleaner surface for an aggressive thesis.</h2>
         </div>
         <p>
-          The homepage stays focused on the visual identity and live desk snapshot. The mechanics now live on the
-          dashboard, while the long-form HOOD bull case has its own dedicated page.
+          The homepage stays focused on the visual identity and live desk snapshot. The dashboard holds the automation
+          rail, transaction terminal, and NLT backing logic; the HOOD bull case has its own dedicated page.
         </p>
       </section>
 
@@ -100,7 +100,7 @@ export default function Home() {
         </div>
         <div>
           <ShieldCheck size={18} aria-hidden="true" />
-          <span>Prototype remains read-only and does not place trades.</span>
+          <span>Execution is server-side only, with browser keys kept out of the product surface.</span>
         </div>
       </section>
 

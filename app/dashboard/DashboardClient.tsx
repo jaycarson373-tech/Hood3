@@ -4,16 +4,17 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
   CircleDollarSign,
-  Database,
   ExternalLink,
   Gauge,
   Link2,
+  ListChecks,
   RefreshCcw,
   ShieldCheck,
+  Terminal,
   TrendingUp,
   WalletCards,
 } from "lucide-react";
-import { howItWorks } from "../data";
+import { automationSteps, howItWorks, terminalEvents } from "../data";
 
 type LoadState = "idle" | "loading" | "linked" | "error";
 
@@ -52,31 +53,32 @@ type NormalizedPosition = {
   pnl: number;
 };
 
-const demoAccount: HyperliquidAccount = {
-  marginSummary: {
-    accountValue: "418200.41",
-    totalNtlPos: "1254600.00",
-    totalMarginUsed: "139400.00",
-  },
-  crossMarginSummary: {
-    accountValue: "418200.41",
-    totalNtlPos: "1254600.00",
-    totalMarginUsed: "139400.00",
-  },
-  assetPositions: [
-    {
-      position: {
-        coin: "HOOD",
-        szi: "9450",
-        positionValue: "1063125",
-        unrealizedPnl: "68440",
-        entryPx: "104.76",
-        leverage: { type: "cross", value: 3 },
-      },
-    },
-  ],
+type SupabaseTerminalRow = {
+  id: number;
+  created_at: string;
+  stage: string;
+  status: string;
+  action: string;
+  message: string | null;
+  asset: string | null;
+  amount: string | number | null;
+  tx_hash: string | null;
+  scan_url: string | null;
 };
 
+type SupabasePositionRow = {
+  recorded_at: string;
+  hyperliquid_account: string;
+  market: string;
+  side: string;
+  size: string | number;
+  notional_usdc: string | number;
+  leverage: string | number;
+  unrealized_pnl_usdc: string | number;
+};
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const addressPattern = /^0x[a-fA-F0-9]{40}$/;
 
 function safeNumber(value: unknown, fallback = 0) {
@@ -103,6 +105,23 @@ function shortAddress(address: string) {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
+function shortHash(hash: string) {
+  return `${hash.slice(0, 8)}...${hash.slice(-6)}`;
+}
+
+function terminalTime(value: string) {
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return "LIVE";
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(date);
+}
+
 function normalizePositions(account: HyperliquidAccount | null): NormalizedPosition[] {
   return (account?.assetPositions ?? [])
     .map((item) => item.position)
@@ -120,12 +139,17 @@ export function DashboardClient() {
   const [status, setStatus] = useState<LoadState>("idle");
   const [message, setMessage] = useState("Paste a Hyperliquid master or sub-account address to read public perps state.");
   const [account, setAccount] = useState<HyperliquidAccount | null>(null);
-  const [monthlyVolume, setMonthlyVolume] = useState(7_500_000);
-  const [feeBps, setFeeBps] = useState(35);
-  const [allocation, setAllocation] = useState(70);
-  const [targetLeverage, setTargetLeverage] = useState(3);
-  const [hoodMark, setHoodMark] = useState(112.5);
-  const [nltSupply, setNltSupply] = useState(1_000_000);
+  const [monthlyVolume, setMonthlyVolume] = useState(0);
+  const [feeBps, setFeeBps] = useState(0);
+  const [allocation, setAllocation] = useState(0);
+  const [targetLeverage, setTargetLeverage] = useState(0);
+  const [hoodMark, setHoodMark] = useState(0);
+  const [nltSupply, setNltSupply] = useState(0);
+  const [terminalRows, setTerminalRows] = useState<SupabaseTerminalRow[]>([]);
+  const [latestPosition, setLatestPosition] = useState<SupabasePositionRow | null>(null);
+  const [supabaseStatus, setSupabaseStatus] = useState(
+    "Supabase not connected. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.",
+  );
   const cleanAddress = address.trim();
   const isValidAddress = addressPattern.test(cleanAddress);
   const scanUrl = isValidAddress ? `https://hypurrscan.io/address/${cleanAddress}` : null;
@@ -133,24 +157,84 @@ export function DashboardClient() {
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
       const savedAddress = window.localStorage.getItem("hood3-hyperliquid-address");
-      const savedAccount = window.localStorage.getItem("hood3-demo-account");
 
       if (savedAddress) {
         setAddress(savedAddress);
-      }
-
-      if (savedAccount === "true") {
-        setAccount(demoAccount);
-        setStatus("linked");
-        setMessage("Demo account loaded. Replace it with a real Hyperliquid address whenever you want.");
       }
     });
 
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
+  useEffect(() => {
+    if (!supabaseUrl || !supabaseAnonKey) {
+      return;
+    }
+
+    let active = true;
+
+    async function readSupabaseViews() {
+      try {
+        const headers = {
+          apikey: supabaseAnonKey ?? "",
+          Authorization: `Bearer ${supabaseAnonKey}`,
+        };
+        const [terminalResponse, positionResponse] = await Promise.all([
+          fetch(`${supabaseUrl}/rest/v1/hood3_public_terminal?select=*&order=created_at.desc&limit=12`, {
+            headers,
+          }),
+          fetch(`${supabaseUrl}/rest/v1/hood3_latest_position?select=*&market=eq.HOOD&limit=1`, {
+            headers,
+          }),
+        ]);
+
+        if (!terminalResponse.ok) {
+          throw new Error(`Terminal feed returned ${terminalResponse.status}`);
+        }
+
+        if (!positionResponse.ok) {
+          throw new Error(`Position feed returned ${positionResponse.status}`);
+        }
+
+        const nextTerminalRows = (await terminalResponse.json()) as SupabaseTerminalRow[];
+        const nextPositionRows = (await positionResponse.json()) as SupabasePositionRow[];
+
+        if (!active) return;
+
+        setTerminalRows(nextTerminalRows);
+        setLatestPosition(nextPositionRows[0] ?? null);
+        setSupabaseStatus("Supabase connected. Polling public receipts every 15 seconds.");
+      } catch (error) {
+        if (!active) return;
+        setSupabaseStatus(error instanceof Error ? error.message : "Could not read Supabase public views.");
+      }
+    }
+
+    void readSupabaseViews();
+    const timer = window.setInterval(readSupabaseViews, 15_000);
+
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+    };
+  }, []);
+
   const positions = useMemo(() => normalizePositions(account), [account]);
   const hoodPositions = positions.filter((position) => position.coin.toUpperCase().includes("HOOD"));
+  const supabaseHoodLong =
+    latestPosition?.side?.toLowerCase() === "long" ? Math.abs(safeNumber(latestPosition.notional_usdc)) : 0;
+  const supabaseHoodPnl = safeNumber(latestPosition?.unrealized_pnl_usdc);
+  const supabasePositionRows: NormalizedPosition[] = latestPosition
+    ? [
+        {
+          coin: latestPosition.market,
+          size: safeNumber(latestPosition.size),
+          notional: Math.abs(safeNumber(latestPosition.notional_usdc)),
+          pnl: supabaseHoodPnl,
+        },
+      ]
+    : [];
+  const displayedPositions = hoodPositions.length ? hoodPositions : positions.length ? positions.slice(0, 3) : supabasePositionRows;
   const liveHoodLong = hoodPositions
     .filter((position) => position.size > 0)
     .reduce((sum, position) => sum + position.notional, 0);
@@ -162,7 +246,9 @@ export function DashboardClient() {
   const monthlyFees = monthlyVolume * (feeBps / 10_000);
   const monthlyAllocation = monthlyFees * (allocation / 100);
   const projectedLongNotional = monthlyAllocation * targetLeverage;
-  const displayedLongNotional = liveHoodLong > 0 ? liveHoodLong : projectedLongNotional;
+  const displayedLongNotional = liveHoodLong > 0 ? liveHoodLong : supabaseHoodLong > 0 ? supabaseHoodLong : projectedLongNotional;
+  const displayedPnl = liveHoodLong > 0 ? liveHoodPnl : supabaseHoodPnl;
+  const exposureSource = liveHoodLong > 0 ? "Linked HOOD long" : supabaseHoodLong > 0 ? "Supabase HOOD long" : "Projected HOOD long";
   const projectedShares = hoodMark > 0 ? projectedLongNotional / hoodMark : 0;
   const backingPerNlt = displayedLongNotional / Math.max(nltSupply, 1);
   const refillRate = displayedLongNotional > 0 ? (monthlyAllocation / displayedLongNotional) * 100 : 0;
@@ -199,19 +285,10 @@ export function DashboardClient() {
       setStatus("linked");
       setMessage("Account linked in read-only mode. HOOD exposure appears when a matching position exists.");
       window.localStorage.setItem("hood3-hyperliquid-address", cleanAddress);
-      window.localStorage.removeItem("hood3-demo-account");
     } catch (error) {
       setStatus("error");
-      setMessage(error instanceof Error ? error.message : "Could not read the account. Try again or use the demo state.");
+      setMessage(error instanceof Error ? error.message : "Could not read the account. Check the address and try again.");
     }
-  }
-
-  function loadDemo() {
-    setAddress("0x0000000000000000000000000000000000000000");
-    setAccount(demoAccount);
-    setStatus("linked");
-    setMessage("Demo account loaded. It shows the intended Hood3 readout before production plumbing.");
-    window.localStorage.setItem("hood3-demo-account", "true");
   }
 
   function clearAccount() {
@@ -220,7 +297,6 @@ export function DashboardClient() {
     setStatus("idle");
     setMessage("Paste a Hyperliquid master or sub-account address to read public perps state.");
     window.localStorage.removeItem("hood3-hyperliquid-address");
-    window.localStorage.removeItem("hood3-demo-account");
   }
 
   return (
@@ -229,8 +305,8 @@ export function DashboardClient() {
         <p className="eyebrow">Hood3 dashboard</p>
         <h1>NLT flywheel desk</h1>
         <p>
-          Model fee flow, link a read-only Hyperliquid account, and publish the HOOD long amount that backs HOODX native
-          leverage.
+          Model fee flow, link a Hyperliquid account, and publish the HOOD long amount that backs the NLT, the Native
+          Leverage Token flywheel.
         </p>
       </section>
 
@@ -251,7 +327,7 @@ export function DashboardClient() {
               <div className="flywheel-core">
                 <span>HOOD long</span>
                 <strong>{money(displayedLongNotional)}</strong>
-                <small>{liveHoodLong > 0 ? "linked account" : "simulated"}</small>
+                <small>{liveHoodLong > 0 ? "linked account" : "waiting for flow"}</small>
               </div>
             </div>
             <div className="flywheel-legend">
@@ -304,7 +380,7 @@ export function DashboardClient() {
             <span>Monthly feeable flow</span>
             <input
               type="number"
-              min="10000"
+              min="0"
               step="10000"
               value={monthlyVolume}
               onChange={(event) => setMonthlyVolume(safeNumber(event.target.value, monthlyVolume))}
@@ -317,7 +393,7 @@ export function DashboardClient() {
             </span>
             <input
               type="range"
-              min="5"
+              min="0"
               max="100"
               value={feeBps}
               onChange={(event) => setFeeBps(safeNumber(event.target.value, feeBps))}
@@ -330,7 +406,7 @@ export function DashboardClient() {
             </span>
             <input
               type="range"
-              min="10"
+              min="0"
               max="95"
               value={allocation}
               onChange={(event) => setAllocation(safeNumber(event.target.value, allocation))}
@@ -342,7 +418,7 @@ export function DashboardClient() {
               <span>Target leverage</span>
               <input
                 type="number"
-                min="1"
+                min="0"
                 max="5"
                 step="0.25"
                 value={targetLeverage}
@@ -350,10 +426,10 @@ export function DashboardClient() {
               />
             </label>
             <label className="control">
-              <span>Demo HOOD mark</span>
+              <span>HOOD mark</span>
               <input
                 type="number"
-                min="1"
+                min="0"
                 step="0.01"
                 value={hoodMark}
                 onChange={(event) => setHoodMark(safeNumber(event.target.value, hoodMark))}
@@ -365,7 +441,7 @@ export function DashboardClient() {
             <span>NLT supply</span>
             <input
               type="number"
-              min="1"
+              min="0"
               step="1000"
               value={nltSupply}
               onChange={(event) => setNltSupply(safeNumber(event.target.value, nltSupply))}
@@ -403,7 +479,7 @@ export function DashboardClient() {
 
           <div className={`status-pill ${status}`}>
             <span aria-hidden="true" />
-            {status === "loading" ? "Reading account" : status === "linked" ? "Account linked" : status === "error" ? "Needs attention" : "Demo or link"}
+            {status === "loading" ? "Reading account" : status === "linked" ? "Account linked" : status === "error" ? "Needs attention" : "Ready to link"}
           </div>
 
           <label className="control address-control">
@@ -420,10 +496,6 @@ export function DashboardClient() {
             <button className="button primary" type="button" onClick={linkAccount} disabled={status === "loading"}>
               <Link2 size={17} aria-hidden="true" />
               Read account
-            </button>
-            <button className="button ghost" type="button" onClick={loadDemo}>
-              <Database size={17} aria-hidden="true" />
-              Demo
             </button>
             {scanUrl ? (
               <a className="button ghost" href={scanUrl} target="_blank" rel="noreferrer">
@@ -488,9 +560,13 @@ export function DashboardClient() {
           </div>
 
           <div className="exposure-number">
-            <span>{liveHoodLong > 0 ? "Linked HOOD long" : "Projected HOOD long"}</span>
+            <span>{exposureSource}</span>
             <strong>{money(displayedLongNotional)}</strong>
-            <small>{liveHoodLong > 0 ? `${money(liveHoodPnl)} unrealized PnL` : `${money(monthlyAllocation)} fee allocation at ${targetLeverage}x`}</small>
+            <small>
+              {liveHoodLong > 0 || supabaseHoodLong > 0
+                ? `${money(displayedPnl)} unrealized PnL`
+                : "Waiting for live account or Supabase position row"}
+            </small>
           </div>
 
           <div className="positions-table">
@@ -500,7 +576,7 @@ export function DashboardClient() {
               <span>Notional</span>
               <span>PnL</span>
             </div>
-            {(hoodPositions.length ? hoodPositions : positions.slice(0, 3)).map((position) => (
+            {displayedPositions.map((position) => (
               <div className="table-row" key={`${position.coin}-${position.notional}-${position.size}`}>
                 <span>{position.coin}</span>
                 <span>{new Intl.NumberFormat("en-US", { maximumFractionDigits: 4 }).format(position.size)}</span>
@@ -508,17 +584,90 @@ export function DashboardClient() {
                 <span className={position.pnl >= 0 ? "positive" : "negative"}>{money(position.pnl)}</span>
               </div>
             ))}
-            {!positions.length && (
+            {!displayedPositions.length && (
               <div className="empty-row">
-                Link an account or load the demo state to populate public positions.
+                Link an account to populate public positions. Supabase can also publish the latest HOOD long here.
               </div>
             )}
           </div>
 
           <div className="disclosure">
             <ShieldCheck size={18} aria-hidden="true" />
-            No private keys, signatures, custody, or order placement in this prototype.
+            No private keys in the browser. Execution belongs in server-side Supabase workers.
           </div>
+        </div>
+      </section>
+
+      <section className="content-band automation-section">
+        <div className="section-heading">
+          <span className="icon-chip">
+            <ListChecks size={18} aria-hidden="true" />
+          </span>
+          <div>
+            <p className="kicker">Automation rail</p>
+            <h2>Designed to run end to end.</h2>
+          </div>
+        </div>
+
+        <p className="section-copy">
+          The live rail is automated once Supabase, wallet secrets, and risk limits are connected: claim fees, send SOL,
+          convert to USDC, fund the perp account, scale the HOOD long, and publish receipts.
+        </p>
+
+        <div className="automation-grid">
+          {automationSteps.map((step) => (
+            <article className="automation-card" key={step.label}>
+              <span>{step.label}</span>
+              <h3>{step.title}</h3>
+              <p>{step.text}</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="terminal-panel">
+          <div className="terminal-head">
+            <div>
+              <p className="kicker">Hood3 terminal</p>
+              <h2>Transaction feed.</h2>
+            </div>
+            <Terminal size={20} aria-hidden="true" />
+          </div>
+          <div className="terminal-log" aria-label="Hood3 transaction terminal">
+            {terminalRows.length
+              ? terminalRows.map((event) => (
+                  <div className="terminal-row" key={event.id}>
+                    <span>{terminalTime(event.created_at)}</span>
+                    <strong>{event.stage}</strong>
+                    <em>{event.status.toUpperCase()}</em>
+                    <p>
+                      {event.action}
+                      <small>
+                        {event.message ?? "Receipt recorded"}
+                        {event.tx_hash && event.scan_url ? (
+                          <>
+                            {" "}
+                            <a href={event.scan_url} target="_blank" rel="noreferrer">
+                              {shortHash(event.tx_hash)}
+                            </a>
+                          </>
+                        ) : null}
+                      </small>
+                    </p>
+                  </div>
+                ))
+              : terminalEvents.map((event) => (
+                  <div className="terminal-row" key={`${event.stage}-${event.action}`}>
+                    <span>{event.stamp}</span>
+                    <strong>{event.stage}</strong>
+                    <em>{event.status}</em>
+                    <p>
+                      {event.action}
+                      <small>{event.detail}</small>
+                    </p>
+                  </div>
+                ))}
+          </div>
+          <p className="terminal-status">{supabaseStatus}</p>
         </div>
       </section>
 
@@ -529,7 +678,7 @@ export function DashboardClient() {
           </span>
           <div>
             <p className="kicker">How it works</p>
-            <h2>From SOL bridge to HOODX burn.</h2>
+            <h2>From claim to HOOD long.</h2>
           </div>
         </div>
 
