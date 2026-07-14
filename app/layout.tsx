@@ -13,12 +13,19 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Hood3 NLT Flywheel",
+  title: "Hood3 | HOODX Native Leverage",
   description:
-    "A simple Hood3 dashboard for routing fees into a HOOD long and publishing NLT backing.",
+    "A cinematic Hood3 site for HOODX burns, SOL bridge flow, and a fee-backed HOOD long dashboard.",
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/favicon.png",
+    shortcut: "/favicon.png",
+    apple: "/favicon.png",
+  },
+  openGraph: {
+    title: "Hood3 | HOODX Native Leverage",
+    description:
+      "A cinematic Hood3 site for HOODX burns, SOL bridge flow, and a fee-backed HOOD long dashboard.",
+    images: ["/hood3-logo.png"],
   },
 };
 
