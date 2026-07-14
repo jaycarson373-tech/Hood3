@@ -278,6 +278,7 @@ h3 {
 }
 
 .contract-chip,
+.account-link,
 .social-link,
 .nav-cta {
   align-items: center;
@@ -314,6 +315,27 @@ h3 {
   white-space: nowrap;
 }
 
+.account-link {
+  background: rgba(57, 200, 196, 0.09);
+  border: 1px solid rgba(57, 200, 196, 0.36);
+  color: #f3ffe6;
+  gap: 7px;
+  min-width: 148px;
+  padding: 0 10px;
+}
+
+.account-link span {
+  color: var(--cyan);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+}
+
+.account-link code {
+  color: #ffffff;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+}
+
 .social-link {
   background: rgba(255, 255, 255, 0.045);
   border: 1px solid var(--line);
@@ -323,6 +345,8 @@ h3 {
   padding: 0 12px;
 }
 
+.account-link:hover,
+.account-link:focus-visible,
 .social-link:hover,
 .social-link:focus-visible {
   border-color: var(--green);
@@ -944,6 +968,15 @@ h3 {
 .scan-card a:focus-visible {
   color: var(--green-strong);
   outline: none;
+}
+
+.public-account-card {
+  background: rgba(57, 200, 196, 0.08);
+  border-color: rgba(57, 200, 196, 0.32);
+}
+
+.public-account-card span {
+  color: #aaf2ef;
 }
 
 .exposure-number {

@@ -38,11 +38,22 @@ export type TerminalEvent = {
   detail: string;
 };
 
+export const hood3ContractAddress = "E5GgVo7dLPUgebUrNLDR6tWVWktgo74a2FfEJmrtpump";
+export const hood3XUrl = "https://x.com/HOOD3pf";
+export const hood3HyperliquidAccount = "0xdF099e764bB99654a7BaE0c0FE89bD8b86ABf45f";
+export const hood3HyperliquidAccountShort = "0xdF09...f45f";
+export const hood3HyperliquidScanUrl = `https://hypurrscan.io/address/${hood3HyperliquidAccount}`;
+
 export const topMetrics: Metric[] = [
   {
     label: "Current position",
     value: "NO POSITION",
     detail: "wallet not connected",
+  },
+  {
+    label: "Hyperliquid account",
+    value: hood3HyperliquidAccountShort,
+    detail: "HypurrScan linked",
   },
   {
     label: "Size",
@@ -188,6 +199,10 @@ export const risks = [
 ];
 
 export const sourceLinks = [
+  {
+    label: "Hood3 Hyperliquid account",
+    href: hood3HyperliquidScanUrl,
+  },
   {
     label: "Robinhood IR overview",
     href: "https://investors.robinhood.com/",

@@ -14,7 +14,13 @@ import {
   TrendingUp,
   WalletCards,
 } from "lucide-react";
-import { automationSteps, howItWorks, terminalEvents } from "../data";
+import {
+  automationSteps,
+  hood3HyperliquidAccount,
+  hood3HyperliquidScanUrl,
+  howItWorks,
+  terminalEvents,
+} from "../data";
 
 type LoadState = "idle" | "loading" | "linked" | "error";
 
@@ -479,6 +485,15 @@ export function DashboardClient() {
           <div className={`status-pill ${status}`}>
             <span aria-hidden="true" />
             {status === "loading" ? "Reading account" : status === "linked" ? "Account linked" : status === "error" ? "Needs attention" : "Ready to link"}
+          </div>
+
+          <div className="scan-card public-account-card">
+            <span>Hood3 Hyperliquid account</span>
+            <strong>{shortAddress(hood3HyperliquidAccount)}</strong>
+            <a href={hood3HyperliquidScanUrl} target="_blank" rel="noreferrer">
+              View live position on HypurrScan
+              <ExternalLink size={14} aria-hidden="true" />
+            </a>
           </div>
 
           <label className="control address-control">

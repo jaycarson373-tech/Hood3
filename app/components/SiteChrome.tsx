@@ -1,10 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
-import { sourceLinks, topMetrics } from "../data";
-
-const contractAddress = "E5GgVo7dLPUgebUrNLDR6tWVWktgo74a2FfEJmrtpump";
-const xUrl = "https://x.com/HOOD3pf";
+import {
+  hood3ContractAddress,
+  hood3HyperliquidAccount,
+  hood3HyperliquidAccountShort,
+  hood3HyperliquidScanUrl,
+  hood3XUrl,
+  sourceLinks,
+  topMetrics,
+} from "../data";
 
 export function SiteHeader() {
   const conveyorMetrics = [...topMetrics, ...topMetrics];
@@ -41,11 +46,27 @@ export function SiteHeader() {
         </nav>
 
         <div className="header-actions">
-          <div className="contract-chip" title={contractAddress} aria-label={`Contract address ${contractAddress}`}>
+          <div
+            className="contract-chip"
+            title={hood3ContractAddress}
+            aria-label={`Contract address ${hood3ContractAddress}`}
+          >
             <span>CA</span>
-            <code>{contractAddress}</code>
+            <code>{hood3ContractAddress}</code>
           </div>
-          <a className="social-link" href={xUrl} target="_blank" rel="noreferrer" aria-label="Open Hood3 on X">
+          <a
+            className="account-link"
+            href={hood3HyperliquidScanUrl}
+            target="_blank"
+            rel="noreferrer"
+            title={hood3HyperliquidAccount}
+            aria-label={`View Hood3 Hyperliquid account ${hood3HyperliquidAccount} on HypurrScan`}
+          >
+            <span>HL</span>
+            <code>{hood3HyperliquidAccountShort}</code>
+            <ExternalLink size={14} aria-hidden="true" />
+          </a>
+          <a className="social-link" href={hood3XUrl} target="_blank" rel="noreferrer" aria-label="Open Hood3 on X">
             X
             <ExternalLink size={14} aria-hidden="true" />
           </a>
