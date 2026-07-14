@@ -26,9 +26,17 @@ insert into public.hood3_config (config_key, config_value)
 values
   ('automation_enabled', '{"enabled": false, "note": "Flip on only after wallet secrets, risk limits, and dry-run checks are configured."}'::jsonb),
   ('claim_interval_minutes', '{"minutes": 15}'::jsonb),
+  ('sol_transfer_policy', '{"buffer_sol": 0.05, "send_rule": "send_all_above_buffer_to_hyperliquid_wallet"}'::jsonb),
   ('nlt_definition', '{"label": "NLT flywheel"}'::jsonb),
   ('risk_limits', '{"max_order_notional_usdc": 0, "max_leverage": 0, "max_slippage_bps": 0, "dry_run": true}'::jsonb)
 on conflict (config_key) do nothing;
+
+insert into public.hood3_config (config_key, config_value)
+values ('sol_transfer_policy', '{"buffer_sol": 0.05, "send_rule": "send_all_above_buffer_to_hyperliquid_wallet"}'::jsonb)
+on conflict (config_key) do update
+set
+  config_value = excluded.config_value,
+  updated_at = now();
 
 create table if not exists public.hood3_wallets (
   id uuid primary key default gen_random_uuid(),
