@@ -73,6 +73,11 @@ export const landingStats: Metric[] = [
     detail: "awaiting live flow",
   },
   {
+    label: "HOODX price",
+    value: "$0.0000",
+    detail: "price feed idle",
+  },
+  {
     label: "NLT backing",
     value: "$0.0000",
     detail: "per token",

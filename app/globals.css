@@ -518,7 +518,7 @@ h3 {
 .landing-stat-row {
   display: grid;
   gap: 1px;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   margin: -26px auto 0;
   max-width: 1180px;
   position: relative;
