@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://hood3-nlt-flywheel.sufficientlev.chatgpt.site"),
   title: "Hood3 | HOODX Native Leverage",
   description:
     "A cinematic Hood3 site for HOODX burns, SOL bridge flow, and a fee-backed HOOD long dashboard.",
