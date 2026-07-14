@@ -5,6 +5,7 @@ import {
   ArrowRight,
   CircleDollarSign,
   Database,
+  ExternalLink,
   Gauge,
   Link2,
   RefreshCcw,
@@ -125,6 +126,9 @@ export function DashboardClient() {
   const [targetLeverage, setTargetLeverage] = useState(3);
   const [hoodMark, setHoodMark] = useState(112.5);
   const [nltSupply, setNltSupply] = useState(1_000_000);
+  const cleanAddress = address.trim();
+  const isValidAddress = addressPattern.test(cleanAddress);
+  const scanUrl = isValidAddress ? `https://hypurrscan.io/address/${cleanAddress}` : null;
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -165,9 +169,7 @@ export function DashboardClient() {
   const burnFlow = monthlyFees - monthlyAllocation;
 
   async function linkAccount() {
-    const cleanAddress = address.trim();
-
-    if (!addressPattern.test(cleanAddress)) {
+    if (!isValidAddress) {
       setStatus("error");
       setMessage("Enter a 42-character 0x Hyperliquid account address.");
       return;
@@ -423,12 +425,36 @@ export function DashboardClient() {
               <Database size={17} aria-hidden="true" />
               Demo
             </button>
+            {scanUrl ? (
+              <a className="button ghost" href={scanUrl} target="_blank" rel="noreferrer">
+                <ExternalLink size={17} aria-hidden="true" />
+                Open scan
+              </a>
+            ) : (
+              <button className="button ghost" type="button" disabled title="Enter a valid 0x wallet to open HypurrScan">
+                <ExternalLink size={17} aria-hidden="true" />
+                Open scan
+              </button>
+            )}
             <button className="icon-button" type="button" onClick={clearAccount} aria-label="Clear linked account">
               <RefreshCcw size={18} aria-hidden="true" />
             </button>
           </div>
 
           <p className="helper-text">{message}</p>
+
+          <div className="scan-card">
+            <span>Hyperliquid scan</span>
+            <strong>{isValidAddress ? shortAddress(cleanAddress) : "Waiting for wallet"}</strong>
+            {scanUrl ? (
+              <a href={scanUrl} target="_blank" rel="noreferrer">
+                View account on HypurrScan
+                <ExternalLink size={14} aria-hidden="true" />
+              </a>
+            ) : (
+              <small>Paste a valid wallet to unlock the external account view.</small>
+            )}
+          </div>
 
           <div className="account-readout">
             <div>

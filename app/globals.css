@@ -133,6 +133,8 @@ h3 {
 .risk-strip span,
 .exposure-number span,
 .exposure-number small,
+.scan-card span,
+.scan-card small,
 .status-pill,
 .helper-text,
 .kicker,
@@ -814,6 +816,38 @@ h3 {
 
 .account-readout {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.scan-card {
+  background: rgba(200, 255, 0, 0.08);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+}
+
+.scan-card strong {
+  color: #f7ffe7;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 18px;
+  line-height: 1.1;
+}
+
+.scan-card a {
+  align-items: center;
+  color: var(--green);
+  display: inline-flex;
+  font-size: 13px;
+  font-weight: 850;
+  gap: 7px;
+  justify-self: start;
+}
+
+.scan-card a:hover,
+.scan-card a:focus-visible {
+  color: var(--green-strong);
+  outline: none;
 }
 
 .exposure-number {
