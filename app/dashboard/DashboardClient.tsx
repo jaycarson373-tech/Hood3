@@ -305,8 +305,7 @@ export function DashboardClient() {
         <p className="eyebrow">Hood3 dashboard</p>
         <h1>NLT flywheel desk</h1>
         <p>
-          Model fee flow, link a Hyperliquid account, and publish the HOOD long amount that backs the NLT, the Native
-          Leverage Token flywheel.
+          Model fee flow, link a Hyperliquid account, and publish the HOOD long amount that backs the NLT flywheel.
         </p>
       </section>
 
