@@ -12,18 +12,41 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteTitle = "Hood3 | Native Leverage Terminal";
+const siteDescription =
+  "Automated NLT flywheel for routing fees into a transparent HOOD long, with live Hyperliquid receipts, burns, and position tracking.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://hood3-nlt-flywheel.sufficientlev.chatgpt.site"),
-  title: "Hood3 | Native Leverage Terminal",
-  description: "Hood3 automation dashboard for NLT receipts, HOODX burns, and a fee-backed HOOD long.",
+  metadataBase: new URL("https://www.hood3pump.fun"),
+  title: siteTitle,
+  description: siteDescription,
+  alternates: {
+    canonical: "/",
+  },
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",
     apple: "/favicon.png",
   },
   openGraph: {
-    title: "Hood3 | Native Leverage Terminal",
-    description: "Hood3 automation dashboard for NLT receipts, HOODX burns, and a fee-backed HOOD long.",
+    title: siteTitle,
+    description: siteDescription,
+    url: "/",
+    siteName: "Hood3",
+    type: "website",
+    images: [
+      {
+        url: "/hood3-logo.png",
+        width: 1280,
+        height: 1195,
+        alt: "Hood3 logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteTitle,
+    description: siteDescription,
     images: ["/hood3-logo.png"],
   },
 };
