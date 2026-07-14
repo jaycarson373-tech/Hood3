@@ -27,7 +27,7 @@ export function SiteHeader() {
           </span>
           <span>
             <strong>Hood3</strong>
-            <small>HOODX native leverage</small>
+            <small>NLT flywheel</small>
           </span>
         </Link>
 

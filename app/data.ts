@@ -138,7 +138,7 @@ export const howItWorks = [
   },
   {
     title: "Scale the HOOD long",
-    text: "The executor opens or adds to the HOOD long, then publishes NLT backing. NLT means Native Leverage Token flywheel.",
+    text: "The executor opens or adds to the HOOD long, then publishes NLT backing and the live flywheel state.",
   },
 ];
 

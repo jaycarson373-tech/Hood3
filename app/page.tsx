@@ -11,7 +11,7 @@ export default function Home() {
 
       <section className="landing-hero">
         <div className="landing-content">
-          <p className="eyebrow">HOODX native leverage terminal</p>
+          <p className="eyebrow">Hood3 automation terminal</p>
           <h1>Hood3</h1>
           <p className="hero-lede">
             Hood3 turns protocol flow into a transparent NLT flywheel: claim fees, route SOL, fund Hyperliquid, expand a

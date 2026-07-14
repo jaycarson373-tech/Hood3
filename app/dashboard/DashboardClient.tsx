@@ -317,7 +317,7 @@ export function DashboardClient() {
               <RefreshCcw size={18} aria-hidden="true" />
             </span>
             <div>
-              <p className="kicker">Native Leverage Token</p>
+              <p className="kicker">NLT flywheel</p>
               <h2>Fee-to-long flywheel</h2>
             </div>
           </div>

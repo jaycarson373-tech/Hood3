@@ -26,7 +26,7 @@ insert into public.hood3_config (config_key, config_value)
 values
   ('automation_enabled', '{"enabled": false, "note": "Flip on only after wallet secrets, risk limits, and dry-run checks are configured."}'::jsonb),
   ('claim_interval_minutes', '{"minutes": 15}'::jsonb),
-  ('nlt_definition', '{"label": "Native Leverage Token flywheel"}'::jsonb),
+  ('nlt_definition', '{"label": "NLT flywheel"}'::jsonb),
   ('risk_limits', '{"max_order_notional_usdc": 0, "max_leverage": 0, "max_slippage_bps": 0, "dry_run": true}'::jsonb)
 on conflict (config_key) do nothing;
 

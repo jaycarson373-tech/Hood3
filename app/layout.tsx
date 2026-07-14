@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteTitle = "Hood3 | Native Leverage Terminal";
+const siteTitle = "Hood3 | NLT Flywheel";
 const siteDescription =
   "Automated NLT flywheel for routing fees into a transparent HOOD long, with live Hyperliquid receipts, burns, and position tracking.";
 

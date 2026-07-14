@@ -5,7 +5,7 @@ import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
 export const metadata = {
   title: "Hood Thesis | Hood3",
-  description: "The Hood3 bull case for a fee-backed HOOD long and HOODX native leverage token.",
+  description: "The Hood3 bull case for a fee-backed HOOD long and NLT flywheel.",
 };
 
 export default function ThesisPage() {
