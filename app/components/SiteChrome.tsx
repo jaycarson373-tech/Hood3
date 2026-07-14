@@ -3,6 +3,9 @@ import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import { sourceLinks, topMetrics } from "../data";
 
+const contractAddress = "E5GgVo7dLPUgebUrNLDR6tWVWktgo74a2FfEJmrtpump";
+const xUrl = "https://x.com/HOOD3pf";
+
 export function SiteHeader() {
   const conveyorMetrics = [...topMetrics, ...topMetrics];
 
@@ -37,9 +40,19 @@ export function SiteHeader() {
           <Link href="/thesis">Hood Thesis</Link>
         </nav>
 
-        <Link className="nav-cta" href="/dashboard">
-          Open desk
-        </Link>
+        <div className="header-actions">
+          <div className="contract-chip" title={contractAddress} aria-label={`Contract address ${contractAddress}`}>
+            <span>CA</span>
+            <code>{contractAddress}</code>
+          </div>
+          <a className="social-link" href={xUrl} target="_blank" rel="noreferrer" aria-label="Open Hood3 on X">
+            X
+            <ExternalLink size={14} aria-hidden="true" />
+          </a>
+          <Link className="nav-cta" href="/dashboard">
+            Open desk
+          </Link>
+        </div>
       </div>
     </header>
   );

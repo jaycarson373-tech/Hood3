@@ -14,8 +14,9 @@ export default function Home() {
           <p className="eyebrow">Hood3 automation terminal</p>
           <h1>Hood3</h1>
           <p className="hero-lede">
-            Hood3 turns protocol flow into a transparent NLT flywheel: claim fees, route SOL, fund Hyperliquid, expand a
-            HOOD long, burn HOODX, and publish the receipts like a professional onchain desk.
+            Fees route into a transparent HOOD long.
+            <br />
+            Receipts and burns stay visible.
           </p>
 
           <div className="hero-actions">

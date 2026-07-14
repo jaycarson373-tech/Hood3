@@ -195,7 +195,7 @@ h3 {
   align-items: center;
   display: grid;
   gap: 18px;
-  grid-template-columns: minmax(190px, 1fr) auto minmax(130px, 1fr);
+  grid-template-columns: minmax(190px, 0.72fr) auto minmax(430px, 1fr);
   margin: 0 auto;
   max-width: 1280px;
   min-height: 74px;
@@ -268,17 +268,70 @@ h3 {
   outline: none;
 }
 
+.header-actions {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  justify-self: end;
+  min-width: 0;
+}
+
+.contract-chip,
+.social-link,
 .nav-cta {
   align-items: center;
-  background: var(--green);
   border-radius: 8px;
-  color: #071006;
   display: inline-flex;
   font-size: 14px;
   font-weight: 900;
   height: 40px;
   justify-content: center;
-  justify-self: end;
+}
+
+.contract-chip {
+  background: rgba(216, 255, 0, 0.1);
+  border: 1px solid var(--line-strong);
+  color: #f3ffe6;
+  gap: 8px;
+  min-width: 0;
+  padding: 0 11px;
+}
+
+.contract-chip span {
+  color: var(--green);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+}
+
+.contract-chip code {
+  color: #ffffff;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  max-width: min(34vw, 360px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.social-link {
+  background: rgba(255, 255, 255, 0.045);
+  border: 1px solid var(--line);
+  color: #f3ffe6;
+  gap: 6px;
+  min-width: 48px;
+  padding: 0 12px;
+}
+
+.social-link:hover,
+.social-link:focus-visible {
+  border-color: var(--green);
+  outline: none;
+}
+
+.nav-cta {
+  background: var(--green);
+  color: #071006;
   padding: 0 16px;
 }
 
@@ -307,7 +360,9 @@ h3 {
   display: grid;
   gap: 22px;
   max-width: 720px;
+  min-width: 0;
   position: relative;
+  width: 100%;
   z-index: 1;
 }
 
@@ -335,6 +390,8 @@ h3 {
   color: rgba(5, 8, 5, 0.78);
   font-size: 18px;
   max-width: 650px;
+  overflow-wrap: break-word;
+  width: 100%;
 }
 
 .eyebrow {
@@ -1272,10 +1329,25 @@ h3 {
     grid-template-columns: 1fr;
   }
 
-  .nav-cta,
+  .header-actions,
   .brand,
   .nav-links {
     justify-self: start;
+  }
+
+  .header-actions {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .contract-chip {
+    flex: 1 1 360px;
+    max-width: 100%;
+  }
+
+  .contract-chip code {
+    max-width: calc(100vw - 170px);
   }
 
   .main-nav {
@@ -1323,9 +1395,26 @@ h3 {
     width: 100%;
   }
 
+  .contract-chip {
+    flex-basis: 100%;
+    justify-content: flex-start;
+    width: 100%;
+  }
+
+  .contract-chip code {
+    max-width: calc(100vw - 90px);
+  }
+
   .landing-hero {
+    display: block;
     min-height: 620px;
     padding: 56px 14px 120px;
+  }
+
+  .landing-content,
+  .hero-lede {
+    max-width: calc(100vw - 28px);
+    width: calc(100vw - 28px);
   }
 
   .hero-command {
