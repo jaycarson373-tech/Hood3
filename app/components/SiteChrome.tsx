@@ -8,6 +8,7 @@ import {
 } from "../data";
 
 const navLinks = [
+  { label: "Origin", href: "/#origin" },
   { label: "Mechanism", href: "/#mechanism" },
   { label: "Thesis", href: "/thesis" },
   { label: "The Long", href: "/dashboard" },

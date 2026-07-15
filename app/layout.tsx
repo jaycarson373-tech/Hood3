@@ -36,10 +36,10 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/longcat-mark.svg",
-        width: 1200,
-        height: 630,
-        alt: "Longcat mark",
+        url: "/longcat-terminal-bg.jpg",
+        width: 608,
+        height: 1280,
+        alt: "Longcat terminal graphic",
       },
     ],
   },
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    images: ["/longcat-mark.svg"],
+    images: ["/longcat-terminal-bg.jpg"],
   },
 };
 

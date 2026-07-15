@@ -2642,6 +2642,58 @@ body:has(.longcat-meme-site) {
   z-index: -3;
 }
 
+.longcat-image-backdrop {
+  background-image: url("/longcat-terminal-bg.jpg");
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: min(92vw, 700px) 100%;
+  bottom: 0;
+  filter: saturate(1.08) contrast(1.04);
+  left: 0;
+  opacity: 0.94;
+  pointer-events: none;
+  position: absolute;
+  right: 0;
+  top: 66px;
+  z-index: -2;
+}
+
+.longcat-image-backdrop::before,
+.longcat-image-backdrop::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+}
+
+.longcat-image-backdrop::before {
+  background:
+    linear-gradient(90deg, #020402 0%, rgba(2, 4, 2, 0.62) 17%, rgba(2, 4, 2, 0.12) 50%, rgba(2, 4, 2, 0.62) 83%, #020402 100%),
+    linear-gradient(180deg, rgba(2, 4, 2, 0.08), rgba(2, 4, 2, 0.2) 52%, rgba(2, 4, 2, 0.36));
+  inset: 0;
+}
+
+.longcat-image-backdrop::after {
+  background:
+    linear-gradient(rgba(215, 255, 0, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(215, 255, 0, 0.03) 1px, transparent 1px);
+  background-size: 42px 42px;
+  inset: 0;
+  opacity: 0.42;
+}
+
+.longcat-image-glow {
+  background: rgba(215, 255, 0, 0.24);
+  border-radius: 999px;
+  filter: blur(60px);
+  height: min(72vw, 620px);
+  left: 50%;
+  opacity: calc(0.44 + var(--cat-scroll) * 0.18);
+  position: absolute;
+  top: calc(180px + var(--cat-scroll) * 34vh);
+  transform: translateX(-50%);
+  width: min(64vw, 520px);
+}
+
 .longcat-meme-site .site-header {
   background: rgba(2, 4, 2, 0.84);
   backdrop-filter: blur(16px);
@@ -3045,6 +3097,19 @@ body:has(.longcat-meme-site) {
   right: 12px;
 }
 
+.hero-graphic-callout {
+  align-self: center;
+  color: rgba(215, 255, 0, 0.88);
+  font-family: "Comic Sans MS", "Bradley Hand", cursive;
+  font-size: clamp(18px, 2.4vw, 31px);
+  grid-column: 2;
+  justify-self: end;
+  line-height: 1.08;
+  margin-right: clamp(10px, 3vw, 42px);
+  text-shadow: 0 0 18px rgba(215, 255, 0, 0.35);
+  transform: rotate(-8deg);
+}
+
 .length-section {
   display: grid;
   gap: 22px;
@@ -3138,6 +3203,59 @@ body:has(.longcat-meme-site) {
   font-family: var(--font-geist-mono), monospace;
   font-size: clamp(18px, 3vw, 34px);
   font-weight: 900;
+}
+
+.origin-section {
+  display: grid;
+  gap: 20px;
+  justify-items: start;
+}
+
+.origin-section h2 {
+  color: #ffffff;
+  font-size: clamp(40px, 7vw, 92px);
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 0.86;
+  max-width: 880px;
+}
+
+.origin-board {
+  background: rgba(2, 4, 2, 0.78);
+  border: 1px solid rgba(215, 255, 0, 0.3);
+  border-radius: 10px;
+  display: grid;
+  gap: 12px;
+  max-width: 620px;
+  padding: 20px;
+}
+
+.origin-board span,
+.origin-board strong,
+.origin-board em {
+  color: var(--green);
+  font-family: var(--font-geist-mono), monospace;
+  font-style: normal;
+  font-weight: 930;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.origin-board strong {
+  color: #ffffff;
+  font-size: clamp(24px, 4vw, 44px);
+}
+
+.origin-board p {
+  color: rgba(243, 255, 230, 0.76);
+  font-size: 16px;
+  font-weight: 790;
+  line-height: 1.45;
+}
+
+.scribble--origin {
+  right: 8%;
+  top: 30%;
 }
 
 .mechanic-section {
@@ -3509,6 +3627,12 @@ body:has(.longcat-meme-site) {
     min-height: 260px;
   }
 
+  .hero-graphic-callout {
+    grid-column: 1;
+    justify-self: start;
+    margin-right: 0;
+  }
+
   .length-grid,
   .meme-faq .faq-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -3566,6 +3690,11 @@ body:has(.longcat-meme-site) {
 
   .long-button {
     width: 100%;
+  }
+
+  .longcat-image-backdrop {
+    background-size: min(118vw, 560px) 100%;
+    opacity: 0.78;
   }
 
   .spine-cat--head {

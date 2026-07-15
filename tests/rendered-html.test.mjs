@@ -10,6 +10,9 @@ const requiredLaunchCopy = [
   "Current Length",
   "Cat Extension Today",
   "+1.42 metres",
+  "ORIGIN LORE",
+  "Futaba / 2chan",
+  "Know Your Meme",
   "$LONGCAT trades",
   "fees extend $CASHCAT",
   "tail not found",
@@ -54,8 +57,10 @@ test("server-renders the Longcat launch homepage", async () => {
 
   assert.match(html, /No win, no magic/);
   assert.match(html, /Loooo+ng\./);
+  assert.match(html, /longcat-terminal-bg\.jpg/);
+  assert.match(html, /https:\/\/amp\.knowyourmeme\.com\/memes\/longcat/);
   assert.match(html, /Leveraged positions can lose money or get liquidated/);
-  assert.match(html, /<meta[^>]+property=["']og:image["'][^>]+longcat-mark\.svg/i);
+  assert.match(html, /<meta[^>]+property=["']og:image["'][^>]+longcat-terminal-bg\.jpg/i);
   assert.match(html, /<link[^>]+rel=["']icon["'][^>]+favicon\.svg/i);
   assert.doesNotMatch(html, bannedRenderedCopy);
 });
@@ -93,6 +98,7 @@ test("repo no longer ships preview or legacy launch wiring", async () => {
   assert.match(readme, /^# Longcat/m);
   assert.match(layout, /Longcat \| The Longest Long on Robinhood/);
   assert.match(page, /THE LONGEST LONG/);
+  assert.match(page, /ORIGIN LORE/);
   assert.doesNotMatch(`${page}\n${layout}\n${packageJson}\n${readme}`, bannedLaunchCopy);
 
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));

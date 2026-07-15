@@ -6,7 +6,7 @@ realized trading profits can buy back and burn $LONGCAT.
 
 ## Routes
 
-- `/` - Longcat landing page with the vertical cat backing, live length placeholders, meme mechanics, burns, and FAQ.
+- `/` - Longcat landing page with the provided vertical Longcat graphic backing, origin lore, live length placeholders, meme mechanics, burns, and FAQ.
 - `/dashboard` - read-only Hyperliquid account viewer, Cashcat long model, receipt terminal, and burn placeholders.
 - `/thesis` - Cashcat thesis, risks, and source links.
 

@@ -57,28 +57,8 @@ export function LongcatSpine() {
   }, []);
 
   return (
-    <div className="longcat-spine" aria-hidden="true">
-      <span className="spine-grid" />
-      <span className="spine-cat spine-cat--head">
-        <span className="spine-ear spine-ear--left" />
-        <span className="spine-ear spine-ear--right" />
-        <span className="spine-eye spine-eye--left" />
-        <span className="spine-eye spine-eye--right" />
-        <span className="spine-tear spine-tear--left" />
-        <span className="spine-tear spine-tear--right" />
-        <span className="spine-mouth" />
-      </span>
-      <span className="spine-arm spine-arm--left" />
-      <span className="spine-arm spine-arm--right" />
-      <span className="spine-body" />
-      <span className="spine-foot spine-foot--left" />
-      <span className="spine-foot spine-foot--right" />
-      <span className="spine-tail" />
-      <span className="meme-note meme-note--one">very long</span>
-      <span className="meme-note meme-note--two">still going</span>
-      <span className="meme-note meme-note--three">this part also cat</span>
-      <span className="meme-note meme-note--four">length increasing...</span>
-      <span className="meme-note meme-note--five">tail not found yet</span>
+    <div className="longcat-image-backdrop" aria-hidden="true">
+      <span className="longcat-image-glow" />
     </div>
   );
 }

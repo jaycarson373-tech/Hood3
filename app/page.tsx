@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { cashcatChartUrl, publicPositionScanUrl } from "./data";
-import { LengthMeter, LongChart, LongcatMascot, LongcatSpine, SupplyShrink } from "./components/LongcatVisuals";
+import { LengthMeter, LongChart, LongcatSpine, SupplyShrink } from "./components/LongcatVisuals";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
 
 const lengthStats = [
@@ -10,6 +10,8 @@ const lengthStats = [
   { label: "Current Long", value: "$0", detail: "awaiting first position" },
   { label: "Burned", value: "0", detail: "tail still attached" },
 ];
+
+const originUrl = "https://amp.knowyourmeme.com/memes/longcat";
 
 const flow = [
   "$LONGCAT trades",
@@ -67,10 +69,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="crying-cat-stage" aria-hidden="true">
-          <LongcatMascot variant="crying" />
-          <span className="scribble scribble--hero">very long<br />much directional</span>
-        </div>
+        <span className="hero-graphic-callout" aria-hidden="true">very long<br />much directional</span>
       </section>
 
       <section className="cat-section length-section" aria-label="Live length">
@@ -92,6 +91,25 @@ export default function Home() {
         <span className="meme-word">LONGER.</span>
         <span className="meme-word">LONGEST.</span>
         <p>tail not found</p>
+      </section>
+
+      <section className="cat-section origin-section" id="origin">
+        <div className="section-label">ORIGIN LORE</div>
+        <h2>BEFORE THE LONG WAS A POSITION, THE LONG WAS A CAT.</h2>
+        <div className="origin-board">
+          <span>2004-2005</span>
+          <strong>Futaba / 2chan</strong>
+          <p>
+            A white cat named Shiroi, also known as Nobiko, gets stretched into internet history. The instruction was
+            not complicated.
+          </p>
+          <em>Looooooooooooooooong.</em>
+        </div>
+        <a className="button ghost long-button" href={originUrl} target="_blank" rel="noreferrer">
+          Know Your Meme
+          <ExternalLink size={16} aria-hidden="true" />
+        </a>
+        <span className="scribble scribble--origin">ancient length tech</span>
       </section>
 
       <section className="cat-section mechanic-section" id="mechanism">
