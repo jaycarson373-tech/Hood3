@@ -5,7 +5,9 @@ import test from "node:test";
 const projectRoot = new URL("../", import.meta.url);
 const requiredLaunchCopy = [
   "Longcat | The Longest Cat on Robinhood",
-  "THE LONGEST CAT ON ROBINHOOD.",
+  "THE ",
+  "LONGEST",
+  " CAT ON ROBINHOOD.",
   "Every fee makes the cat longer.",
   "Current Length",
   "Cat Extension Today",
@@ -55,6 +57,7 @@ test("server-renders the Longcat launch homepage", async () => {
   }
 
   assert.match(html, /No win, no magic/);
+  assert.match(html, /class=["']hero-longest["'][^>]*>LONGEST</);
   assert.match(html, /Loooo+ng\./);
   assert.match(html, /longcat-wallpaper-clean\.png/);
   assert.match(html, /longcat-origin-real\.jpg/);
@@ -102,7 +105,7 @@ test("repo no longer ships preview or legacy launch wiring", async () => {
   assert.match(readme, /^# Longcat/m);
   assert.match(layout, /Longcat \| The Longest Cat on Robinhood/);
   assert.match(layout, /favicon\.png/);
-  assert.match(page, /THE LONGEST CAT ON ROBINHOOD/);
+  assert.match(page, /hero-longest/);
   assert.match(page, /ORIGIN LORE/);
   assert.match(visuals, /longcat-wallpaper-clean\.png/);
   assert.match(visuals, /longcat-sky\.jpg/);

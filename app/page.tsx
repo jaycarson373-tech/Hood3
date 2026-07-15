@@ -57,7 +57,9 @@ export default function Home() {
       <section className="cat-section meme-hero" id="buy-longcat">
         <div className="meme-hero__copy">
           <p className="meme-kicker">LONGCAT // ROBINHOOD CHAIN // STATUS: EXTENDING</p>
-          <h1>THE LONGEST CAT ON ROBINHOOD.</h1>
+          <h1>
+            THE <span className="hero-longest">LONGEST</span> CAT ON ROBINHOOD.
+          </h1>
           <p className="meme-subtitle">Every fee makes the cat longer.</p>
           <div className="hero-actions meme-actions">
             <Link className="button primary long-button" href="#buy-longcat">
