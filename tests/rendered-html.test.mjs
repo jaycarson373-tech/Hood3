@@ -57,13 +57,12 @@ test("server-renders the Longcat launch homepage", async () => {
 
   assert.match(html, /No win, no magic/);
   assert.match(html, /Loooo+ng\./);
-  assert.match(html, /longcat-terminal-bg\.jpg/);
-  assert.match(html, /longcat-head\.jpg/);
-  assert.match(html, /longcat-bottom\.jpg/);
+  assert.match(html, /longcat-wallpaper-clean\.png/);
   assert.match(html, /https:\/\/amp\.knowyourmeme\.com\/memes\/longcat/);
   assert.match(html, /Leveraged positions can lose money or get liquidated/);
-  assert.match(html, /<meta[^>]+property=["']og:image["'][^>]+longcat-terminal-bg\.jpg/i);
+  assert.match(html, /<meta[^>]+property=["']og:image["'][^>]+longcat-wallpaper-clean\.png/i);
   assert.match(html, /<link[^>]+rel=["']icon["'][^>]+favicon\.png/i);
+  assert.doesNotMatch(html, /hero-graphic-callout|scribble|THE PLAN/);
   assert.doesNotMatch(html, bannedRenderedCopy);
 });
 
@@ -103,9 +102,9 @@ test("repo no longer ships preview or legacy launch wiring", async () => {
   assert.match(layout, /favicon\.png/);
   assert.match(page, /THE LONGEST LONG/);
   assert.match(page, /ORIGIN LORE/);
-  assert.match(visuals, /function LongcatVisual/);
-  assert.match(visuals, /calculateBodyHeight/);
+  assert.match(visuals, /longcat-wallpaper-clean\.png/);
   assert.doesNotMatch(visuals, /scaleY/);
+  assert.doesNotMatch(page, /hero-graphic-callout|scribble--|THE PLAN/);
   assert.doesNotMatch(`${page}\n${layout}\n${visuals}\n${packageJson}\n${readme}`, bannedLaunchCopy);
 
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));

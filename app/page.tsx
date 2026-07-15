@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { cashcatChartUrl, publicPositionScanUrl } from "./data";
-import { LengthMeter, LongChart, LongcatSpine, SupplyShrink } from "./components/LongcatVisuals";
+import { LongChart, LongcatSpine, SupplyShrink } from "./components/LongcatVisuals";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
 
 const lengthStats = [
@@ -69,7 +69,6 @@ export default function Home() {
           </div>
         </div>
 
-        <span className="hero-graphic-callout" aria-hidden="true">very long<br />much directional</span>
       </section>
 
       <section className="cat-section length-section" aria-label="Live length">
@@ -83,7 +82,6 @@ export default function Home() {
             </article>
           ))}
         </div>
-        <LengthMeter />
       </section>
 
       <section className="cat-section shout-section">
@@ -109,11 +107,10 @@ export default function Home() {
           Know Your Meme
           <ExternalLink size={16} aria-hidden="true" />
         </a>
-        <span className="scribble scribble--origin">ancient length tech</span>
       </section>
 
       <section className="cat-section mechanic-section" id="mechanism">
-        <div className="section-label">THE PLAN</div>
+        <div className="section-label">MECHANIC</div>
         <h2>EVERY FEE EXTENDS THE CAT.</h2>
         <div className="long-flow">
           {flow.map((step) => (
@@ -130,7 +127,6 @@ export default function Home() {
           <strong>Looooooooooooooooong</strong>
         </div>
         <LongChart />
-        <span className="scribble scribble--chart">the long gets longer</span>
       </section>
 
       <section className="cat-section thesis-section" id="cashcat-thesis">

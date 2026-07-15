@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import {
   publicPositionAccount,
@@ -22,11 +23,11 @@ export function SiteHeader() {
       <div className="main-nav longcat-nav">
         <Link className="brand" href="/" aria-label="Longcat home">
           <span className="brand-mark longcat-brand-mark" aria-hidden="true">
-            <img src="/longcat-logo.png" alt="" />
+            <Image src="/longcat-logo.png" alt="" width={512} height={512} />
           </span>
           <span>
             <strong>LONGCAT</strong>
-            <small>still going</small>
+            <small>$LONGCAT</small>
           </span>
         </Link>
 
