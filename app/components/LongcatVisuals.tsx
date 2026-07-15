@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import type { Metric } from "../data";
 
 type LongcatMascotProps = {
@@ -12,6 +12,38 @@ type MetricGridProps = {
   metrics: Metric[];
   className?: string;
 };
+
+type LongcatVisualProps = {
+  scale?: number;
+  className?: string;
+};
+
+const lengthMilestones = [
+  { size: 0, height: 240 },
+  { size: 10_000, height: 280 },
+  { size: 25_000, height: 330 },
+  { size: 50_000, height: 390 },
+  { size: 100_000, height: 470 },
+  { size: 250_000, height: 590 },
+  { size: 500_000, height: 720 },
+  { size: 1_000_000, height: 900 },
+];
+
+export function calculateBodyHeight(positionSizeUsd: number) {
+  const size = Math.max(0, positionSizeUsd);
+
+  for (let index = 1; index < lengthMilestones.length; index += 1) {
+    const previous = lengthMilestones[index - 1];
+    const next = lengthMilestones[index];
+
+    if (size <= next.size) {
+      const progress = (size - previous.size) / (next.size - previous.size);
+      return Math.round(previous.height + (next.height - previous.height) * progress);
+    }
+  }
+
+  return lengthMilestones[lengthMilestones.length - 1].height;
+}
 
 export function LongcatMascot({ variant = "hero", label = "Longcat mascot" }: LongcatMascotProps) {
   return (
@@ -38,12 +70,15 @@ export function LongcatMascot({ variant = "hero", label = "Longcat mascot" }: Lo
 }
 
 export function LongcatSpine() {
+  const [catScale, setCatScale] = useState(500_000);
+
   useEffect(() => {
     const root = document.documentElement;
     const updateLength = () => {
       const scrollable = Math.max(1, document.body.scrollHeight - window.innerHeight);
       const progress = Math.min(1, Math.max(0, window.scrollY / scrollable));
       root.style.setProperty("--cat-scroll", progress.toFixed(4));
+      setCatScale(Math.round(500_000 + progress * 500_000));
     };
 
     updateLength();
@@ -58,13 +93,26 @@ export function LongcatSpine() {
 
   return (
     <div className="longcat-image-backdrop" aria-hidden="true">
-      <span className="longcat-image-glow" />
+      <LongcatVisual scale={catScale} className="longcat--backdrop" />
     </div>
   );
 }
 
 export function LongcatBackground() {
   return <LongcatSpine />;
+}
+
+export function LongcatVisual({ scale = 0, className = "" }: LongcatVisualProps) {
+  const bodyHeight = calculateBodyHeight(scale);
+  const style = { "--longcat-body-height": `${bodyHeight}px` } as CSSProperties;
+
+  return (
+    <div className={`longcat ${className}`.trim()} style={style}>
+      <img className="longcat-head" src="/longcat-head.jpg" alt="" />
+      <div className="longcat-body" />
+      <img className="longcat-bottom" src="/longcat-bottom.jpg" alt="" />
+    </div>
+  );
 }
 
 export function LengthMeter() {

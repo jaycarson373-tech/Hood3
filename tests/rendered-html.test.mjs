@@ -58,10 +58,12 @@ test("server-renders the Longcat launch homepage", async () => {
   assert.match(html, /No win, no magic/);
   assert.match(html, /Loooo+ng\./);
   assert.match(html, /longcat-terminal-bg\.jpg/);
+  assert.match(html, /longcat-head\.jpg/);
+  assert.match(html, /longcat-bottom\.jpg/);
   assert.match(html, /https:\/\/amp\.knowyourmeme\.com\/memes\/longcat/);
   assert.match(html, /Leveraged positions can lose money or get liquidated/);
   assert.match(html, /<meta[^>]+property=["']og:image["'][^>]+longcat-terminal-bg\.jpg/i);
-  assert.match(html, /<link[^>]+rel=["']icon["'][^>]+favicon\.svg/i);
+  assert.match(html, /<link[^>]+rel=["']icon["'][^>]+favicon\.png/i);
   assert.doesNotMatch(html, bannedRenderedCopy);
 });
 
@@ -87,9 +89,10 @@ test("server-renders Longcat dashboard and thesis routes", async () => {
 });
 
 test("repo no longer ships preview or legacy launch wiring", async () => {
-  const [page, layout, packageJson, readme] = await Promise.all([
+  const [page, layout, visuals, packageJson, readme] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/components/LongcatVisuals.tsx", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
     readFile(new URL("../README.md", import.meta.url), "utf8"),
   ]);
@@ -97,9 +100,13 @@ test("repo no longer ships preview or legacy launch wiring", async () => {
   assert.match(packageJson, /"name": "longcat"/);
   assert.match(readme, /^# Longcat/m);
   assert.match(layout, /Longcat \| The Longest Long on Robinhood/);
+  assert.match(layout, /favicon\.png/);
   assert.match(page, /THE LONGEST LONG/);
   assert.match(page, /ORIGIN LORE/);
-  assert.doesNotMatch(`${page}\n${layout}\n${packageJson}\n${readme}`, bannedLaunchCopy);
+  assert.match(visuals, /function LongcatVisual/);
+  assert.match(visuals, /calculateBodyHeight/);
+  assert.doesNotMatch(visuals, /scaleY/);
+  assert.doesNotMatch(`${page}\n${layout}\n${visuals}\n${packageJson}\n${readme}`, bannedLaunchCopy);
 
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));
 });

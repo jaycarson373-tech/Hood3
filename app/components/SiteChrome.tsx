@@ -22,7 +22,7 @@ export function SiteHeader() {
       <div className="main-nav longcat-nav">
         <Link className="brand" href="/" aria-label="Longcat home">
           <span className="brand-mark longcat-brand-mark" aria-hidden="true">
-            <span className="brand-cat" />
+            <img src="/longcat-logo.png" alt="" />
           </span>
           <span>
             <strong>LONGCAT</strong>
