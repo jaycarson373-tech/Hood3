@@ -1,12 +1,12 @@
 # Longcat
 
-Longcat is a Robinhood-coded launch site for a Longcat-themed native leverage token:
-creator fees extend one public leveraged Cashcat long, and qualifying realized trading
-profits buy back and burn $LONGCAT.
+Longcat is a Robinhood-coded meme terminal built around one joke: the cat keeps
+getting longer. Creator fees extend one public Cashcat long, and qualifying
+realized trading profits can buy back and burn $LONGCAT.
 
 ## Routes
 
-- `/` - Longcat landing page with hero, mechanism, Cashcat thesis, live placeholders, burns, manifesto, and FAQ.
+- `/` - Longcat landing page with the vertical cat backing, live length placeholders, meme mechanics, burns, and FAQ.
 - `/dashboard` - read-only Hyperliquid account viewer, Cashcat long model, receipt terminal, and burn placeholders.
 - `/thesis` - Cashcat thesis, risks, and source links.
 

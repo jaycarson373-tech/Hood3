@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 const siteTitle = "Longcat | The Longest Long on Robinhood";
 const siteDescription =
-  "Longcat is a native leverage token for Cashcat: every creator fee extends one public Cashcat long, and realized trading profits buy back and burn $LONGCAT.";
+  "Longcat is the longest long on Robinhood. Every fee makes the cat longer; winning trades can buy back and burn $LONGCAT.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.hood3pump.fun"),

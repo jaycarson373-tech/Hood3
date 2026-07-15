@@ -6,16 +6,15 @@ const projectRoot = new URL("../", import.meta.url);
 const requiredLaunchCopy = [
   "Longcat | The Longest Long on Robinhood",
   "THE LONGEST LONG",
-  "ON ROBINHOOD.",
-  "Every fee makes the long longer.",
-  "THE NATIVE LEVERAGE TOKEN FOR CASHCAT",
+  "Every fee makes the cat longer.",
+  "Current Length",
+  "Cat Extension Today",
+  "+1.42 metres",
   "$LONGCAT trades",
-  "Fees long $CASHCAT",
-  "Realized trading profits",
-  "IF ROBINHOOD BECOMES THE HOME OF RETAIL, CASHCAT CAN BECOME ITS CAT.",
-  "WHEN THE LONG WINS",
+  "fees extend $CASHCAT",
+  "tail not found",
+  "POSITION EXTENDING IN PUBLIC.",
   "LONGCAT GETS SHORTER.",
-  "Looooooooooooooooong.",
 ];
 const bannedLaunchCopy =
   /codex-preview|react-loading-skeleton|Your site is taking shape|Codex is working|\bHood[3]\b|\bHOO[D]3\b|\bHOO[D]X\b|The Leveraged Bet|HOO[D] long|Hood Thesis|redeemable reserve|direct redemption|guaranteed yield|passive income|dividends|treasury/i;
@@ -53,9 +52,9 @@ test("server-renders the Longcat launch homepage", async () => {
     assert.match(html, new RegExp(copy.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
 
-  assert.match(html, /Every creator fee extends one public leveraged long on \$CASHCAT/);
-  assert.match(html, /No fabricated live values/);
-  assert.match(html, /Buybacks are not guaranteed/);
+  assert.match(html, /No win, no magic/);
+  assert.match(html, /Loooo+ng\./);
+  assert.match(html, /Leveraged positions can lose money or get liquidated/);
   assert.match(html, /<meta[^>]+property=["']og:image["'][^>]+longcat-mark\.svg/i);
   assert.match(html, /<link[^>]+rel=["']icon["'][^>]+favicon\.svg/i);
   assert.doesNotMatch(html, bannedRenderedCopy);

@@ -2611,3 +2611,995 @@ body {
     display: none;
   }
 }
+
+/* Longcat meme terminal rewrite */
+:root {
+  --cat-scroll: 0;
+}
+
+.longcat-meme-site {
+  background: #020402;
+  isolation: isolate;
+  min-height: 100vh;
+  overflow: hidden;
+  position: relative;
+}
+
+body:has(.longcat-meme-site) {
+  background: #020402;
+}
+
+.longcat-meme-site::before {
+  background:
+    linear-gradient(rgba(215, 255, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(215, 255, 0, 0.035) 1px, transparent 1px);
+  background-size: 46px 46px;
+  content: "";
+  inset: 0;
+  opacity: 0.55;
+  pointer-events: none;
+  position: absolute;
+  z-index: -3;
+}
+
+.longcat-meme-site .site-header {
+  background: rgba(2, 4, 2, 0.84);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(215, 255, 0, 0.22);
+}
+
+.longcat-meme-site .main-nav.longcat-nav {
+  grid-template-columns: minmax(152px, 0.48fr) minmax(0, 1fr) auto;
+  min-height: 66px;
+}
+
+.longcat-meme-site .brand-mark {
+  background: #f8fff0;
+  border-color: rgba(215, 255, 0, 0.65);
+  width: 68px;
+}
+
+.longcat-meme-site .brand strong {
+  color: #ffffff;
+  font-size: 15px;
+  letter-spacing: 0;
+}
+
+.longcat-meme-site .brand small,
+.longcat-meme-site .account-link span,
+.longcat-meme-site .account-link code {
+  color: var(--green);
+}
+
+.longcat-meme-site .nav-links {
+  background: transparent;
+  border: 0;
+  gap: 8px;
+}
+
+.longcat-meme-site .nav-links a {
+  color: rgba(243, 255, 230, 0.76);
+  min-height: 34px;
+  padding: 9px 10px;
+}
+
+.longcat-meme-site .nav-links a:hover,
+.longcat-meme-site .nav-links a:focus-visible {
+  background: rgba(215, 255, 0, 0.12);
+  color: #ffffff;
+}
+
+.longcat-meme-site .account-link {
+  background: rgba(248, 255, 240, 0.035);
+  border-color: rgba(215, 255, 0, 0.22);
+  min-width: 130px;
+}
+
+.longcat-meme-site .nav-cta,
+.longcat-meme-site .button.primary {
+  background: var(--green);
+  color: #030603;
+}
+
+.longcat-spine {
+  inset: 66px 0 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: absolute;
+  z-index: -1;
+}
+
+.spine-grid {
+  background:
+    linear-gradient(rgba(215, 255, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(215, 255, 0, 0.04) 1px, transparent 1px);
+  background-size: 34px 34px;
+  inset: 0;
+  opacity: 0.55;
+  position: absolute;
+}
+
+.spine-body {
+  animation: cat-body-wiggle 7s ease-in-out infinite;
+  background:
+    linear-gradient(90deg, rgba(215, 255, 0, 0.38), transparent 12%, transparent 88%, rgba(215, 255, 0, 0.3)),
+    linear-gradient(180deg, #fffef7 0%, #e5ead7 48%, #b8c0ab 100%);
+  border: 1px solid rgba(215, 255, 0, 0.44);
+  border-radius: 999px;
+  box-shadow:
+    0 0 26px rgba(215, 255, 0, 0.36),
+    inset 0 0 28px rgba(5, 8, 5, 0.12);
+  left: calc(50% - clamp(54px, 8vw, 86px));
+  min-height: calc(100% - 370px);
+  position: absolute;
+  top: 240px;
+  transform: scaleY(calc(1 + var(--cat-scroll) * 0.12));
+  transform-origin: top center;
+  width: clamp(108px, 16vw, 172px);
+}
+
+.spine-body::before,
+.spine-body::after {
+  background: rgba(5, 8, 5, 0.08);
+  border-radius: 999px;
+  content: "";
+  filter: blur(10px);
+  inset: 16px 28% 16px auto;
+  opacity: 0.55;
+  position: absolute;
+  width: 14%;
+}
+
+.spine-body::after {
+  inset: 22px auto 22px 22%;
+  opacity: 0.24;
+  width: 10%;
+}
+
+.spine-cat--head {
+  animation: cat-head-float 5.5s ease-in-out infinite;
+  background:
+    radial-gradient(circle at 32% 42%, #020402 0 5px, transparent 6px),
+    radial-gradient(circle at 66% 42%, #020402 0 5px, transparent 6px),
+    linear-gradient(180deg, #fffef7, #e8ecdc);
+  border: 1px solid rgba(215, 255, 0, 0.5);
+  border-radius: 48% 52% 54% 46%;
+  box-shadow: 0 0 34px rgba(215, 255, 0, 0.34);
+  height: clamp(132px, 18vw, 205px);
+  left: calc(50% - clamp(76px, 10vw, 112px));
+  position: absolute;
+  top: 64px;
+  width: clamp(150px, 20vw, 224px);
+}
+
+.spine-ear {
+  background: #fffef7;
+  border: 1px solid rgba(215, 255, 0, 0.42);
+  height: 44px;
+  position: absolute;
+  top: -22px;
+  width: 44px;
+}
+
+.spine-ear--left {
+  border-radius: 10px 36px 10px 36px;
+  left: 28px;
+  transform: rotate(16deg);
+}
+
+.spine-ear--right {
+  border-radius: 36px 10px 36px 10px;
+  right: 28px;
+  transform: rotate(-16deg);
+}
+
+.spine-mouth {
+  background: #020402;
+  border-radius: 999px;
+  bottom: 34px;
+  height: 4px;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 32px;
+}
+
+.spine-tear {
+  background: var(--green);
+  border-radius: 999px;
+  height: 25px;
+  opacity: 0.85;
+  position: absolute;
+  top: 54%;
+  width: 7px;
+}
+
+.spine-tear--left {
+  left: 34%;
+}
+
+.spine-tear--right {
+  right: 34%;
+}
+
+.spine-arm {
+  background: linear-gradient(90deg, #fffef7, #c9d0bc);
+  border: 1px solid rgba(215, 255, 0, 0.4);
+  border-radius: 999px;
+  box-shadow: 0 0 22px rgba(215, 255, 0, 0.22);
+  height: clamp(26px, 4vw, 42px);
+  position: absolute;
+  top: clamp(150px, 20vw, 230px);
+  width: clamp(130px, 22vw, 270px);
+}
+
+.spine-arm--left {
+  left: calc(50% - clamp(330px, 35vw, 430px));
+  transform: rotate(-10deg);
+}
+
+.spine-arm--right {
+  left: calc(50% + clamp(80px, 9vw, 126px));
+  transform: rotate(9deg);
+}
+
+.spine-foot {
+  background: #fffef7;
+  border: 1px solid rgba(215, 255, 0, 0.38);
+  border-radius: 999px;
+  bottom: 92px;
+  height: clamp(34px, 5vw, 54px);
+  position: absolute;
+  width: clamp(68px, 10vw, 110px);
+}
+
+.spine-foot--left {
+  left: calc(50% - clamp(88px, 10vw, 126px));
+  transform: rotate(-8deg);
+}
+
+.spine-foot--right {
+  left: calc(50% + clamp(18px, 4vw, 44px));
+  transform: rotate(7deg);
+}
+
+.spine-tail {
+  background: linear-gradient(90deg, #fffef7, #c7cfba);
+  border: 1px solid rgba(215, 255, 0, 0.38);
+  border-radius: 999px;
+  bottom: 122px;
+  box-shadow: 0 0 22px rgba(215, 255, 0, 0.28);
+  height: clamp(30px, 4vw, 48px);
+  left: calc(50% + clamp(72px, 10vw, 130px));
+  position: absolute;
+  transform: rotate(16deg);
+  width: clamp(120px, 20vw, 250px);
+}
+
+.meme-note,
+.scribble {
+  color: rgba(215, 255, 0, 0.86);
+  font-family: "Comic Sans MS", "Bradley Hand", cursive;
+  font-size: clamp(15px, 2vw, 25px);
+  line-height: 1.1;
+  position: absolute;
+  text-shadow: 0 0 14px rgba(215, 255, 0, 0.32);
+  transform: rotate(-8deg);
+}
+
+.meme-note::after,
+.scribble::after {
+  content: "->";
+  display: inline-block;
+  font-family: var(--font-geist-mono), monospace;
+  margin-left: 10px;
+}
+
+.meme-note--one {
+  left: 61%;
+  top: 14%;
+}
+
+.meme-note--two {
+  left: 15%;
+  top: 34%;
+}
+
+.meme-note--three {
+  left: 62%;
+  top: 51%;
+}
+
+.meme-note--four {
+  left: 12%;
+  top: 69%;
+}
+
+.meme-note--five {
+  bottom: 118px;
+  left: 58%;
+}
+
+.cat-section {
+  margin: 0 auto;
+  max-width: 1180px;
+  min-height: 66vh;
+  padding: clamp(72px, 11vw, 140px) 0;
+  position: relative;
+  width: calc(100% - 44px);
+  z-index: 1;
+}
+
+.cat-section::before {
+  background: rgba(2, 4, 2, 0.58);
+  border: 1px solid rgba(215, 255, 0, 0.12);
+  border-radius: 10px;
+  box-shadow: 0 0 38px rgba(2, 4, 2, 0.42);
+  content: "";
+  inset: clamp(42px, 7vw, 82px) auto auto 0;
+  min-height: 180px;
+  position: absolute;
+  width: min(420px, 48vw);
+  z-index: -1;
+}
+
+.meme-hero {
+  align-items: center;
+  display: grid;
+  gap: clamp(28px, 7vw, 88px);
+  grid-template-columns: minmax(0, 0.95fr) minmax(280px, 0.76fr);
+  min-height: calc(100vh - 66px);
+  padding-top: clamp(80px, 11vw, 138px);
+}
+
+.meme-hero::before {
+  display: none;
+}
+
+.meme-hero__copy {
+  display: grid;
+  gap: 22px;
+  max-width: 720px;
+}
+
+.meme-kicker,
+.section-label {
+  color: var(--green);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.meme-hero h1 {
+  color: #ffffff;
+  font-size: clamp(72px, 12vw, 168px);
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 0.78;
+  max-width: 760px;
+  text-shadow:
+    0 0 18px rgba(215, 255, 0, 0.2),
+    0 8px 0 rgba(215, 255, 0, 0.12);
+}
+
+.meme-subtitle {
+  color: #ffffff;
+  font-size: clamp(24px, 4vw, 46px);
+  font-weight: 930;
+  line-height: 0.95;
+  max-width: 620px;
+}
+
+.meme-actions {
+  margin-top: 10px;
+}
+
+.long-button {
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 950;
+  height: 48px;
+  min-width: 168px;
+  padding: 0 24px;
+  text-transform: uppercase;
+}
+
+.crying-cat-stage {
+  min-height: 360px;
+  position: relative;
+}
+
+.crying-cat-stage .longcat-mascot {
+  filter: drop-shadow(0 0 26px rgba(215, 255, 0, 0.3));
+  max-width: 520px;
+  transform: rotate(-3deg);
+}
+
+.longcat-mascot--crying .longcat-tear {
+  display: block;
+}
+
+.longcat-tear {
+  background: var(--green);
+  border-radius: 999px;
+  display: none;
+  height: 18px;
+  position: absolute;
+  top: 31px;
+  width: 5px;
+  z-index: 2;
+}
+
+.longcat-tear--left {
+  right: 39px;
+}
+
+.longcat-tear--right {
+  right: 19px;
+}
+
+.scribble--hero {
+  bottom: 54px;
+  right: 12px;
+}
+
+.length-section {
+  display: grid;
+  gap: 22px;
+  min-height: 56vh;
+}
+
+.length-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.length-stat {
+  background: rgba(2, 4, 2, 0.72);
+  border: 1px solid rgba(215, 255, 0, 0.28);
+  border-radius: 10px;
+  display: grid;
+  gap: 9px;
+  min-height: 122px;
+  padding: 18px;
+}
+
+.length-stat span,
+.length-stat small {
+  color: rgba(243, 255, 230, 0.7);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  font-weight: 850;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.length-stat strong {
+  color: var(--green);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: clamp(20px, 3vw, 32px);
+  line-height: 1;
+  overflow-wrap: anywhere;
+}
+
+.length-meter {
+  background: rgba(215, 255, 0, 0.08);
+  border: 1px solid rgba(215, 255, 0, 0.34);
+  border-radius: 999px;
+  box-shadow: inset 0 0 18px rgba(215, 255, 0, 0.12);
+  display: grid;
+  gap: 8px;
+  max-width: 820px;
+  padding: 12px;
+}
+
+.length-meter span {
+  color: #ffffff;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 13px;
+  font-weight: 900;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.length-meter strong {
+  animation: length-pulse 2.4s ease-in-out infinite;
+  background: var(--green);
+  border-radius: 999px;
+  display: block;
+  height: 16px;
+  transform-origin: left center;
+  width: calc(68% + var(--cat-scroll) * 22%);
+}
+
+.shout-section {
+  align-content: center;
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+}
+
+.meme-word {
+  color: #ffffff;
+  display: block;
+  font-size: clamp(64px, 13vw, 186px);
+  font-weight: 960;
+  line-height: 0.76;
+  text-shadow: 0 0 26px rgba(215, 255, 0, 0.18);
+}
+
+.shout-section p,
+.one-direction-section p {
+  color: var(--green);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: clamp(18px, 3vw, 34px);
+  font-weight: 900;
+}
+
+.mechanic-section {
+  display: grid;
+  gap: 22px;
+  justify-items: start;
+}
+
+.mechanic-section h2,
+.thesis-section h2,
+.terminal-section h2,
+.burn-section h2,
+.one-direction-section h2 {
+  color: #ffffff;
+  font-size: clamp(42px, 7vw, 96px);
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 0.86;
+  max-width: 850px;
+}
+
+.long-flow,
+.thesis-tape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 840px;
+}
+
+.long-flow span,
+.thesis-tape span {
+  background: rgba(215, 255, 0, 0.1);
+  border: 1px solid rgba(215, 255, 0, 0.32);
+  border-radius: 999px;
+  color: #ffffff;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 13px;
+  font-weight: 900;
+  min-height: 42px;
+  padding: 13px 15px;
+  text-transform: uppercase;
+}
+
+.microcopy {
+  color: rgba(243, 255, 230, 0.74);
+  font-size: 17px;
+  font-weight: 820;
+  line-height: 1.4;
+  max-width: 560px;
+}
+
+.chart-meme-section {
+  align-items: center;
+  display: grid;
+  gap: 28px;
+  grid-template-columns: minmax(0, 0.46fr) minmax(280px, 1fr);
+}
+
+.chart-meme-section h2 {
+  color: #ffffff;
+  font-size: clamp(48px, 8vw, 118px);
+  line-height: 0.8;
+}
+
+.chart-meme-section strong {
+  color: var(--green);
+  display: block;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: clamp(22px, 4vw, 42px);
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+}
+
+.long-chart {
+  align-items: end;
+  border: 1px solid rgba(215, 255, 0, 0.3);
+  border-radius: 10px;
+  display: flex;
+  gap: clamp(14px, 3vw, 34px);
+  height: clamp(280px, 52vw, 560px);
+  justify-content: center;
+  overflow: hidden;
+  padding: 32px;
+  position: relative;
+}
+
+.long-chart::before {
+  background:
+    linear-gradient(rgba(215, 255, 0, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(215, 255, 0, 0.05) 1px, transparent 1px);
+  background-size: 28px 28px;
+  content: "";
+  inset: 0;
+  opacity: 0.7;
+  position: absolute;
+}
+
+.long-candle {
+  animation: candle-grow 3s ease-in-out infinite;
+  background: var(--green);
+  box-shadow: 0 0 18px rgba(215, 255, 0, 0.35);
+  display: block;
+  position: relative;
+  width: clamp(10px, 2vw, 18px);
+  z-index: 1;
+}
+
+.long-candle::before,
+.long-candle::after {
+  background: var(--green);
+  content: "";
+  height: 42px;
+  left: 50%;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 2px;
+}
+
+.long-candle::before {
+  top: -42px;
+}
+
+.long-candle::after {
+  bottom: -42px;
+}
+
+.long-candle--one {
+  height: 22%;
+}
+
+.long-candle--two {
+  height: 34%;
+}
+
+.long-candle--three {
+  height: 46%;
+}
+
+.long-candle--four {
+  height: 57%;
+}
+
+.long-candle--five {
+  height: 68%;
+}
+
+.long-candle--six {
+  height: 84%;
+}
+
+.long-arrow {
+  border-right: 3px solid var(--green);
+  border-top: 3px solid var(--green);
+  height: 42%;
+  position: absolute;
+  right: 50px;
+  top: 44px;
+  transform: rotate(-18deg);
+  width: 42%;
+}
+
+.scribble--chart {
+  bottom: 18%;
+  right: 6%;
+}
+
+.thesis-section {
+  display: grid;
+  gap: 22px;
+  justify-items: start;
+}
+
+.one-direction-section {
+  align-content: center;
+  display: grid;
+  gap: 18px;
+  justify-items: start;
+}
+
+.terminal-section {
+  display: grid;
+  gap: 18px;
+}
+
+.terminal-strip {
+  background: rgba(2, 4, 2, 0.72);
+  border: 1px solid rgba(215, 255, 0, 0.3);
+  border-radius: 10px;
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  overflow: hidden;
+}
+
+.terminal-strip span,
+.terminal-strip strong {
+  background: rgba(255, 255, 255, 0.025);
+  font-family: var(--font-geist-mono), monospace;
+  min-height: 54px;
+  padding: 16px;
+}
+
+.terminal-strip span {
+  color: rgba(243, 255, 230, 0.66);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.terminal-strip strong {
+  color: var(--green);
+  font-size: clamp(17px, 2.5vw, 29px);
+  font-weight: 950;
+  overflow-wrap: anywhere;
+}
+
+.burn-section {
+  align-items: center;
+  display: grid;
+  gap: 34px;
+  grid-template-columns: minmax(0, 0.8fr) minmax(220px, 0.42fr);
+}
+
+.supply-shrink {
+  align-items: center;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  min-height: 220px;
+}
+
+.supply-shrink span {
+  background: var(--green);
+  border-radius: 999px;
+  box-shadow: 0 0 24px rgba(215, 255, 0, 0.34);
+  display: block;
+}
+
+.supply-shrink span:nth-child(1) {
+  height: 130px;
+  width: 44px;
+}
+
+.supply-shrink span:nth-child(2) {
+  height: 96px;
+  width: 34px;
+}
+
+.supply-shrink span:nth-child(3) {
+  height: 62px;
+  width: 24px;
+}
+
+.supply-shrink span:nth-child(4) {
+  height: 28px;
+  width: 14px;
+}
+
+.meme-faq {
+  min-height: 48vh;
+}
+
+.meme-faq .faq-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 24px;
+}
+
+.meme-faq .faq-item {
+  background: rgba(2, 4, 2, 0.74);
+  border: 1px solid rgba(215, 255, 0, 0.22);
+  border-radius: 10px;
+  min-height: 178px;
+  padding: 18px;
+}
+
+.meme-faq .faq-item h3 {
+  color: #ffffff;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.meme-faq .faq-item p {
+  color: rgba(243, 255, 230, 0.72);
+  font-size: 14px;
+  font-weight: 760;
+  line-height: 1.4;
+}
+
+.longcat-meme-site .site-footer {
+  background: rgba(2, 4, 2, 0.82);
+  border-top: 1px solid rgba(215, 255, 0, 0.25);
+  margin-top: 0;
+  padding-bottom: 42px;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes cat-body-wiggle {
+  0%,
+  100% {
+    border-radius: 52% 48% 50% 50% / 4% 5% 4% 5%;
+  }
+
+  50% {
+    border-radius: 48% 52% 50% 50% / 5% 4% 5% 4%;
+  }
+}
+
+@keyframes cat-head-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-1deg);
+  }
+
+  50% {
+    transform: translateY(8px) rotate(1deg);
+  }
+}
+
+@keyframes length-pulse {
+  0%,
+  100% {
+    transform: scaleX(0.88);
+  }
+
+  50% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes candle-grow {
+  0%,
+  100% {
+    transform: scaleY(0.94);
+  }
+
+  50% {
+    transform: scaleY(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spine-body,
+  .spine-cat--head,
+  .length-meter strong,
+  .long-candle {
+    animation: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .longcat-meme-site .main-nav.longcat-nav {
+    grid-template-columns: 1fr auto;
+  }
+
+  .longcat-meme-site .nav-links {
+    display: none;
+  }
+
+  .meme-hero,
+  .chart-meme-section,
+  .burn-section {
+    grid-template-columns: 1fr;
+  }
+
+  .crying-cat-stage {
+    min-height: 260px;
+  }
+
+  .length-grid,
+  .meme-faq .faq-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .terminal-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .spine-arm--left {
+    left: calc(50% - 260px);
+  }
+
+  .spine-arm--right {
+    left: calc(50% + 74px);
+  }
+}
+
+@media (max-width: 680px) {
+  .longcat-meme-site .main-nav.longcat-nav {
+    width: calc(100% - 24px);
+  }
+
+  .longcat-meme-site .account-link {
+    display: none;
+  }
+
+  .cat-section {
+    min-height: 58vh;
+    padding: 74px 0;
+    width: calc(100% - 28px);
+  }
+
+  .cat-section::before {
+    inset: 42px auto auto 0;
+    width: min(340px, 84vw);
+  }
+
+  .meme-hero {
+    min-height: calc(100vh - 66px);
+  }
+
+  .meme-hero h1 {
+    font-size: clamp(64px, 19vw, 96px);
+  }
+
+  .meme-subtitle {
+    font-size: 28px;
+  }
+
+  .length-grid,
+  .meme-faq .faq-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .long-button {
+    width: 100%;
+  }
+
+  .spine-cat--head {
+    left: calc(50% - 74px);
+  }
+
+  .spine-body {
+    left: calc(50% - 48px);
+    width: 96px;
+  }
+
+  .spine-arm {
+    display: none;
+  }
+
+  .meme-note {
+    font-size: 14px;
+    max-width: 120px;
+  }
+
+  .meme-note--one,
+  .meme-note--three,
+  .meme-note--five {
+    left: 64%;
+  }
+
+  .meme-note--two,
+  .meme-note--four {
+    left: 6%;
+  }
+
+  .terminal-strip span,
+  .terminal-strip strong {
+    min-height: 44px;
+    padding: 12px;
+  }
+}

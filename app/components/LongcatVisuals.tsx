@@ -1,7 +1,10 @@
+"use client";
+
+import { useEffect } from "react";
 import type { Metric } from "../data";
 
 type LongcatMascotProps = {
-  variant?: "hero" | "line" | "vertical";
+  variant?: "hero" | "line" | "vertical" | "crying";
   label?: string;
 };
 
@@ -24,6 +27,8 @@ export function LongcatMascot({ variant = "hero", label = "Longcat mascot" }: Lo
         <span className="longcat-ear longcat-ear--right" />
         <span className="longcat-eye longcat-eye--left" />
         <span className="longcat-eye longcat-eye--right" />
+        <span className="longcat-tear longcat-tear--left" />
+        <span className="longcat-tear longcat-tear--right" />
         <span className="longcat-nose" />
       </span>
       <span className="longcat-arm longcat-arm--top" />
@@ -32,17 +37,86 @@ export function LongcatMascot({ variant = "hero", label = "Longcat mascot" }: Lo
   );
 }
 
-export function LongcatBackground() {
+export function LongcatSpine() {
+  useEffect(() => {
+    const root = document.documentElement;
+    const updateLength = () => {
+      const scrollable = Math.max(1, document.body.scrollHeight - window.innerHeight);
+      const progress = Math.min(1, Math.max(0, window.scrollY / scrollable));
+      root.style.setProperty("--cat-scroll", progress.toFixed(4));
+    };
+
+    updateLength();
+    window.addEventListener("scroll", updateLength, { passive: true });
+    window.addEventListener("resize", updateLength);
+
+    return () => {
+      window.removeEventListener("scroll", updateLength);
+      window.removeEventListener("resize", updateLength);
+    };
+  }, []);
+
   return (
-    <div className="longcat-background" aria-hidden="true">
-      <div className="grid-glow" />
-      <div className="ticker-rain">
-        <span>LONG +0.00</span>
-        <span>CASHCAT 0.00x</span>
-        <span>FEES $0</span>
-        <span>BURN 0</span>
-      </div>
-      <LongcatMascot variant="line" label="Decorative longcat silhouette" />
+    <div className="longcat-spine" aria-hidden="true">
+      <span className="spine-grid" />
+      <span className="spine-cat spine-cat--head">
+        <span className="spine-ear spine-ear--left" />
+        <span className="spine-ear spine-ear--right" />
+        <span className="spine-eye spine-eye--left" />
+        <span className="spine-eye spine-eye--right" />
+        <span className="spine-tear spine-tear--left" />
+        <span className="spine-tear spine-tear--right" />
+        <span className="spine-mouth" />
+      </span>
+      <span className="spine-arm spine-arm--left" />
+      <span className="spine-arm spine-arm--right" />
+      <span className="spine-body" />
+      <span className="spine-foot spine-foot--left" />
+      <span className="spine-foot spine-foot--right" />
+      <span className="spine-tail" />
+      <span className="meme-note meme-note--one">very long</span>
+      <span className="meme-note meme-note--two">still going</span>
+      <span className="meme-note meme-note--three">this part also cat</span>
+      <span className="meme-note meme-note--four">length increasing...</span>
+      <span className="meme-note meme-note--five">tail not found yet</span>
+    </div>
+  );
+}
+
+export function LongcatBackground() {
+  return <LongcatSpine />;
+}
+
+export function LengthMeter() {
+  return (
+    <div className="length-meter" aria-label="Longcat length meter">
+      <span>Looooooooooooooooooooong</span>
+      <strong />
+    </div>
+  );
+}
+
+export function LongChart() {
+  return (
+    <div className="long-chart" aria-hidden="true">
+      <span className="long-candle long-candle--one" />
+      <span className="long-candle long-candle--two" />
+      <span className="long-candle long-candle--three" />
+      <span className="long-candle long-candle--four" />
+      <span className="long-candle long-candle--five" />
+      <span className="long-candle long-candle--six" />
+      <span className="long-arrow" />
+    </div>
+  );
+}
+
+export function SupplyShrink() {
+  return (
+    <div className="supply-shrink" aria-hidden="true">
+      <span />
+      <span />
+      <span />
+      <span />
     </div>
   );
 }

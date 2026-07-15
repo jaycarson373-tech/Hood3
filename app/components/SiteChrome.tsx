@@ -5,34 +5,19 @@ import {
   publicPositionAccountShort,
   publicPositionScanUrl,
   sourceLinks,
-  topMetrics,
 } from "../data";
 
 const navLinks = [
   { label: "Mechanism", href: "/#mechanism" },
-  { label: "Cashcat Thesis", href: "/thesis" },
-  { label: "Live Position", href: "/dashboard" },
+  { label: "Thesis", href: "/thesis" },
+  { label: "The Long", href: "/dashboard" },
   { label: "Burns", href: "/#burns" },
   { label: "FAQ", href: "/#faq" },
 ];
 
 export function SiteHeader() {
-  const conveyorMetrics = [...topMetrics, ...topMetrics];
-
   return (
     <header className="site-header">
-      <div className="market-strip" aria-label="Longcat live mechanism snapshot">
-        <div className="market-strip__track">
-          {conveyorMetrics.map((metric, index) => (
-            <div className="market-strip__item" key={`${metric.label}-${index}`}>
-              <span>{metric.label}</span>
-              <strong>{metric.value}</strong>
-              <small>{metric.detail}</small>
-            </div>
-          ))}
-        </div>
-      </div>
-
       <div className="main-nav longcat-nav">
         <Link className="brand" href="/" aria-label="Longcat home">
           <span className="brand-mark longcat-brand-mark" aria-hidden="true">
@@ -40,7 +25,7 @@ export function SiteHeader() {
           </span>
           <span>
             <strong>LONGCAT</strong>
-            <small>The longest long</small>
+            <small>still going</small>
           </span>
         </Link>
 
