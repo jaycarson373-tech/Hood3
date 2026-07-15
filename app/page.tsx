@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, ExternalLink } from "lucide-react";
-import { cashcatChartUrl, publicPositionScanUrl } from "./data";
+import { cashcatChartUrl } from "./data";
 import { LongcatSpine, MemeGraphicStack } from "./components/LongcatVisuals";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
 
@@ -158,10 +158,10 @@ export default function Home() {
           <strong>AWAITING FIRST LONG</strong>
         </div>
         <div className="button-row">
-          <a className="button primary long-button" href={publicPositionScanUrl} target="_blank" rel="noreferrer">
+          <Link className="button primary long-button" href="/dashboard">
             Verify Position
-            <ExternalLink size={16} aria-hidden="true" />
-          </a>
+            <ArrowRight size={16} aria-hidden="true" />
+          </Link>
           <Link className="button ghost long-button" href="/dashboard">
             Terminal
           </Link>

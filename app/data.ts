@@ -46,9 +46,6 @@ export const longcatXUrl = "#x";
 export const longcatChartUrl = "#chart";
 export const longcatContractUrl = "/LongcatToken.sol";
 export const cashcatChartUrl = "#cashcat-chart";
-export const publicPositionAccount = "0xdF099e764bB99654a7BaE0c0FE89bD8b86ABf45f";
-export const publicPositionAccountShort = "0xdF09...f45f";
-export const publicPositionScanUrl = `https://hypurrscan.io/address/${publicPositionAccount}`;
 
 export const topMetrics: Metric[] = [
   {
@@ -259,10 +256,6 @@ export const sourceLinks = [
   {
     label: "Contract",
     href: longcatContractUrl,
-  },
-  {
-    label: "Position",
-    href: publicPositionScanUrl,
   },
   {
     label: "Burns",

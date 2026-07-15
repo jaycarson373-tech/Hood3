@@ -1056,6 +1056,14 @@ h3 {
   outline: none;
 }
 
+.scan-card p {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 740;
+  line-height: 1.45;
+  margin: 0;
+}
+
 .public-account-card {
   background: rgba(213, 253, 81, 0.08);
   border-color: rgba(213, 253, 81, 0.32);

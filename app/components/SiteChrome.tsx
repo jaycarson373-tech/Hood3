@@ -1,12 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
-import {
-  publicPositionAccount,
-  publicPositionAccountShort,
-  publicPositionScanUrl,
-  sourceLinks,
-} from "../data";
+import { sourceLinks } from "../data";
 
 const navLinks = [
   { label: "Origin", href: "/#origin" },
@@ -40,18 +35,6 @@ export function SiteHeader() {
         </nav>
 
         <div className="header-actions">
-          <a
-            className="account-link"
-            href={publicPositionScanUrl}
-            target="_blank"
-            rel="noreferrer"
-            title={publicPositionAccount}
-            aria-label={`View Longcat public position account ${publicPositionAccountShort}`}
-          >
-            <span>LONG</span>
-            <code>{publicPositionAccountShort}</code>
-            <ExternalLink size={14} aria-hidden="true" />
-          </a>
           <Link className="nav-cta" href="/#buy-longcat">
             Buy $LONGCAT
           </Link>

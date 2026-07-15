@@ -17,8 +17,6 @@ import {
   burnStats,
   howItWorks,
   livePositionStats,
-  publicPositionAccount,
-  publicPositionScanUrl,
   terminalEvents,
 } from "../data";
 import { MetricGrid } from "../components/LongcatVisuals";
@@ -317,11 +315,8 @@ export function DashboardClient() {
 
           <div className="scan-card public-account-card">
             <span>Longcat public position account</span>
-            <strong>{shortAddress(publicPositionAccount)}</strong>
-            <a href={publicPositionScanUrl} target="_blank" rel="noreferrer">
-              View live position on HypurrScan
-              <ExternalLink size={14} aria-hidden="true" />
-            </a>
+            <strong>Awaiting public account.</strong>
+            <p>The live Hyperliquid account will be published after the first verified position.</p>
           </div>
 
           <label className="control address-control">
