@@ -40,18 +40,19 @@ export type FaqItem = {
   answer: string;
 };
 
-export const longcatTicker = "$LONGCAT";
-export const cashcatTicker = "$CASHCAT";
-export const longcatXUrl = "https://x.com/LongcatRH_";
-export const longcatChartUrl = "#chart";
-export const longcatContractUrl = "/LongcatToken.sol";
-export const cashcatChartUrl = "#cashcat-chart";
+export const hood3Ticker = "$HOOD3";
+export const hoodTicker = "HOOD";
+export const hood3XUrl = "https://x.com/HOOD3pf";
+export const hood3ChartUrl = "#chart";
+export const hood3ContractUrl = "/Hood3Token.sol";
+export const hoodChartUrl = "#hood-chart";
+export const lighterUrl = "https://lighter.xyz/";
 
 export const topMetrics: Metric[] = [
   {
-    label: "Cashcat Long",
+    label: "HOOD Long",
     value: "$0",
-    detail: "awaiting integration",
+    detail: "Lighter integration pending",
   },
   {
     label: "Current Leverage",
@@ -69,7 +70,7 @@ export const topMetrics: Metric[] = [
     detail: "buyback fuel",
   },
   {
-    label: "$LONGCAT Burned",
+    label: "$HOOD3 Burned",
     value: "0",
     detail: "permanent removal",
   },
@@ -77,7 +78,7 @@ export const topMetrics: Metric[] = [
 
 export const landingStats: Metric[] = [
   {
-    label: "Cashcat Long",
+    label: "HOOD Long",
     value: "$0",
     detail: "public position",
   },
@@ -92,7 +93,7 @@ export const landingStats: Metric[] = [
     detail: "2% fee extends the long",
   },
   {
-    label: "$LONGCAT Burned",
+    label: "$HOOD3 Burned",
     value: "0",
     detail: "supply removed",
   },
@@ -121,22 +122,22 @@ export const burnStats: Metric[] = [
 export const flywheelSteps: AutomationStep[] = [
   {
     label: "01",
-    title: "$LONGCAT trades",
+    title: "$HOOD3 trades",
     text: "Every transaction generates the 2% creator fee.",
   },
   {
     label: "02",
-    title: "Fees long $CASHCAT",
-    text: "100% of the 2% creator fee is strategically deployed into the public Cashcat position.",
+    title: "Fees long HOOD",
+    text: "100% of protocol creator fees are designed to build a public HOOD long on Lighter.",
   },
   {
     label: "03",
-    title: "Profits buy $LONGCAT",
-    text: "Realized trading profits are used to market-buy the native token.",
+    title: "Profits buy $HOOD3",
+    text: "Qualifying realized trading profits can market-buy the native token.",
   },
   {
     label: "04",
-    title: "$LONGCAT is burned",
+    title: "$HOOD3 is burned",
     text: "Every purchased token is permanently removed from circulation.",
   },
   {
@@ -148,39 +149,39 @@ export const flywheelSteps: AutomationStep[] = [
 
 export const timeline = [
   {
-    label: "2005",
-    title: "Longcat is born",
-    text: "The internet meets Shiro, the rescue cat from Japan with an impossibly long body.",
+    label: "Robinhood Chain",
+    title: "Retail moves onchain",
+    text: "Hood3 is built around the thesis that Robinhood-native rails can pull a new retail class into onchain markets.",
   },
   {
-    label: "2026",
-    title: "Longcat enters Robinhood",
-    text: "$LONGCAT turns meme length into directional Cashcat exposure.",
+    label: "Lighter",
+    title: "The leverage layer",
+    text: "Lighter provides the perp venue Hood3 is designed to use for transparent HOOD exposure.",
   },
   {
-    label: "Forever",
-    title: "The long keeps extending",
-    text: "Every fee makes the long longer. Every realized winning trade can make supply shorter.",
+    label: "Flywheel",
+    title: "Fees become direction",
+    text: "Creator fees build exposure; realized profits can buy and burn $HOOD3.",
   },
 ];
 
-export const cashcatThesisPoints: ThesisPoint[] = [
+export const hoodThesisPoints: ThesisPoint[] = [
   {
     label: "Retail rail",
     value: "01",
-    text: "Robinhood is bringing new retail onchain.",
+    text: "Robinhood Chain can bring mainstream retail directly onchain.",
     icon: TrendingUp,
   },
   {
-    label: "Native memes",
+    label: "Native equity",
     value: "02",
-    text: "Native ecosystems produce native memes.",
+    text: "HOOD is the clean directional proxy for Robinhood's own onchain expansion.",
     icon: Sparkles,
   },
   {
-    label: "Defining cat",
+    label: "Lighter execution",
     value: "03",
-    text: "Our thesis is Cashcat becomes Robinhood's defining cat.",
+    text: "Hood3 turns token activity into transparent Lighter-based HOOD exposure.",
     icon: BadgeDollarSign,
   },
 ];
@@ -188,19 +189,19 @@ export const cashcatThesisPoints: ThesisPoint[] = [
 export const howItWorks = [
   {
     title: "Creator fees accumulate",
-    text: "Trading activity creates the 2% creator fee for the Longcat mechanism.",
+    text: "Trading activity creates the 2% creator fee for the Hood3 mechanism.",
   },
   {
-    title: "Fees extend Cashcat",
-    text: "100% of the 2% creator fee allocated to the protocol is strategically deployed into the public $CASHCAT long.",
+    title: "Fees build the HOOD long",
+    text: "100% of the 2% creator fee allocated to the protocol is designed to add to the public HOOD long on Lighter.",
   },
   {
     title: "Profit is realized",
     text: "When the position generates qualifying realized gains, those gains become buyback fuel.",
   },
   {
-    title: "Longcat gets shorter",
-    text: "Realized trading profits buy back $LONGCAT and permanently burn the purchased tokens.",
+    title: "Hood3 supply contracts",
+    text: "Realized trading profits buy back $HOOD3 and permanently burn the purchased tokens.",
   },
 ];
 
@@ -213,7 +214,7 @@ export const automationSteps: AutomationStep[] = [
   {
     label: "02",
     title: "Extend the long",
-    text: "Fees strategically add to the public Cashcat long inside execution and risk limits.",
+    text: "Fees strategically add to the public HOOD long on Lighter inside execution and risk limits.",
   },
   {
     label: "03",
@@ -223,7 +224,7 @@ export const automationSteps: AutomationStep[] = [
   {
     label: "04",
     title: "Buy and burn",
-    text: "Profit buys $LONGCAT on market and permanently removes it from supply.",
+    text: "Profit buys $HOOD3 on market and permanently removes it from supply.",
   },
 ];
 
@@ -233,13 +234,13 @@ export const terminalEvents: TerminalEvent[] = [
     stage: "SYSTEM",
     status: "IDLE",
     action: "No live transactions yet",
-    detail: "Live receipts will stream creator fees, Cashcat long orders, realized profit, $LONGCAT buybacks, and burns here.",
+    detail: "Live receipts will stream creator fees, Lighter HOOD orders, realized profit, $HOOD3 buybacks, and burns here.",
   },
 ];
 
 export const risks = [
   "Leveraged trading can lose money quickly, including through liquidation.",
-  "Cashcat, Robinhood Chain, memecoins, and tokenized markets can face sharp volatility and regulatory review.",
+  "HOOD, Robinhood Chain, memecoins, and tokenized markets can face sharp volatility and regulatory review.",
   "Buybacks and burns only occur when qualifying realized profits exist; they are not guaranteed.",
   "Execution, liquidity, slippage, automation, and wallet operations need audited controls before full automation.",
 ];
@@ -247,15 +248,19 @@ export const risks = [
 export const sourceLinks = [
   {
     label: "X",
-    href: longcatXUrl,
+    href: hood3XUrl,
   },
   {
     label: "Chart",
-    href: longcatChartUrl,
+    href: hood3ChartUrl,
   },
   {
     label: "Contract",
-    href: longcatContractUrl,
+    href: hood3ContractUrl,
+  },
+  {
+    label: "Lighter",
+    href: lighterUrl,
   },
   {
     label: "Burns",
@@ -266,7 +271,7 @@ export const sourceLinks = [
 export const thesisRisks = [
   {
     label: "Market risk",
-    text: "Cashcat can move against the position. A long thesis is not a guarantee.",
+    text: "HOOD can move against the position. A long thesis is not a guarantee.",
   },
   {
     label: "Liquidation risk",
@@ -278,19 +283,19 @@ export const thesisRisks = [
   },
   {
     label: "Narrative risk",
-    text: "The thesis assumes Cashcat remains culturally relevant as Robinhood-linked onchain activity grows.",
+    text: "The thesis assumes Robinhood Chain and Lighter-linked onchain activity keep expanding.",
   },
 ];
 
 export const homePillars = [
   {
-    title: "Creator fees extend Cashcat",
-    text: "Every 2% creator fee allocated to the protocol strategically extends one public leveraged long on $CASHCAT.",
+    title: "Creator fees long HOOD",
+    text: "Every 2% creator fee allocated to the protocol is designed to extend one public leveraged HOOD position on Lighter.",
     icon: StretchHorizontal,
   },
   {
     title: "Winning trades create scarcity",
-    text: "Realized trading profits buy back $LONGCAT and permanently burn it.",
+    text: "Realized trading profits buy back $HOOD3 and permanently burn it.",
     icon: Flame,
   },
   {
@@ -302,31 +307,31 @@ export const homePillars = [
 
 export const faqItems: FaqItem[] = [
   {
-    question: "What is $LONGCAT?",
-    answer: "$LONGCAT is a native leverage token whose 2% creator fee is deployed into a public leveraged long position on Cashcat.",
+    question: "What is $HOOD3?",
+    answer: "$HOOD3 is a Robinhood Chain native leverage token designed to route its 2% creator fee into a public leveraged HOOD position on Lighter.",
   },
   {
     question: "Where do creator fees go?",
-    answer: "100% of the 2% creator fee allocated to the protocol is strategically deployed into the Cashcat position, subject to execution, risk controls and operating conditions.",
+    answer: "100% of the 2% creator fee allocated to the protocol is designed to build the HOOD long, subject to execution, risk controls and operating conditions.",
   },
   {
     question: "What happens to trading profits?",
-    answer: "Realized profits designated by the mechanism are used to buy $LONGCAT from the market and permanently burn the purchased tokens.",
+    answer: "Qualifying realized profits designated by the mechanism are used to buy $HOOD3 from the market and permanently burn the purchased tokens.",
   },
   {
     question: "Are profits or burns guaranteed?",
-    answer: "No. Leveraged trading involves significant risk. The Cashcat position can lose money, and buybacks only occur when qualifying realized profits exist.",
+    answer: "No. Leveraged trading involves significant risk. The HOOD position can lose money, and buybacks only occur when qualifying realized profits exist.",
   },
   {
     question: "Can the position be liquidated?",
     answer: "Yes. Any leveraged position carries liquidation risk. The position, leverage and liquidation level should be displayed publicly whenever integrations are available.",
   },
   {
-    question: "Why Cashcat?",
-    answer: "Our thesis is that Cashcat can become one of the defining native memes of the Robinhood ecosystem as Robinhood brings more retail activity onchain.",
+    question: "Why HOOD?",
+    answer: "Our thesis is that HOOD is the cleanest directional expression of Robinhood's own onchain expansion.",
   },
   {
-    question: "Is this affiliated with Robinhood or Cashcat?",
-    answer: "$LONGCAT is an independent community project and is not affiliated with or endorsed by Robinhood, Cashcat, Shiro, Longcat's original creators or any referenced third party.",
+    question: "Is this affiliated with Robinhood or Lighter?",
+    answer: "$HOOD3 is an independent community project and is not affiliated with or endorsed by Robinhood Markets, Lighter, or any referenced third party.",
   },
 ];

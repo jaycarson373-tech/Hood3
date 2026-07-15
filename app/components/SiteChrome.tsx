@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
-import { longcatXUrl, sourceLinks } from "../data";
+import { hood3XUrl, sourceLinks } from "../data";
 
 const navLinks = [
-  { label: "Origin", href: "/#origin" },
+  { label: "Robinhood Chain", href: "/#origin" },
   { label: "Mechanism", href: "/#mechanism" },
   { label: "Thesis", href: "/thesis" },
   { label: "The Long", href: "/dashboard" },
@@ -15,14 +15,14 @@ const navLinks = [
 export function SiteHeader() {
   return (
     <header className="site-header">
-      <div className="main-nav longcat-nav">
-        <Link className="brand" href="/" aria-label="Longcat home">
-          <span className="brand-mark longcat-brand-mark" aria-hidden="true">
-            <Image src="/longcat-logo.png" alt="" width={512} height={512} />
+      <div className="main-nav hood3-nav">
+        <Link className="brand" href="/" aria-label="Hood3 home">
+          <span className="brand-mark hood3-brand-mark" aria-hidden="true">
+            <Image src="/hood3-logo.png" alt="" width={1280} height={1195} />
           </span>
           <span>
-            <strong>LONGCAT</strong>
-            <small>$LONGCAT</small>
+            <strong>HOOD3</strong>
+            <small>$HOOD3</small>
           </span>
         </Link>
 
@@ -35,12 +35,12 @@ export function SiteHeader() {
         </nav>
 
         <div className="header-actions">
-          <a className="social-link x-header-link" href={longcatXUrl} target="_blank" rel="noreferrer" aria-label="Open Longcat on X">
+          <a className="social-link x-header-link" href={hood3XUrl} target="_blank" rel="noreferrer" aria-label="Open Hood3 on X">
             X
             <ExternalLink size={13} aria-hidden="true" />
           </a>
-          <Link className="nav-cta" href="/#buy-longcat">
-            Buy $LONGCAT
+          <Link className="nav-cta" href="/#buy-hood3">
+            Buy $HOOD3
           </Link>
         </div>
       </div>
@@ -50,10 +50,10 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="site-footer longcat-footer">
+    <footer className="site-footer hood3-footer">
       <div>
-        <strong>LONGCAT</strong>
-        <span>The longest cat on Robinhood.</span>
+        <strong>HOOD3</strong>
+        <span>The leveraged bet on HOOD, powered by Lighter.</span>
       </div>
       <div className="source-links">
         {sourceLinks.map((source) => (
@@ -64,9 +64,9 @@ export function SiteFooter() {
         ))}
       </div>
       <p>
-        $LONGCAT is a highly speculative community token. Leveraged trading can result in partial or total loss,
-        including liquidation. Nothing on this website is financial advice. $LONGCAT is not affiliated with Robinhood
-        Markets, Cashcat, Shiro, Longcat&apos;s original creators or any referenced third party.
+        $HOOD3 is a highly speculative community token. Leveraged trading can result in partial or total loss,
+        including liquidation. Nothing on this website is financial advice. $HOOD3 is not affiliated with Robinhood
+        Markets, Lighter, HOOD, or any referenced third party.
       </p>
     </footer>
   );

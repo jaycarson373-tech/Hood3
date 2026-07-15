@@ -12,9 +12,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteTitle = "Longcat | The Longest Cat on Robinhood";
+const siteTitle = "Hood3 | The Leveraged Bet on HOOD";
 const siteDescription =
-  "Longcat is the longest cat on Robinhood. A 2% creator fee makes the cat longer; winning trades can buy back and burn $LONGCAT.";
+  "Hood3 is a Robinhood Chain native leverage token powered by Lighter: creator fees build a public HOOD long, and qualifying realized profits buy back and burn $HOOD3.";
 const siteUrl = process.env.SITE_URL;
 
 export const metadata: Metadata = {
@@ -27,20 +27,20 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.png",
     shortcut: "/favicon.png",
-    apple: "/longcat-logo.png",
+    apple: "/hood3-logo.png",
   },
   openGraph: {
     title: siteTitle,
     description: siteDescription,
     url: "/",
-    siteName: "Longcat",
+    siteName: "Hood3",
     type: "website",
     images: [
       {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "Longcat social card",
+        alt: "Hood3 social card",
       },
     ],
   },

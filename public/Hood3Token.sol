@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.24;
 
-/// @title Longcat fixed-fee ERC20
-/// @notice $LONGCAT with a locked 2% creator fee routed to one public mechanism wallet.
+/// @title Hood3 fixed-fee ERC20
+/// @notice $HOOD3 with a locked 2% creator fee routed to one public mechanism wallet.
 /// @dev No owner, blacklist, pause, hidden mint, or mutable tax controls.
-contract LongcatToken {
-    string public constant name = "Longcat";
-    string public constant symbol = "LONGCAT";
+contract Hood3Token {
+    string public constant name = "Hood3";
+    string public constant symbol = "HOOD3";
     uint8 public constant decimals = 18;
 
     uint16 public constant FEE_BPS = 200;

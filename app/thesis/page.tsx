@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { ArrowRight, ExternalLink, TriangleAlert } from "lucide-react";
 import Link from "next/link";
-import { cashcatChartUrl, cashcatThesisPoints, risks, sourceLinks, thesisRisks } from "../data";
+import { hoodChartUrl, hoodThesisPoints, risks, sourceLinks, thesisRisks } from "../data";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
-const title = "Cashcat Thesis | Longcat";
+const title = "HOOD Thesis | Hood3";
 const description =
-  "The Longcat thesis for Cashcat: Robinhood-coded meme conviction, public leveraged exposure, and $LONGCAT buyback burns from realized trading profits.";
+  "The Hood3 thesis for HOOD: Robinhood Chain distribution, Lighter-based leverage, and $HOOD3 buyback burns from qualifying realized trading profits.";
 
 export const metadata: Metadata = {
   title,
@@ -27,27 +27,27 @@ export const metadata: Metadata = {
 
 export default function ThesisPage() {
   return (
-    <main className="site-shell longcat-shell">
+    <main className="site-shell hood3-shell hood3-terminal-site">
       <SiteHeader />
 
-      <section className="page-hero thesis-hero longcat-thesis-hero">
-        <p className="eyebrow">Cashcat Thesis</p>
-        <h1>Cashcat is the directional bet.</h1>
-        <p>Three points. One public long. No certainty implied.</p>
+      <section className="page-hero thesis-hero hood3-thesis-hero">
+        <p className="eyebrow">HOOD Thesis</p>
+        <h1>HOOD is the directional bet.</h1>
+        <p>Robinhood Chain distribution. Lighter execution. Public leverage. No certainty implied.</p>
         <div className="button-row">
           <Link className="button primary" href="/dashboard">
             View the long
             <ArrowRight size={17} aria-hidden="true" />
           </Link>
-          <a className="button ghost" href={cashcatChartUrl}>
-            View Cashcat
+          <a className="button ghost" href={hoodChartUrl}>
+            View HOOD
             <ExternalLink size={17} aria-hidden="true" />
           </a>
         </div>
       </section>
 
       <section className="thesis-grid content-band">
-        {cashcatThesisPoints.map((point) => {
+        {hoodThesisPoints.map((point) => {
           const Icon = point.icon;
 
           return (
@@ -65,16 +65,16 @@ export default function ThesisPage() {
         })}
       </section>
 
-      <section className="content-band thesis-memo cashcat-memo">
+      <section className="content-band thesis-memo hood3-memo">
         <div>
           <p className="eyebrow">Core view</p>
           <h2>
-            IF CASHCAT WINS,
+            IF HOOD WINS,
             <br />
-            LONGCAT GETS LONGER.
+            HOOD3 GETS SCARCER.
           </h2>
         </div>
-        <p>2% creator fees scale into a public $CASHCAT long. Realized profits buy back and burn $LONGCAT.</p>
+        <p>2% creator fees are designed to scale into a public HOOD long on Lighter. Qualifying realized profits buy back and burn $HOOD3.</p>
       </section>
 
       <section className="content-band thesis-risk-grid">
@@ -99,7 +99,7 @@ export default function ThesisPage() {
       </section>
 
       <section className="content-band legal-risk-list">
-        <h2>Longcat risks</h2>
+        <h2>Hood3 risks</h2>
         <ul>
           {risks.map((risk) => (
             <li key={risk}>{risk}</li>

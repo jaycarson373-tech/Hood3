@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 import { DashboardClient } from "./DashboardClient";
 
-const title = "Live Position | Longcat";
+const title = "Live Position | Hood3";
 const description =
-  "Track Longcat's public Cashcat long, 2% creator fees deployed, realized profit, $LONGCAT buybacks, and burns.";
+  "Track Hood3's public HOOD long on Lighter, 2% creator fees deployed, realized profit, $HOOD3 buybacks, and burns.";
 
 export const metadata: Metadata = {
   title,
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    <main className="site-shell longcat-shell">
+    <main className="site-shell hood3-shell hood3-terminal-site">
       <SiteHeader />
       <DashboardClient />
       <SiteFooter />

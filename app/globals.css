@@ -19,6 +19,379 @@
   --shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
 }
 
+/* Hood3 Robinhood Chain / Lighter rebrand layer */
+body:has(.hood3-terminal-site) {
+  background:
+    radial-gradient(circle at 78% 16%, rgba(213, 253, 81, 0.16), transparent 32%),
+    radial-gradient(circle at 12% 82%, rgba(213, 253, 81, 0.08), transparent 34%),
+    #020402;
+}
+
+.hood3-terminal-site {
+  --green: #d5fd51;
+  --green-strong: #edff9c;
+  --line: rgba(213, 253, 81, 0.18);
+  --line-strong: rgba(213, 253, 81, 0.34);
+  --panel: rgba(5, 10, 5, 0.76);
+  background:
+    linear-gradient(rgba(213, 253, 81, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(213, 253, 81, 0.055) 1px, transparent 1px),
+    #020402;
+  background-size: 54px 54px;
+  color: #ffffff;
+  overflow: hidden;
+  position: relative;
+}
+
+.hood3-terminal-site::before {
+  background: linear-gradient(90deg, transparent, rgba(213, 253, 81, 0.09), transparent);
+  content: "";
+  height: 1px;
+  left: 0;
+  opacity: 0.8;
+  position: fixed;
+  right: 0;
+  top: 42vh;
+  z-index: 0;
+}
+
+.hood3-terminal-site .site-header {
+  background: rgba(2, 4, 2, 0.72);
+  backdrop-filter: blur(18px);
+}
+
+.hood3-terminal-site .main-nav.hood3-nav,
+.hood3-nav {
+  border-color: rgba(213, 253, 81, 0.28);
+  box-shadow: 0 0 40px rgba(213, 253, 81, 0.08);
+}
+
+.hood3-brand-mark {
+  background: #d5fd51;
+  border: 1px solid rgba(213, 253, 81, 0.8);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.hood3-brand-mark img {
+  transform: scale(1.08);
+}
+
+.hood3-terminal-site .brand strong,
+.hood3-terminal-site .nav-links a:hover,
+.hood3-terminal-site .nav-links a:focus-visible,
+.hood3-terminal-site .section-label,
+.hood3-terminal-site .eyebrow,
+.hood3-terminal-site .kicker {
+  color: #d5fd51;
+}
+
+.hood3-signal-field {
+  inset: 0;
+  opacity: 0.78;
+  pointer-events: none;
+  position: fixed;
+  z-index: 0;
+}
+
+.hood3-signal-grid {
+  background:
+    linear-gradient(rgba(213, 253, 81, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(213, 253, 81, 0.055) 1px, transparent 1px);
+  background-size: 42px 42px;
+  inset: 0;
+  mask-image: radial-gradient(circle at 70% 20%, #000, transparent 72%);
+  position: absolute;
+}
+
+.hood3-signal-chart {
+  bottom: 12vh;
+  height: 34vh;
+  left: 52vw;
+  max-width: 760px;
+  min-width: 360px;
+  opacity: 0.38;
+  position: absolute;
+  right: 3vw;
+  transform: skewY(-9deg);
+}
+
+.hood3-signal-chart span {
+  background: linear-gradient(90deg, transparent, #d5fd51, transparent);
+  border-radius: 999px;
+  box-shadow: 0 0 22px rgba(213, 253, 81, 0.34);
+  display: block;
+  height: 3px;
+  margin: 44px 0;
+  transform-origin: left center;
+}
+
+.hood3-signal-chart span:nth-child(1) {
+  transform: rotate(-4deg) scaleX(0.78);
+}
+
+.hood3-signal-chart span:nth-child(2) {
+  transform: rotate(8deg) scaleX(0.95);
+}
+
+.hood3-signal-chart span:nth-child(3) {
+  transform: rotate(18deg) scaleX(1.08);
+}
+
+.hood3-signal-beam {
+  background: radial-gradient(circle, rgba(213, 253, 81, 0.24), transparent 62%);
+  filter: blur(18px);
+  height: 420px;
+  position: absolute;
+  right: 7vw;
+  top: 10vh;
+  width: 420px;
+}
+
+.hood-section,
+.hood3-terminal-site .content-band,
+.hood3-terminal-site .page-hero,
+.hood3-terminal-site .site-footer {
+  position: relative;
+  z-index: 1;
+}
+
+.hood-section {
+  display: grid;
+  gap: 26px;
+  margin: 0 auto;
+  max-width: 1180px;
+  min-height: 54vh;
+  padding: 96px 24px;
+  width: 100%;
+}
+
+.hood-hero {
+  align-items: center;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.72fr);
+  min-height: calc(100svh - 80px);
+  padding-top: 118px;
+}
+
+.hood-hero__copy {
+  max-width: 780px;
+}
+
+.hood-hero h1 {
+  color: #ffffff;
+  font-size: clamp(72px, 11vw, 160px);
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 0.84;
+  margin: 10px 0 22px;
+  text-transform: uppercase;
+}
+
+.hood-hero h1 span {
+  color: #d5fd51;
+  display: block;
+  text-shadow: 0 0 28px rgba(213, 253, 81, 0.2);
+}
+
+.hood-hero .hero-copy-lines {
+  max-width: 640px;
+}
+
+.hood-hero .hero-copy-lines p {
+  color: rgba(255, 255, 255, 0.86);
+  font-size: clamp(17px, 2vw, 22px);
+  font-weight: 760;
+}
+
+.hood-hero__mark {
+  align-items: center;
+  aspect-ratio: 1;
+  border: 1px solid rgba(213, 253, 81, 0.18);
+  border-radius: 50%;
+  display: grid;
+  justify-items: center;
+  position: relative;
+}
+
+.hood-hero__mark::before {
+  background: radial-gradient(circle, rgba(213, 253, 81, 0.18), transparent 65%);
+  content: "";
+  inset: -22%;
+  position: absolute;
+}
+
+.hood-hero__mark img {
+  filter: drop-shadow(0 0 34px rgba(213, 253, 81, 0.34));
+  max-width: min(420px, 78vw);
+  position: relative;
+  width: 86%;
+  z-index: 1;
+}
+
+.hood-hero__mark span {
+  background: #d5fd51;
+  border-radius: 999px;
+  bottom: 12%;
+  color: #050805;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  font-weight: 950;
+  letter-spacing: 0;
+  padding: 8px 12px;
+  position: absolute;
+  right: 12%;
+  z-index: 2;
+}
+
+.hood3-terminal-site .button.primary,
+.hood3-terminal-site .nav-cta {
+  background: #d5fd51;
+  color: #050805;
+}
+
+.hood3-terminal-site .button.ghost,
+.hood3-terminal-site .social-link {
+  background: rgba(213, 253, 81, 0.08);
+  border-color: rgba(213, 253, 81, 0.32);
+  color: #d5fd51;
+}
+
+.hood3-terminal-site .length-stat,
+.hood3-terminal-site .faq-item,
+.hood3-terminal-site .origin-board,
+.hood3-terminal-site .terminal-strip,
+.hood3-terminal-site .panel,
+.hood3-terminal-site .thesis-card,
+.hood3-terminal-site .risk-card,
+.hood3-terminal-site .how-card,
+.signal-card {
+  background: rgba(3, 8, 3, 0.78);
+  border-color: rgba(213, 253, 81, 0.22);
+  box-shadow: 0 0 38px rgba(213, 253, 81, 0.055);
+}
+
+.hood3-terminal-site .length-stat strong,
+.hood3-terminal-site .terminal-strip strong,
+.hood3-terminal-site .thesis-closing,
+.hood3-terminal-site .exposure-number strong {
+  color: #d5fd51;
+}
+
+.hood-origin-grid {
+  align-items: stretch;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mechanism-note {
+  color: rgba(255, 255, 255, 0.68);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 13px;
+  font-weight: 780;
+  text-transform: uppercase;
+}
+
+.signal-graphic-stack {
+  display: grid;
+  gap: 14px;
+  min-width: min(420px, 100%);
+}
+
+.signal-card {
+  border: 1px solid rgba(213, 253, 81, 0.24);
+  border-radius: 8px;
+  padding: 18px;
+}
+
+.signal-card span {
+  color: rgba(213, 253, 81, 0.78);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.signal-card strong {
+  color: #ffffff;
+  display: block;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: clamp(18px, 2.8vw, 30px);
+  margin-top: 8px;
+}
+
+.hood3-terminal-site .site-footer {
+  background: rgba(2, 4, 2, 0.88);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hood3-signal-chart span {
+    animation: hood-signal-scan 7s ease-in-out infinite;
+  }
+
+  .hood3-signal-beam {
+    animation: hood-soft-pulse 8s ease-in-out infinite;
+  }
+}
+
+@keyframes hood-signal-scan {
+  0%,
+  100% {
+    opacity: 0.28;
+  }
+  50% {
+    opacity: 0.74;
+  }
+}
+
+@keyframes hood-soft-pulse {
+  0%,
+  100% {
+    opacity: 0.42;
+  }
+  50% {
+    opacity: 0.76;
+  }
+}
+
+@media (max-width: 900px) {
+  .hood-hero,
+  .hood-origin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hood-hero {
+    min-height: auto;
+    padding-top: 104px;
+  }
+
+  .hood-hero__mark {
+    margin: 0 auto;
+    max-width: 360px;
+    order: -1;
+    width: 72vw;
+  }
+
+  .hood-section {
+    min-height: auto;
+    padding: 72px 18px;
+  }
+}
+
+@media (max-width: 560px) {
+  .hood-hero h1 {
+    font-size: clamp(56px, 18vw, 82px);
+  }
+
+  .hood-hero .hero-copy-lines p {
+    font-size: 15px;
+  }
+
+  .hood3-signal-chart {
+    left: 10vw;
+    opacity: 0.24;
+    right: -20vw;
+    top: 42vh;
+  }
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

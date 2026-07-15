@@ -1,25 +1,25 @@
-# Longcat
+# Hood3
 
-Longcat is the longest cat on Robinhood: a meme terminal built around one joke, the cat keeps
-getting longer. A 2% creator fee extends one public Cashcat long, and qualifying
-realized trading profits can buy back and burn $LONGCAT.
+Hood3 is a Robinhood Chain native leverage token powered by Lighter. A fixed
+2% creator fee is designed to build one public HOOD long; qualifying realized
+profits can buy back and permanently burn `$HOOD3`.
 
 ## Routes
 
-- `/` - Longcat landing page with a full-site Longcat wallpaper backing, original meme origin photo, live integration placeholders, meme mechanics, burns, and FAQ.
-- `/dashboard` - read-only Hyperliquid account viewer, Cashcat position telemetry, receipt terminal, and burn placeholders.
-- `/thesis` - Cashcat thesis, risks, and source links.
+- `/` - Hood3 launch page with black/neon Robinhood-coded terminal visuals, live integration placeholders, mechanism, thesis, burns, and FAQ.
+- `/dashboard` - Lighter-facing read-only terminal for HOOD position telemetry, receipts, and burn placeholders.
+- `/thesis` - HOOD thesis, risks, and source links.
 
 ## Contract
 
-- Source: `contracts/LongcatToken.sol`
+- Source: `contracts/Hood3Token.sol`
 - Fee: fixed `2%`
 - Receiver: immutable public mechanism wallet
 - Controls: no owner, no pause, no blacklist, no hidden mint
 
-The contract only routes the 2% fee to the mechanism wallet. Cashcat execution,
-buybacks, and burns should be handled by audited server-side automation and
-published as public terminal receipts.
+The contract only routes the 2% fee to the mechanism wallet. Lighter execution,
+HOOD position management, buybacks, and burns should be handled by audited
+server-side automation and published as public terminal receipts.
 
 ## X Assets And Copy
 
@@ -28,18 +28,18 @@ published as public terminal receipts.
 
 Bio:
 ```text
-The longest cat on Robinhood.
+The leveraged bet on HOOD.
 
-2% creator fees scale into a public $CASHCAT long on Hyperliquid.
+2% creator fees scale into a public HOOD long on Lighter.
 
-Profits buy back & burn $LONGCAT.
+Profits buy back & burn $HOOD3.
 ```
 
 Community description:
 ```text
-100% of the 2% creator fee scales into a public $CASHCAT long on Hyperliquid.
+100% of the 2% creator fee is designed to scale into a public HOOD long on Lighter.
 
-Realized profits buy back & permanently burn $LONGCAT.
+Qualifying realized profits buy back & permanently burn $HOOD3.
 ```
 
 ## Required Frontend Environment
@@ -51,7 +51,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
 The frontend only reads browser-safe Supabase views. Keep service-role keys,
-wallet keys, and Hyperliquid signing keys server-side.
+wallet keys, and Lighter signing keys server-side.
 
 ## Useful Commands
 
@@ -68,5 +68,5 @@ npm test
 
 Run `supabase/schema.sql` in Supabase before connecting live receipts. The
 automation worker should stay in dry-run mode until Robinhood ETH wallet
-authority, gas buffer, transfer routing, swaps, perp collateral movement,
-Cashcat order sizing, risk limits, and terminal logging are verified end to end.
+authority, gas buffer, transfer routing, swaps, Lighter collateral movement,
+HOOD order sizing, risk limits, and terminal logging are verified end to end.
