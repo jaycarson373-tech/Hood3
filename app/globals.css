@@ -3681,3 +3681,364 @@ body:has(.longcat-meme-site) {
     padding: 12px;
   }
 }
+
+/* Hood3 premium launch motion polish */
+.hood3-terminal-site {
+  isolation: isolate;
+}
+
+.hood3-terminal-site::after {
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(213, 253, 81, 0.05) 48%, transparent 100%),
+    radial-gradient(circle at 72% 24%, rgba(213, 253, 81, 0.12), transparent 28%);
+  content: "";
+  inset: 0;
+  mix-blend-mode: screen;
+  opacity: 0.42;
+  pointer-events: none;
+  position: fixed;
+  transform: translateY(-105%);
+  z-index: 0;
+}
+
+.hood3-terminal-site .site-header,
+.hood3-terminal-site .main-nav.hood3-nav,
+.hood3-terminal-site .button,
+.hood3-terminal-site .length-stat,
+.hood3-terminal-site .faq-item,
+.hood3-terminal-site .origin-board,
+.hood3-terminal-site .terminal-strip,
+.hood3-terminal-site .signal-card,
+.hood3-terminal-site .thesis-tape span,
+.hood3-terminal-site .long-flow span {
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    color 220ms ease,
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+.hood3-terminal-site .main-nav.hood3-nav {
+  box-shadow:
+    0 0 0 1px rgba(213, 253, 81, 0.05),
+    0 20px 70px rgba(0, 0, 0, 0.4),
+    0 0 42px rgba(213, 253, 81, 0.08);
+}
+
+.hood3-terminal-site .button {
+  position: relative;
+}
+
+.hood3-terminal-site .button.primary:hover,
+.hood3-terminal-site .button.primary:focus-visible,
+.hood3-terminal-site .nav-cta:hover,
+.hood3-terminal-site .nav-cta:focus-visible {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.28),
+    0 18px 44px rgba(213, 253, 81, 0.18);
+  transform: translateY(-2px);
+}
+
+.hood3-terminal-site .button.ghost:hover,
+.hood3-terminal-site .button.ghost:focus-visible,
+.hood3-terminal-site .social-link:hover,
+.hood3-terminal-site .social-link:focus-visible {
+  background: rgba(213, 253, 81, 0.14);
+  border-color: rgba(213, 253, 81, 0.56);
+  box-shadow: 0 14px 38px rgba(213, 253, 81, 0.1);
+  transform: translateY(-2px);
+}
+
+.hood3-terminal-site .length-stat:hover,
+.hood3-terminal-site .faq-item:hover,
+.hood3-terminal-site .origin-board:hover,
+.hood3-terminal-site .signal-card:hover,
+.hood3-terminal-site .terminal-strip:hover {
+  border-color: rgba(213, 253, 81, 0.46);
+  box-shadow:
+    0 0 0 1px rgba(213, 253, 81, 0.08),
+    0 18px 48px rgba(0, 0, 0, 0.32),
+    0 0 44px rgba(213, 253, 81, 0.09);
+  transform: translateY(-3px);
+}
+
+.hood3-terminal-site .long-flow span {
+  overflow: hidden;
+  position: relative;
+}
+
+.hood3-terminal-site .long-flow span::after,
+.hood3-terminal-site .signal-card::after,
+.hood3-terminal-site .terminal-strip::after {
+  background: linear-gradient(110deg, transparent, rgba(213, 253, 81, 0.18), transparent);
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  transform: translateX(-120%);
+}
+
+.hood3-terminal-site .signal-card,
+.hood3-terminal-site .terminal-strip {
+  overflow: hidden;
+  position: relative;
+}
+
+.hood3-terminal-site .hood-hero__mark {
+  box-shadow:
+    inset 0 0 80px rgba(213, 253, 81, 0.035),
+    0 0 90px rgba(213, 253, 81, 0.07);
+}
+
+.hood3-terminal-site .hood-hero__mark span {
+  box-shadow: 0 0 22px rgba(213, 253, 81, 0.22);
+}
+
+.hood3-terminal-site .hero-ca {
+  color: rgba(213, 253, 81, 0.78);
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 850;
+  letter-spacing: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hood3-terminal-site {
+    animation: hood-grid-drift 34s linear infinite;
+  }
+
+  .hood3-terminal-site::before {
+    animation: hood-line-scan 10s ease-in-out infinite;
+  }
+
+  .hood3-terminal-site::after {
+    animation: hood-surface-sweep 13s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+
+  .hood3-signal-grid {
+    animation: hood-grid-parallax 42s linear infinite;
+  }
+
+  .hood3-signal-beam {
+    animation:
+      hood-soft-pulse 8s ease-in-out infinite,
+      hood-beam-orbit 20s ease-in-out infinite;
+  }
+
+  .hood3-signal-chart span {
+    animation:
+      hood-signal-scan 7s ease-in-out infinite,
+      hood-chart-float 12s ease-in-out infinite;
+  }
+
+  .hood3-signal-chart span:nth-child(2) {
+    animation-delay: 0.6s;
+  }
+
+  .hood3-signal-chart span:nth-child(3) {
+    animation-delay: 1.2s;
+  }
+
+  .hood3-terminal-site .hood-hero__copy {
+    animation: hood-fade-up 860ms cubic-bezier(0.22, 1, 0.36, 1) 80ms both;
+  }
+
+  .hood3-terminal-site .hood-hero__mark {
+    animation:
+      hood-fade-up 860ms cubic-bezier(0.22, 1, 0.36, 1) 180ms both,
+      hood-logo-float 7s ease-in-out 1s infinite;
+  }
+
+  .hood3-terminal-site .hood-hero__mark::before {
+    animation: hood-mark-glow 8s ease-in-out infinite;
+  }
+
+  .hood3-terminal-site .section-label,
+  .hood3-terminal-site .hood-section h2,
+  .hood3-terminal-site .length-stat,
+  .hood3-terminal-site .origin-board,
+  .hood3-terminal-site .long-flow,
+  .hood3-terminal-site .thesis-tape,
+  .hood3-terminal-site .terminal-strip,
+  .hood3-terminal-site .signal-card,
+  .hood3-terminal-site .faq-item {
+    animation: hood-fade-up 720ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hood3-terminal-site .length-stat:nth-child(2n),
+  .hood3-terminal-site .origin-board:nth-child(2),
+  .hood3-terminal-site .faq-item:nth-child(2n),
+  .hood3-terminal-site .signal-card:nth-child(2) {
+    animation-delay: 90ms;
+  }
+
+  .hood3-terminal-site .length-stat:nth-child(3n),
+  .hood3-terminal-site .faq-item:nth-child(3n),
+  .hood3-terminal-site .signal-card:nth-child(3) {
+    animation-delay: 160ms;
+  }
+
+  .hood3-terminal-site .long-flow span::after,
+  .hood3-terminal-site .signal-card::after,
+  .hood3-terminal-site .terminal-strip::after {
+    animation: hood-sheen 7.5s ease-in-out infinite;
+  }
+
+  .hood3-terminal-site .long-flow span:nth-child(2)::after {
+    animation-delay: 0.45s;
+  }
+
+  .hood3-terminal-site .long-flow span:nth-child(3)::after {
+    animation-delay: 0.9s;
+  }
+
+  .hood3-terminal-site .long-flow span:nth-child(4)::after {
+    animation-delay: 1.35s;
+  }
+
+  .hood3-terminal-site .long-flow span:nth-child(5)::after {
+    animation-delay: 1.8s;
+  }
+}
+
+@keyframes hood-grid-drift {
+  from {
+    background-position:
+      0 0,
+      0 0,
+      0 0;
+  }
+
+  to {
+    background-position:
+      54px 54px,
+      54px 54px,
+      0 0;
+  }
+}
+
+@keyframes hood-grid-parallax {
+  from {
+    background-position:
+      0 0,
+      0 0;
+  }
+
+  to {
+    background-position:
+      42px 84px,
+      84px 42px;
+  }
+}
+
+@keyframes hood-line-scan {
+  0%,
+  100% {
+    opacity: 0.3;
+    top: 24vh;
+  }
+
+  50% {
+    opacity: 0.9;
+    top: 72vh;
+  }
+}
+
+@keyframes hood-surface-sweep {
+  0%,
+  55% {
+    opacity: 0;
+    transform: translateY(-105%);
+  }
+
+  70% {
+    opacity: 0.44;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(105%);
+  }
+}
+
+@keyframes hood-beam-orbit {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(-4vw, 3vh, 0) scale(1.08);
+  }
+}
+
+@keyframes hood-chart-float {
+  0%,
+  100% {
+    filter: brightness(0.86);
+  }
+
+  50% {
+    filter: brightness(1.12);
+  }
+}
+
+@keyframes hood-fade-up {
+  from {
+    filter: blur(7px);
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    filter: blur(0);
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hood-logo-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -8px, 0);
+  }
+}
+
+@keyframes hood-mark-glow {
+  0%,
+  100% {
+    opacity: 0.58;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.92;
+    transform: scale(1.035);
+  }
+}
+
+@keyframes hood-sheen {
+  0%,
+  54% {
+    transform: translateX(-120%);
+  }
+
+  74%,
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hood3-terminal-site,
+  .hood3-terminal-site *,
+  .hood3-terminal-site::before,
+  .hood3-terminal-site::after {
+    animation: none !important;
+    transition-duration: 0.01ms !important;
+  }
+}
