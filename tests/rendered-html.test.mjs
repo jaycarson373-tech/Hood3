@@ -11,6 +11,7 @@ const requiredLaunchCopy = [
   "ON ROBINHOOD.",
   "2% creator fees scale into a public $CASHCAT long on Hyperliquid.",
   "Realized profits buy back and burn $LONGCAT.",
+  "CA: soon",
   "POSITION SIZE",
   "TOTAL FEES DEPLOYED",
   "ENTRY PRICE",
@@ -85,6 +86,7 @@ test("server-renders the Longcat launch homepage", async () => {
   assert.match(html, /Leveraged positions can lose money or get liquidated/);
   assert.match(html, /<meta[^>]+property=["']og:image["'][^>]+og\.png/i);
   assert.match(html, /<link[^>]+rel=["']icon["'][^>]+favicon\.png/i);
+  assert.match(html, /https:\/\/x\.com\/LongcatRH_/);
   assert.doesNotMatch(html, /hero-graphic-callout|scribble|THE PLAN|tail not found|Cat Extension Today|Measured Emotionally|\+1\.42|Loooo+ng|No win, no magic|STATUS: EXTENDING/);
   assert.doesNotMatch(html, bannedRenderedCopy);
 });
@@ -115,8 +117,9 @@ test("server-renders Longcat dashboard and thesis routes", async () => {
 });
 
 test("repo no longer ships preview or legacy launch wiring", async () => {
-  const [page, layout, visuals, packageJson, readme, xBanner, contract, publicContract, supabaseSchema, supabaseReadme, railwayEnv] = await Promise.all([
+  const [page, data, layout, visuals, packageJson, readme, xBanner, contract, publicContract, supabaseSchema, supabaseReadme, railwayEnv] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/data.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/components/LongcatVisuals.tsx", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
@@ -135,6 +138,7 @@ test("repo no longer ships preview or legacy launch wiring", async () => {
   assert.match(layout, /favicon\.png/);
   assert.match(layout, /og\.png/);
   assert.match(page, /hero-longest/);
+  assert.match(page, /hero-ca/);
   assert.match(page, /ORIGIN LORE/);
   assert.match(visuals, /longcat-wallpaper-clean\.png/);
   assert.match(visuals, /longcat-sky\.jpg/);
@@ -150,6 +154,7 @@ test("repo no longer ships preview or legacy launch wiring", async () => {
   assert.match(readme, /public\/x-avatar\.png/);
   assert.match(xBanner, /THE LONGEST CAT/);
   assert.match(xBanner, /opacity="\.2"/);
+  assert.match(data, /LongcatRH_/);
   assert.match(supabaseSchema, /eth_fee_policy/);
   assert.match(supabaseSchema, /eth_wallet_address/);
   assert.match(supabaseReadme, /Robinhood ETH only/);

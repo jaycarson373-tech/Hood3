@@ -42,7 +42,7 @@ export type FaqItem = {
 
 export const longcatTicker = "$LONGCAT";
 export const cashcatTicker = "$CASHCAT";
-export const longcatXUrl = "#x";
+export const longcatXUrl = "https://x.com/LongcatRH_";
 export const longcatChartUrl = "#chart";
 export const longcatContractUrl = "/LongcatToken.sol";
 export const cashcatChartUrl = "#cashcat-chart";

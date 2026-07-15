@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
-import { sourceLinks } from "../data";
+import { longcatXUrl, sourceLinks } from "../data";
 
 const navLinks = [
   { label: "Origin", href: "/#origin" },
@@ -35,6 +35,10 @@ export function SiteHeader() {
         </nav>
 
         <div className="header-actions">
+          <a className="social-link x-header-link" href={longcatXUrl} target="_blank" rel="noreferrer" aria-label="Open Longcat on X">
+            X
+            <ExternalLink size={13} aria-hidden="true" />
+          </a>
           <Link className="nav-cta" href="/#buy-longcat">
             Buy $LONGCAT
           </Link>

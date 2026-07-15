@@ -377,6 +377,12 @@ h3 {
   padding: 0 12px;
 }
 
+.x-header-link {
+  height: 34px;
+  min-width: 42px;
+  padding: 0 10px;
+}
+
 .account-link:hover,
 .account-link:focus-visible,
 .social-link:hover,
@@ -2789,6 +2795,16 @@ body:has(.longcat-meme-site) {
 .meme-actions {
   animation: launch-fade 860ms ease 160ms both;
   margin-top: 4px;
+}
+
+.hero-ca {
+  color: rgba(213, 253, 81, 0.84);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
+  margin: -8px 0 0;
+  text-transform: uppercase;
 }
 
 .long-button {
