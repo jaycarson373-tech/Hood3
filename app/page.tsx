@@ -78,7 +78,7 @@ export default function Home() {
               View The Long
             </Link>
           </div>
-          <p className="hero-ca">CA: soon</p>
+          <p className="hero-ca">CA: 0xcd026c6da703739fe13e3d6f13caf4c0f9627777</p>
         </div>
 
       </section>

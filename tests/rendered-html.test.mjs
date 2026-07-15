@@ -11,7 +11,7 @@ const requiredLaunchCopy = [
   "ON ROBINHOOD.",
   "2% creator fees scale into a public $CASHCAT long on Hyperliquid.",
   "Realized profits buy back and burn $LONGCAT.",
-  "CA: soon",
+  "CA: 0xcd026c6da703739fe13e3d6f13caf4c0f9627777",
   "POSITION SIZE",
   "TOTAL FEES DEPLOYED",
   "ENTRY PRICE",
