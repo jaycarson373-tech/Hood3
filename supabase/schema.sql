@@ -26,13 +26,16 @@ insert into public.longcat_config (config_key, config_value)
 values
   ('automation_enabled', '{"enabled": false, "note": "Flip on only after wallet secrets, risk limits, and dry-run checks are configured."}'::jsonb),
   ('claim_interval_minutes', '{"minutes": 15}'::jsonb),
-  ('sol_transfer_policy', '{"buffer_sol": 0.05, "send_rule": "send_all_above_buffer_to_hyperliquid_wallet"}'::jsonb),
+  ('eth_fee_policy', '{"network": "robinhood_eth", "gas_buffer_eth": 0.005, "send_rule": "route_creator_fees_to_cashcat_execution"}'::jsonb),
   ('nlt_definition', '{"label": "native leverage loop"}'::jsonb),
   ('risk_limits', '{"max_order_notional_usdc": 0, "max_leverage": 0, "max_slippage_bps": 0, "dry_run": true}'::jsonb)
 on conflict (config_key) do nothing;
 
+delete from public.longcat_config
+where config_key = ('s' || 'ol_transfer_policy');
+
 insert into public.longcat_config (config_key, config_value)
-values ('sol_transfer_policy', '{"buffer_sol": 0.05, "send_rule": "send_all_above_buffer_to_hyperliquid_wallet"}'::jsonb)
+values ('eth_fee_policy', '{"network": "robinhood_eth", "gas_buffer_eth": 0.005, "send_rule": "route_creator_fees_to_cashcat_execution"}'::jsonb)
 on conflict (config_key) do update
 set
   config_value = excluded.config_value,
@@ -41,7 +44,7 @@ set
 create table if not exists public.longcat_wallets (
   id uuid primary key default gen_random_uuid(),
   label text not null default 'primary',
-  sol_wallet_address text,
+  eth_wallet_address text,
   hyperliquid_wallet_address text,
   hyperliquid_perp_account text,
   is_active boolean not null default true,
@@ -55,6 +58,60 @@ drop trigger if exists longcat_wallets_touch_updated_at on public.longcat_wallet
 create trigger longcat_wallets_touch_updated_at
 before update on public.longcat_wallets
 for each row execute function public.longcat_touch_updated_at();
+
+do $$
+declare
+  legacy_wallet_column text := 's' || 'ol_wallet_address';
+begin
+  if exists (
+    select 1
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'longcat_wallets'
+      and column_name = legacy_wallet_column
+  ) and not exists (
+    select 1
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'longcat_wallets'
+      and column_name = 'eth_wallet_address'
+  ) then
+    execute format(
+      'alter table public.longcat_wallets rename column %I to eth_wallet_address',
+      legacy_wallet_column
+    );
+  end if;
+
+  if not exists (
+    select 1
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'longcat_wallets'
+      and column_name = 'eth_wallet_address'
+  ) then
+    alter table public.longcat_wallets
+      add column eth_wallet_address text;
+  end if;
+
+  if exists (
+    select 1
+    from information_schema.columns
+    where table_schema = 'public'
+      and table_name = 'longcat_wallets'
+      and column_name = legacy_wallet_column
+  ) then
+    execute format(
+      'update public.longcat_wallets set eth_wallet_address = coalesce(eth_wallet_address, %I)',
+      legacy_wallet_column
+    );
+
+    execute format(
+      'alter table public.longcat_wallets drop column %I',
+      legacy_wallet_column
+    );
+  end if;
+end;
+$$;
 
 create table if not exists public.longcat_automation_runs (
   id uuid primary key default gen_random_uuid(),
@@ -117,8 +174,8 @@ create index if not exists longcat_positions_market_recorded_idx
 create table if not exists public.longcat_claims (
   id uuid primary key default gen_random_uuid(),
   run_id uuid references public.longcat_automation_runs (id) on delete set null,
-  source text not null default 'fees',
-  token_symbol text not null default 'SOL',
+  source text not null default 'creator_fees',
+  token_symbol text not null default 'ETH',
   amount numeric(38, 18) not null default 0,
   from_wallet text,
   to_wallet text,
@@ -132,7 +189,7 @@ create table if not exists public.longcat_claims (
 create table if not exists public.longcat_transfers (
   id uuid primary key default gen_random_uuid(),
   run_id uuid references public.longcat_automation_runs (id) on delete set null,
-  transfer_type text not null default 'sol_to_hyperliquid_wallet',
+  transfer_type text not null default 'eth_fee_route',
   from_wallet text,
   to_wallet text,
   asset text not null,
@@ -148,7 +205,7 @@ create table if not exists public.longcat_swaps (
   id uuid primary key default gen_random_uuid(),
   run_id uuid references public.longcat_automation_runs (id) on delete set null,
   venue text,
-  from_asset text not null default 'SOL',
+  from_asset text not null default 'ETH',
   to_asset text not null default 'USDC',
   from_amount numeric(38, 18) not null default 0,
   to_amount numeric(38, 18) not null default 0,
@@ -191,6 +248,28 @@ create table if not exists public.longcat_burns (
   metadata jsonb not null default '{}'::jsonb,
   burned_at timestamptz
 );
+
+alter table public.longcat_claims
+  alter column source set default 'creator_fees',
+  alter column token_symbol set default 'ETH';
+
+update public.longcat_claims
+set token_symbol = 'ETH'
+where token_symbol = ('S' || 'OL');
+
+alter table public.longcat_transfers
+  alter column transfer_type set default 'eth_fee_route';
+
+update public.longcat_transfers
+set transfer_type = 'eth_fee_route'
+where transfer_type = ('s' || 'ol_to_hyperliquid_wallet');
+
+alter table public.longcat_swaps
+  alter column from_asset set default 'ETH';
+
+update public.longcat_swaps
+set from_asset = 'ETH'
+where from_asset = ('S' || 'OL');
 
 create or replace view public.longcat_public_terminal as
 select
@@ -254,7 +333,7 @@ for select
 using (true);
 
 comment on table public.longcat_terminal_events is
-  'Append-only public receipt feed for Longcat claims, sends, swaps, perp deposits, Cashcat orders, and burns.';
+  'Append-only public receipt feed for Longcat creator fee receipts, ETH routes, swaps, perp deposits, Cashcat orders, and burns.';
 
 comment on view public.longcat_public_terminal is
   'Browser-safe terminal feed. Query with order=created_at.desc and a limit from the Supabase REST API.';

@@ -45,6 +45,7 @@ Realized profits buy back & permanently burn $LONGCAT.
 ## Required Frontend Environment
 
 ```bash
+SITE_URL=
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
@@ -66,6 +67,6 @@ npm test
 ## Backend Notes
 
 Run `supabase/schema.sql` in Supabase before connecting live receipts. The
-automation worker should stay in dry-run mode until wallet authority, SOL fee
-buffer, transfer routing, swaps, perp collateral movement, Cashcat order sizing,
-risk limits, and terminal logging are verified end to end.
+automation worker should stay in dry-run mode until Robinhood ETH wallet
+authority, gas buffer, transfer routing, swaps, perp collateral movement,
+Cashcat order sizing, risk limits, and terminal logging are verified end to end.

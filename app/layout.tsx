@@ -15,9 +15,10 @@ const geistMono = Geist_Mono({
 const siteTitle = "Longcat | The Longest Cat on Robinhood";
 const siteDescription =
   "Longcat is the longest cat on Robinhood. A 2% creator fee makes the cat longer; winning trades can buy back and burn $LONGCAT.";
+const siteUrl = process.env.SITE_URL;
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.hood3pump.fun"),
+  ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
   title: siteTitle,
   description: siteDescription,
   alternates: {
