@@ -4,20 +4,21 @@ import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
 const requiredLaunchCopy = [
-  "Hood3 | NLT Flywheel",
-  "The Leveraged Bet on HOOD.",
-  "Powered by the Native Leverage Token (NLT) Flywheel.",
-  "https://x.com/HOOD3pf",
-  "0xdF099e764bB99654a7BaE0c0FE89bD8b86ABf45f",
-  "https://hypurrscan.io/address/0xdF099e764bB99654a7BaE0c0FE89bD8b86ABf45f",
-  "Creator Fees",
-  "HOOD Long",
-  "Realized Profit",
-  "HOOD3 Buyback",
-  "Permanent Burn",
+  "Longcat | The Longest Long on Robinhood",
+  "THE LONGEST LONG",
+  "ON ROBINHOOD.",
+  "Every fee makes the long longer.",
+  "THE NATIVE LEVERAGE TOKEN FOR CASHCAT",
+  "$LONGCAT trades",
+  "Fees long $CASHCAT",
+  "Realized trading profits",
+  "IF ROBINHOOD BECOMES THE HOME OF RETAIL, CASHCAT CAN BECOME ITS CAT.",
+  "WHEN THE LONG WINS",
+  "LONGCAT GETS SHORTER.",
+  "Looooooooooooooooong.",
 ];
 const bannedLaunchCopy =
-  /codex-preview|react-loading-skeleton|Your site is taking shape|Codex is working|HOODX|redeemable reserve|direct redemption|Leverage Terminal|cinematic|demo state|simulated/i;
+  /codex-preview|react-loading-skeleton|Your site is taking shape|Codex is working|\bHood[3]\b|\bHOO[D]3\b|\bHOO[D]X\b|The Leveraged Bet|HOO[D] long|Hood Thesis|redeemable reserve|direct redemption|guaranteed yield|passive income|dividends|treasury/i;
 const bannedRenderedCopy = new RegExp(`${bannedLaunchCopy.source}|NEXT_PUBLIC|Supabase not connected`, "i");
 
 async function render(path = "/") {
@@ -41,7 +42,7 @@ async function render(path = "/") {
   );
 }
 
-test("server-renders the Hood3 launch homepage", async () => {
+test("server-renders the Longcat launch homepage", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
@@ -52,37 +53,36 @@ test("server-renders the Hood3 launch homepage", async () => {
     assert.match(html, new RegExp(copy.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
   }
 
-  assert.match(html, /100% of creator fees fund a public HOOD long on Hyperliquid/);
-  assert.match(html, /The more HOOD wins, the more HOOD3 disappears/);
-  assert.match(html, /<meta[^>]+property=["']og:image["'][^>]+hood3-logo\.png/i);
-  assert.match(html, /<link[^>]+rel=["']icon["'][^>]+favicon\.png/i);
+  assert.match(html, /Every creator fee extends one public leveraged long on \$CASHCAT/);
+  assert.match(html, /No fabricated live values/);
+  assert.match(html, /Buybacks are not guaranteed/);
+  assert.match(html, /<meta[^>]+property=["']og:image["'][^>]+longcat-mark\.svg/i);
+  assert.match(html, /<link[^>]+rel=["']icon["'][^>]+favicon\.svg/i);
   assert.doesNotMatch(html, bannedRenderedCopy);
 });
 
-test("server-renders dashboard and thesis launch routes", async () => {
+test("server-renders Longcat dashboard and thesis routes", async () => {
   const [dashboardResponse, thesisResponse] = await Promise.all([render("/dashboard"), render("/thesis")]);
   assert.equal(dashboardResponse.status, 200);
   assert.equal(thesisResponse.status, 200);
 
   const [dashboardHtml, thesisHtml] = await Promise.all([dashboardResponse.text(), thesisResponse.text()]);
 
-  assert.match(dashboardHtml, /NLT Flywheel terminal/);
-  assert.match(dashboardHtml, /Native Leverage Token \(NLT\) Flywheel/);
-  assert.match(dashboardHtml, /Creator Fees/);
-  assert.match(dashboardHtml, /Permanent Burn/);
-  assert.match(dashboardHtml, /Hood3 Hyperliquid account/);
+  assert.match(dashboardHtml, /Longcat terminal/);
+  assert.match(dashboardHtml, /Current Cashcat long/);
+  assert.match(dashboardHtml, /Longcat public position account/);
   assert.match(dashboardHtml, /View live position on HypurrScan/);
-  assert.match(dashboardHtml, /Hood3 terminal/);
+  assert.match(dashboardHtml, /When the long wins, Longcat gets shorter/);
   assert.doesNotMatch(dashboardHtml, bannedRenderedCopy);
 
-  assert.match(thesisHtml, /Hood Thesis/);
-  assert.match(thesisHtml, /The HOOD bull case/);
-  assert.match(thesisHtml, /Native Leverage Token \(NLT\) Flywheel/);
-  assert.match(thesisHtml, /Robinhood/);
+  assert.match(thesisHtml, /Cashcat Thesis/);
+  assert.match(thesisHtml, /The native cat of Robinhood deserves the longest position on Robinhood/);
+  assert.match(thesisHtml, /if Robinhood Chain wins retail attention/i);
+  assert.match(thesisHtml, /No buyback is guaranteed|Buybacks are not guaranteed/);
   assert.doesNotMatch(thesisHtml, bannedRenderedCopy);
 });
 
-test("repo no longer ships preview skeleton wiring", async () => {
+test("repo no longer ships preview or legacy launch wiring", async () => {
   const [page, layout, packageJson, readme] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
@@ -90,10 +90,10 @@ test("repo no longer ships preview skeleton wiring", async () => {
     readFile(new URL("../README.md", import.meta.url), "utf8"),
   ]);
 
-  assert.match(packageJson, /"name": "hood3"/);
-  assert.match(readme, /^# Hood3/m);
-  assert.match(layout, /Hood3 \| NLT Flywheel/);
-  assert.match(page, /The Leveraged Bet on HOOD/);
+  assert.match(packageJson, /"name": "longcat"/);
+  assert.match(readme, /^# Longcat/m);
+  assert.match(layout, /Longcat \| The Longest Long on Robinhood/);
+  assert.match(page, /THE LONGEST LONG/);
   assert.doesNotMatch(`${page}\n${layout}\n${packageJson}\n${readme}`, bannedLaunchCopy);
 
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));

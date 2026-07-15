@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Longcat">
+  <rect width="128" height="128" rx="28" fill="#050805"/>
+  <path d="M18 70c18-16 38-24 62-18l2-16 13 13 17-4-8 16c8 7 9 20 1 28-11 11-34 9-52 2-15-6-27-8-43-2 0-8 2-14 8-19Z" fill="#f8fff0"/>
+  <path d="M78 52c-21-6-41 2-60 18" fill="none" stroke="#d7ff00" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="93" cy="66" r="3" fill="#050805"/>
+  <circle cx="105" cy="66" r="3" fill="#050805"/>
+</svg>

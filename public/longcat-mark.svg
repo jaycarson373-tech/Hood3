@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Longcat social mark">
+  <rect width="1200" height="630" fill="#050805"/>
+  <g opacity=".28" stroke="#d7ff00" stroke-width="1">
+    <path d="M0 120h1200M0 220h1200M0 320h1200M0 420h1200M0 520h1200"/>
+    <path d="M120 0v630M260 0v630M400 0v630M540 0v630M680 0v630M820 0v630M960 0v630M1100 0v630"/>
+  </g>
+  <path d="M96 330c130-86 278-112 506-80l16-70 62 52 85-18-38 72c36 26 48 79 16 116-54 62-190 52-314 14-121-37-215-34-344 24 2-46 4-79 11-110Z" fill="#f8fff0"/>
+  <path d="M96 330c130-86 278-112 506-80" fill="none" stroke="#d7ff00" stroke-width="18" stroke-linecap="round"/>
+  <circle cx="662" cy="316" r="12" fill="#050805"/>
+  <circle cx="716" cy="318" r="12" fill="#050805"/>
+  <path d="M686 350c14 6 27 6 40 0" fill="none" stroke="#050805" stroke-width="7" stroke-linecap="round"/>
+  <text x="92" y="126" fill="#d7ff00" font-family="Arial, Helvetica, sans-serif" font-size="54" font-weight="900">LONGCAT</text>
+  <text x="92" y="548" fill="#f8fff0" font-family="Arial, Helvetica, sans-serif" font-size="76" font-weight="900">THE LONGEST LONG ON ROBINHOOD</text>
+</svg>

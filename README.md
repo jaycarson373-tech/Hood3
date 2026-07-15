@@ -1,14 +1,14 @@
-# Hood3
+# Longcat
 
-Hood3 is a launch site for the Native Leverage Token (NLT) Flywheel: public
-receipts, HOOD long visibility, Hyperliquid account linking, HOOD3 buybacks,
-permanent burns, and the Hood Thesis.
+Longcat is a Robinhood-coded launch site for a Longcat-themed native leverage token:
+creator fees extend one public leveraged Cashcat long, and qualifying realized trading
+profits buy back and burn $LONGCAT.
 
 ## Routes
 
-- `/` - landing page with the Hood3 hero, X link, Hyperliquid account link, and zeroed launch stats.
-- `/dashboard` - read-only Hyperliquid account viewer, NLT Flywheel model, automation rail, and Hood3 terminal.
-- `/thesis` - Hood stock bull thesis, risks, and source links.
+- `/` - Longcat landing page with hero, mechanism, Cashcat thesis, live placeholders, burns, manifesto, and FAQ.
+- `/dashboard` - read-only Hyperliquid account viewer, Cashcat long model, receipt terminal, and burn placeholders.
+- `/thesis` - Cashcat thesis, risks, and source links.
 
 ## Required Frontend Environment
 
@@ -35,5 +35,5 @@ npm test
 
 Run `supabase/schema.sql` in Supabase before connecting live receipts. The
 automation worker should stay in dry-run mode until wallet authority, SOL fee
-buffer, transfer routing, swaps, perp collateral movement, HOOD order sizing,
+buffer, transfer routing, swaps, perp collateral movement, Cashcat order sizing,
 risk limits, and terminal logging are verified end to end.

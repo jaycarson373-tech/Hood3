@@ -12,9 +12,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteTitle = "Hood3 | NLT Flywheel";
+const siteTitle = "Longcat | The Longest Long on Robinhood";
 const siteDescription =
-  "The leveraged bet on HOOD, powered by the Native Leverage Token (NLT) Flywheel: creator fees fund a public HOOD long, realized profits buy back and burn $HOOD3.";
+  "Longcat is a native leverage token for Cashcat: every creator fee extends one public Cashcat long, and realized trading profits buy back and burn $LONGCAT.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.hood3pump.fun"),
@@ -24,22 +24,22 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/favicon.png",
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
   },
   openGraph: {
     title: siteTitle,
     description: siteDescription,
     url: "/",
-    siteName: "Hood3",
+    siteName: "Longcat",
     type: "website",
     images: [
       {
-        url: "/hood3-logo.png",
-        width: 1280,
-        height: 1195,
-        alt: "Hood3 logo",
+        url: "/longcat-mark.svg",
+        width: 1200,
+        height: 630,
+        alt: "Longcat mark",
       },
     ],
   },
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: siteTitle,
     description: siteDescription,
-    images: ["/hood3-logo.png"],
+    images: ["/longcat-mark.svg"],
   },
 };
 
@@ -58,11 +58,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
     </html>
   );
 }

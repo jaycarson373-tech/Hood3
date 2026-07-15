@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { ArrowRight, ExternalLink, TriangleAlert } from "lucide-react";
 import Link from "next/link";
-import { risks, sourceLinks, thesisPoints, thesisRisks } from "../data";
+import { cashcatChartUrl, cashcatThesisPoints, risks, sourceLinks, thesisRisks } from "../data";
+import { LongcatMascot } from "../components/LongcatVisuals";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
-const title = "Hood Thesis | Hood3";
+const title = "Cashcat Thesis | Longcat";
 const description =
-  "The Hood3 bull thesis for a fee-backed HOOD long, the Native Leverage Token (NLT) Flywheel, and permanent HOOD3 burns.";
+  "The Longcat thesis for Cashcat: Robinhood-coded meme conviction, public leveraged exposure, and $LONGCAT buyback burns from realized trading profits.";
 
 export const metadata: Metadata = {
-  title: "Hood Thesis | Hood3",
+  title,
   description,
   alternates: {
     canonical: "/thesis",
@@ -27,25 +28,31 @@ export const metadata: Metadata = {
 
 export default function ThesisPage() {
   return (
-    <main className="site-shell">
+    <main className="site-shell longcat-shell">
       <SiteHeader />
 
-      <section className="page-hero thesis-hero">
-        <p className="eyebrow">Hood Thesis</p>
-        <h1>HOOD stock bull thesis.</h1>
+      <section className="page-hero thesis-hero longcat-thesis-hero">
+        <p className="eyebrow">Cashcat Thesis</p>
+        <h1>The native cat of Robinhood deserves the longest position on Robinhood.</h1>
         <p>
-          The bull thesis is that Robinhood is becoming a financial super-app for younger active users, with deposits,
-          options, event contracts, margin, tokenization, and subscription revenue compounding into a broader earnings
-          base.
+          Our thesis is simple: if Robinhood Chain wins retail attention, Cashcat is positioned to become one of its
+          defining native speculative assets. $LONGCAT expresses that view through creator fees that extend one public
+          Cashcat long.
         </p>
-        <Link className="button primary" href="/dashboard">
-          See the flywheel
-          <ArrowRight size={17} aria-hidden="true" />
-        </Link>
+        <div className="button-row">
+          <Link className="button primary" href="/dashboard">
+            View the long
+            <ArrowRight size={17} aria-hidden="true" />
+          </Link>
+          <a className="button ghost" href={cashcatChartUrl}>
+            View Cashcat
+            <ExternalLink size={17} aria-hidden="true" />
+          </a>
+        </div>
       </section>
 
       <section className="thesis-grid content-band">
-        {thesisPoints.map((point) => {
+        {cashcatThesisPoints.map((point) => {
           const Icon = point.icon;
 
           return (
@@ -63,17 +70,29 @@ export default function ThesisPage() {
         })}
       </section>
 
-      <section className="content-band thesis-memo">
+      <section className="content-band thesis-memo cashcat-memo">
         <div>
           <p className="eyebrow">Core view</p>
-          <h2>The HOOD bull case is not just trading volume.</h2>
+          <h2>IF ROBINHOOD BECOMES THE HOME OF RETAIL, CASHCAT CAN BECOME ITS CAT.</h2>
         </div>
         <p>
-          Hood3 is built around the idea that Robinhood has multiple compounding surfaces: funded accounts, asset growth,
-          margin balances, options activity, event contracts, Gold subscriptions, crypto infrastructure, and international
-          tokenized assets. The Native Leverage Token (NLT) Flywheel turns that thesis into a public loop: creator fees
-          fund a HOOD long, realized profits buy HOOD3, and burns make the supply side visible.
+          We believe memecoins are often the first assets new retail participants understand and trade. Strong native
+          mascots can become cultural indexes for their chains. If Robinhood brings more retail activity onchain, Cashcat
+          has a chance to become one of its dominant speculative symbols.
         </p>
+      </section>
+
+      <section className="content-band dual-visual-section">
+        <div className="dual-panel dual-panel--long">
+          <p className="eyebrow">Directional exposure</p>
+          <h2>The longer Longcat trades, the longer the long becomes.</h2>
+          <LongcatMascot variant="line" />
+        </div>
+        <div className="dual-panel dual-panel--short">
+          <p className="eyebrow">Supply pressure</p>
+          <h2>Realized trading profits buy back and burn $LONGCAT.</h2>
+          <p>No buyback is guaranteed. It only happens when qualifying realized profits exist.</p>
+        </div>
       </section>
 
       <section className="content-band thesis-risk-grid">
@@ -82,7 +101,7 @@ export default function ThesisPage() {
             <TriangleAlert size={18} aria-hidden="true" />
           </span>
           <div>
-            <p className="kicker">Bear case</p>
+            <p className="kicker">Risk</p>
             <h2>What can break the thesis.</h2>
           </div>
         </div>
@@ -98,7 +117,7 @@ export default function ThesisPage() {
       </section>
 
       <section className="content-band legal-risk-list">
-        <h2>NLT Flywheel risks</h2>
+        <h2>Longcat risks</h2>
         <ul>
           {risks.map((risk) => (
             <li key={risk}>{risk}</li>
@@ -107,10 +126,10 @@ export default function ThesisPage() {
       </section>
 
       <section className="content-band source-panel">
-        <p className="eyebrow">Source notes</p>
+        <p className="eyebrow">Links</p>
         <div className="source-panel-links">
           {sourceLinks.map((source) => (
-            <a key={source.href} href={source.href} target="_blank" rel="noreferrer">
+            <a key={source.href} href={source.href} target={source.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
               {source.label}
               <ExternalLink size={14} aria-hidden="true" />
             </a>

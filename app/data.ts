@@ -1,13 +1,12 @@
 import {
-  Activity,
   ArrowUpRight,
+  BadgeDollarSign,
   Flame,
-  Layers3,
-  Repeat2,
+  LineChart,
   ShieldCheck,
+  Sparkles,
+  StretchHorizontal,
   TrendingUp,
-  WalletCards,
-  Zap,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -38,145 +37,217 @@ export type TerminalEvent = {
   detail: string;
 };
 
-export const hood3XUrl = "https://x.com/HOOD3pf";
-export const hood3HyperliquidAccount = "0xdF099e764bB99654a7BaE0c0FE89bD8b86ABf45f";
-export const hood3HyperliquidAccountShort = "0xdF09...f45f";
-export const hood3HyperliquidScanUrl = `https://hypurrscan.io/address/${hood3HyperliquidAccount}`;
+export type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+export const longcatTicker = "$LONGCAT";
+export const cashcatTicker = "$CASHCAT";
+export const longcatXUrl = "#x";
+export const longcatChartUrl = "#chart";
+export const longcatContractUrl = "#contract";
+export const cashcatChartUrl = "#cashcat-chart";
+export const publicPositionAccount = "0xdF099e764bB99654a7BaE0c0FE89bD8b86ABf45f";
+export const publicPositionAccountShort = "0xdF09...f45f";
+export const publicPositionScanUrl = `https://hypurrscan.io/address/${publicPositionAccount}`;
 
 export const topMetrics: Metric[] = [
   {
-    label: "Desk position",
-    value: "FLAT",
-    detail: "HOOD long idle",
-  },
-  {
-    label: "Current HOOD long",
+    label: "Cashcat Long",
     value: "$0",
-    detail: `HL ${hood3HyperliquidAccountShort}`,
+    detail: "awaiting integration",
   },
   {
-    label: "Fees deployed",
+    label: "Current Leverage",
+    value: "0.00x",
+    detail: "risk controls offline",
+  },
+  {
+    label: "Total Fees Deployed",
     value: "$0",
     detail: "100% creator fees",
   },
   {
-    label: "Realized profit",
+    label: "Realized Profit",
     value: "$0",
-    detail: "awaiting close",
+    detail: "buyback fuel",
   },
   {
-    label: "HOOD3 bought back",
-    value: "$0",
-    detail: "market buyback",
-  },
-  {
-    label: "HOOD3 burned",
+    label: "$LONGCAT Burned",
     value: "0",
-    detail: "permanent burn",
+    detail: "permanent removal",
   },
 ];
 
 export const landingStats: Metric[] = [
   {
-    label: "Current HOOD long",
+    label: "Cashcat Long",
     value: "$0",
-    detail: "public Hyperliquid account",
+    detail: "public position",
   },
   {
-    label: "Fees deployed",
-    value: "$0",
-    detail: "100% of creator fees",
+    label: "Current Leverage",
+    value: "0.00x",
+    detail: "awaiting execution",
   },
   {
-    label: "Realized profit",
+    label: "Total Fees Deployed",
     value: "$0",
-    detail: "buyback fuel",
+    detail: "creator fees extend the long",
   },
   {
-    label: "HOOD3 burned",
+    label: "$LONGCAT Burned",
     value: "0",
-    detail: "permanent supply removal",
+    detail: "supply removed",
   },
 ];
 
-export const thesisPoints: ThesisPoint[] = [
+export const livePositionStats: Metric[] = [
+  { label: "Cashcat Position Size", value: "-", detail: "awaiting integration" },
+  { label: "Entry Price", value: "-", detail: "awaiting fill" },
+  { label: "Current Price", value: "-", detail: "awaiting feed" },
+  { label: "Leverage", value: "0.00x", detail: "not active" },
+  { label: "Unrealized PnL", value: "$0", detail: "awaiting position" },
+  { label: "Realized PnL", value: "$0", detail: "buyback budget" },
+  { label: "Liquidation Price", value: "-", detail: "risk level pending" },
+  { label: "Total Fees Deployed", value: "$0", detail: "public receipts pending" },
+  { label: "Last Position Increase", value: "-", detail: "no transaction yet" },
+  { label: "Transaction Hash", value: "-", detail: "awaiting first receipt" },
+];
+
+export const burnStats: Metric[] = [
+  { label: "Total $LONGCAT Burned", value: "0", detail: "awaiting burns" },
+  { label: "Total Buyback Value", value: "$0", detail: "realized profit only" },
+  { label: "Last Burn", value: "-", detail: "no burn receipt yet" },
+  { label: "Current Circulating Supply", value: "-", detail: "awaiting token data" },
+  { label: "Percentage of Supply Burned", value: "0%", detail: "awaiting burn history" },
+];
+
+export const flywheelSteps: AutomationStep[] = [
   {
-    label: "Deposit engine",
-    value: "$377B",
-    text: "Robinhood reported 27.7M funded customers, $377B in Total Platform Assets, and 27% LTM net deposit growth as of May 31, 2026.",
-    icon: WalletCards,
+    label: "01",
+    title: "$LONGCAT trades",
+    text: "Every transaction generates creator fees.",
   },
   {
-    label: "Trading intensity",
-    value: "$315B",
-    text: "May equity notional volume rose 75% year over year, options contracts grew 29%, and event contracts reached 3.9B.",
-    icon: Activity,
+    label: "02",
+    title: "Fees long $CASHCAT",
+    text: "100% of creator fees are strategically deployed into the public Cashcat position.",
   },
   {
-    label: "Interest flywheel",
-    value: "$19.5B",
-    text: "Margin balances were $19.5B in May, up 117% year over year, while cash and deposits rose 54%.",
-    icon: Repeat2,
+    label: "03",
+    title: "Profits buy $LONGCAT",
+    text: "Realized trading profits are used to market-buy the native token.",
   },
   {
-    label: "Monetization",
-    value: "$1.07B",
-    text: "Q1 2026 revenue grew 15% year over year, adjusted EBITDA grew 14%, and Gold subscribers reached 4.3M.",
+    label: "04",
+    title: "$LONGCAT is burned",
+    text: "Every purchased token is permanently removed from circulation.",
+  },
+  {
+    label: "05",
+    title: "Repeat",
+    text: "More trading creates more exposure, more potential buybacks, and a smaller supply.",
+  },
+];
+
+export const timeline = [
+  {
+    label: "2005",
+    title: "Longcat is born",
+    text: "The internet meets Shiro, the rescue cat from Japan with an impossibly long body.",
+  },
+  {
+    label: "2026",
+    title: "Longcat enters Robinhood",
+    text: "$LONGCAT turns meme length into directional Cashcat exposure.",
+  },
+  {
+    label: "Forever",
+    title: "The long keeps extending",
+    text: "Every fee makes the long longer. Every realized winning trade can make supply shorter.",
+  },
+];
+
+export const cashcatThesisPoints: ThesisPoint[] = [
+  {
+    label: "Native meme",
+    value: "01",
+    text: "We believe Cashcat is one of the most recognizable and culturally native memes emerging from the Robinhood ecosystem.",
+    icon: Sparkles,
+  },
+  {
+    label: "Retail rail",
+    value: "02",
+    text: "Our thesis is that Robinhood can bring a massive new class of retail users directly onchain.",
     icon: TrendingUp,
   },
   {
-    label: "Product velocity",
-    value: "100M+",
-    text: "Robinhood said its public Robinhood Chain testnet processed over 100M transactions while it pushes tokenization and global brokerage.",
-    icon: Zap,
+    label: "First trade",
+    value: "03",
+    text: "Memecoins are often the first assets new retail participants understand and trade.",
+    icon: BadgeDollarSign,
   },
   {
-    label: "Optionality",
-    value: "24/7",
-    text: "Tokenization, event contracts, futures, crypto, advisory, retirement, and banking widen the number of ways a user can become a power user.",
-    icon: Layers3,
+    label: "Mascot index",
+    value: "04",
+    text: "Strong native mascots can become cultural indexes for their chains.",
+    icon: LineChart,
+  },
+  {
+    label: "Chain beta",
+    value: "05",
+    text: "If Robinhood Chain grows, its most recognizable native cat has a chance to become one of its dominant speculative assets.",
+    icon: ArrowUpRight,
+  },
+  {
+    label: "Directional loop",
+    value: "06",
+    text: "$LONGCAT provides continuous directional exposure to that thesis through its fee mechanism.",
+    icon: StretchHorizontal,
   },
 ];
 
 export const howItWorks = [
   {
-    title: "Capture creator fees",
-    text: "Creator fees are collected by the execution rail and written to the Hood3 terminal as public receipts.",
+    title: "Creator fees accumulate",
+    text: "Trading activity creates creator fees for the Longcat mechanism.",
   },
   {
-    title: "Deploy into HOOD",
-    text: "The NLT Flywheel deploys 100% of creator fees into a public HOOD long on Hyperliquid.",
+    title: "Fees extend Cashcat",
+    text: "100% of creator fees allocated to the protocol are strategically deployed into the public $CASHCAT long.",
   },
   {
-    title: "Realize profit",
-    text: "When the long realizes profit, that profit becomes the buyback budget for the next stage.",
+    title: "Profit is realized",
+    text: "When the position generates qualifying realized gains, those gains become buyback fuel.",
   },
   {
-    title: "Buy and burn HOOD3",
-    text: "Realized profits market buy HOOD3 and permanently burn the tokens, reducing supply.",
+    title: "Longcat gets shorter",
+    text: "Realized trading profits buy back $LONGCAT and permanently burn the purchased tokens.",
   },
 ];
 
 export const automationSteps: AutomationStep[] = [
   {
     label: "01",
-    title: "Capture fees",
+    title: "Collect fees",
     text: "Creator fee receipts enter the public terminal before funds move.",
   },
   {
     label: "02",
-    title: "Open HOOD long",
-    text: "Fees deploy into the public Hyperliquid HOOD long account.",
+    title: "Extend the long",
+    text: "Fees strategically add to the public Cashcat long inside execution and risk limits.",
   },
   {
     label: "03",
-    title: "Harvest profit",
-    text: "Realized profit is separated from the long and queued for buybacks.",
+    title: "Harvest gains",
+    text: "Qualifying realized profit is separated from the position and queued for buybacks.",
   },
   {
     label: "04",
     title: "Buy and burn",
-    text: "Profit buys HOOD3 on market and permanently removes it from supply.",
+    text: "Profit buys $LONGCAT on market and permanently removes it from supply.",
   },
 ];
 
@@ -186,73 +257,104 @@ export const terminalEvents: TerminalEvent[] = [
     stage: "SYSTEM",
     status: "IDLE",
     action: "No live transactions yet",
-    detail: "Live receipts will stream creator fees, HOOD long orders, realized profit, HOOD3 buybacks, and burns here.",
+    detail: "Live receipts will stream creator fees, Cashcat long orders, realized profit, $LONGCAT buybacks, and burns here.",
   },
 ];
 
 export const risks = [
-  "Revenue can swing with markets, crypto activity, rates, and retail trading appetite.",
-  "Tokenized equities, prediction markets, perps, and event contracts remain regulatory hot zones.",
-  "Growth spending, acquisitions, and convertible-note financing can pressure margins or dilution.",
-  "The NLT Flywheel needs audits, risk limits, liquidation handling, and user disclosures before production.",
+  "Leveraged trading can lose money quickly, including through liquidation.",
+  "Cashcat, Robinhood Chain, memecoins, and tokenized markets can face sharp volatility and regulatory review.",
+  "Buybacks and burns only occur when qualifying realized profits exist; they are not guaranteed.",
+  "Execution, liquidity, slippage, automation, and wallet operations need audited controls before full automation.",
 ];
 
 export const sourceLinks = [
   {
-    label: "Hood3 Hyperliquid account",
-    href: hood3HyperliquidScanUrl,
+    label: "X",
+    href: longcatXUrl,
   },
   {
-    label: "Robinhood IR overview",
-    href: "https://investors.robinhood.com/",
+    label: "Chart",
+    href: longcatChartUrl,
   },
   {
-    label: "May 2026 operating data",
-    href: "https://investors.robinhood.com/news-releases/news-release-details/robinhood-markets-inc-reports-may-2026-operating-data",
+    label: "Contract",
+    href: longcatContractUrl,
   },
   {
-    label: "Q1 2026 results",
-    href: "https://investors.robinhood.com/news-releases/news-release-details/robinhood-reports-first-quarter-2026-results",
+    label: "Position",
+    href: publicPositionScanUrl,
   },
   {
-    label: "Hyperliquid account API",
-    href: "https://hyperliquid.gitbook.io/hyperliquid-docs/for-developers/api/info-endpoint/perpetuals",
+    label: "Burns",
+    href: "/#burns",
   },
 ];
 
 export const thesisRisks = [
   {
-    label: "Market sensitivity",
-    text: "HOOD remains sensitive to trading volumes, rate cycles, crypto drawdowns, and risk appetite.",
+    label: "Market risk",
+    text: "Cashcat can move against the position. A long thesis is not a guarantee.",
   },
   {
-    label: "Regulatory overhang",
-    text: "Prediction markets, tokenized stocks, and perpetuals can attract complex regulatory review.",
+    label: "Liquidation risk",
+    text: "Any leveraged position can be liquidated if collateral and risk controls are not managed.",
   },
   {
     label: "Execution risk",
-    text: "The bull case assumes Robinhood keeps shipping fast while scaling compliance, reliability, and cross-product conversion.",
+    text: "The mechanism depends on swaps, perp execution, buybacks, burns, receipts, and automation working correctly.",
   },
   {
-    label: "Leverage risk",
-    text: "Hood3 adds a derivative layer. NLT Flywheel mechanics need audited controls before any real user capital is involved.",
+    label: "Narrative risk",
+    text: "The thesis assumes Cashcat remains culturally relevant as Robinhood-linked onchain activity grows.",
   },
 ];
 
 export const homePillars = [
   {
-    title: "Creator fees become exposure",
-    text: "The NLT Flywheel sends creator fees into a public HOOD long instead of leaving the mechanism opaque.",
-    icon: ArrowUpRight,
+    title: "Creator fees extend Cashcat",
+    text: "Every fee allocated to the protocol strategically extends one public leveraged long on $CASHCAT.",
+    icon: StretchHorizontal,
   },
   {
-    title: "Profits buy and burn",
-    text: "Realized profit becomes market buy pressure for HOOD3, then permanently removes those tokens from supply.",
+    title: "Winning trades create scarcity",
+    text: "Realized trading profits buy back $LONGCAT and permanently burn it.",
     icon: Flame,
   },
   {
-    title: "Automation with receipts",
-    text: "The terminal keeps the flow legible: fees, HOOD long orders, realized profit, HOOD3 buybacks, and burns.",
+    title: "Public by design",
+    text: "The position, receipts, and burns are built to be visible once live integrations are connected.",
     icon: ShieldCheck,
+  },
+];
+
+export const faqItems: FaqItem[] = [
+  {
+    question: "What is $LONGCAT?",
+    answer: "$LONGCAT is a native leverage token whose creator fees are deployed into a public leveraged long position on Cashcat.",
+  },
+  {
+    question: "Where do creator fees go?",
+    answer: "100% of creator fees allocated to the protocol are strategically deployed into the Cashcat position, subject to execution, risk controls and operating conditions.",
+  },
+  {
+    question: "What happens to trading profits?",
+    answer: "Realized profits designated by the mechanism are used to buy $LONGCAT from the market and permanently burn the purchased tokens.",
+  },
+  {
+    question: "Are profits or burns guaranteed?",
+    answer: "No. Leveraged trading involves significant risk. The Cashcat position can lose money, and buybacks only occur when qualifying realized profits exist.",
+  },
+  {
+    question: "Can the position be liquidated?",
+    answer: "Yes. Any leveraged position carries liquidation risk. The position, leverage and liquidation level should be displayed publicly whenever integrations are available.",
+  },
+  {
+    question: "Why Cashcat?",
+    answer: "Our thesis is that Cashcat can become one of the defining native memes of the Robinhood ecosystem as Robinhood brings more retail activity onchain.",
+  },
+  {
+    question: "Is this affiliated with Robinhood or Cashcat?",
+    answer: "$LONGCAT is an independent community project and is not affiliated with or endorsed by Robinhood, Cashcat, Shiro, Longcat's original creators or any referenced third party.",
   },
 ];

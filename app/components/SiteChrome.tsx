@@ -1,21 +1,27 @@
 import Link from "next/link";
-import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import {
-  hood3HyperliquidAccount,
-  hood3HyperliquidAccountShort,
-  hood3HyperliquidScanUrl,
-  hood3XUrl,
+  publicPositionAccount,
+  publicPositionAccountShort,
+  publicPositionScanUrl,
   sourceLinks,
   topMetrics,
 } from "../data";
+
+const navLinks = [
+  { label: "Mechanism", href: "/#mechanism" },
+  { label: "Cashcat Thesis", href: "/thesis" },
+  { label: "Live Position", href: "/dashboard" },
+  { label: "Burns", href: "/#burns" },
+  { label: "FAQ", href: "/#faq" },
+];
 
 export function SiteHeader() {
   const conveyorMetrics = [...topMetrics, ...topMetrics];
 
   return (
     <header className="site-header">
-      <div className="market-strip" aria-label="Hood3 live desk snapshot">
+      <div className="market-strip" aria-label="Longcat live mechanism snapshot">
         <div className="market-strip__track">
           {conveyorMetrics.map((metric, index) => (
             <div className="market-strip__item" key={`${metric.label}-${index}`}>
@@ -27,42 +33,40 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div className="main-nav">
-        <Link className="brand" href="/" aria-label="Hood3 home">
-          <span className="brand-mark">
-            <Image src="/hood3-logo.png" alt="" width={1248} height={1086} priority />
+      <div className="main-nav longcat-nav">
+        <Link className="brand" href="/" aria-label="Longcat home">
+          <span className="brand-mark longcat-brand-mark" aria-hidden="true">
+            <span className="brand-cat" />
           </span>
           <span>
-            <strong>Hood3</strong>
-            <small>NLT Flywheel</small>
+            <strong>LONGCAT</strong>
+            <small>The longest long</small>
           </span>
         </Link>
 
         <nav className="nav-links" aria-label="Primary navigation">
-          <Link href="/">Home</Link>
-          <Link href="/dashboard">Dashboard</Link>
-          <Link href="/thesis">Hood Thesis</Link>
+          {navLinks.map((link) => (
+            <Link key={link.href} href={link.href}>
+              {link.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="header-actions">
           <a
             className="account-link"
-            href={hood3HyperliquidScanUrl}
+            href={publicPositionScanUrl}
             target="_blank"
             rel="noreferrer"
-            title={hood3HyperliquidAccount}
-            aria-label={`View Hood3 Hyperliquid account ${hood3HyperliquidAccount} on HypurrScan`}
+            title={publicPositionAccount}
+            aria-label={`View Longcat public position account ${publicPositionAccountShort}`}
           >
-            <span>HL</span>
-            <code>{hood3HyperliquidAccountShort}</code>
+            <span>LONG</span>
+            <code>{publicPositionAccountShort}</code>
             <ExternalLink size={14} aria-hidden="true" />
           </a>
-          <a className="social-link" href={hood3XUrl} target="_blank" rel="noreferrer" aria-label="Open Hood3 on X">
-            X
-            <ExternalLink size={14} aria-hidden="true" />
-          </a>
-          <Link className="nav-cta" href="/dashboard">
-            Open desk
+          <Link className="nav-cta" href="/#buy-longcat">
+            Buy $LONGCAT
           </Link>
         </div>
       </div>
@@ -72,19 +76,24 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="site-footer">
-      <p>
-        Early-stage and unaudited. Not investment advice, not an offer to buy or sell securities, derivatives, crypto
-        assets, or $HOOD3/NLT tokens. Perpetuals and leverage can lose money quickly.
-      </p>
+    <footer className="site-footer longcat-footer">
+      <div>
+        <strong>LONGCAT</strong>
+        <span>The longest long on Robinhood.</span>
+      </div>
       <div className="source-links">
         {sourceLinks.map((source) => (
-          <a key={source.href} href={source.href} target="_blank" rel="noreferrer">
+          <a key={source.href} href={source.href} target={source.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
             {source.label}
             <ExternalLink size={14} aria-hidden="true" />
           </a>
         ))}
       </div>
+      <p>
+        $LONGCAT is a highly speculative community token. Leveraged trading can result in partial or total loss,
+        including liquidation. Nothing on this website is financial advice. $LONGCAT is not affiliated with Robinhood
+        Markets, Cashcat, Shiro, Longcat&apos;s original creators or any referenced third party.
+      </p>
     </footer>
   );
 }
