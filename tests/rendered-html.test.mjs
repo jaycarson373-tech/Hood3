@@ -102,7 +102,7 @@ test("server-renders Longcat dashboard and thesis routes", async () => {
 });
 
 test("repo no longer ships preview or legacy launch wiring", async () => {
-  const [page, layout, visuals, packageJson, readme, xBanner, contract] = await Promise.all([
+  const [page, layout, visuals, packageJson, readme, xBanner, contract, publicContract] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/components/LongcatVisuals.tsx", import.meta.url), "utf8"),
@@ -110,6 +110,7 @@ test("repo no longer ships preview or legacy launch wiring", async () => {
     readFile(new URL("../README.md", import.meta.url), "utf8"),
     readFile(new URL("../public/x-banner.svg", import.meta.url), "utf8"),
     readFile(new URL("../contracts/LongcatToken.sol", import.meta.url), "utf8"),
+    readFile(new URL("../public/LongcatToken.sol", import.meta.url), "utf8"),
   ]);
 
   assert.match(packageJson, /"name": "longcat"/);
@@ -126,6 +127,7 @@ test("repo no longer ships preview or legacy launch wiring", async () => {
   assert.match(readme, /The longest cat on Robinhood\./);
   assert.match(readme, /fixed `2%`/);
   assert.match(contract, /uint16 public constant FEE_BPS = 200;/);
+  assert.match(publicContract, /uint16 public constant FEE_BPS = 200;/);
   assert.match(contract, /No owner, blacklist, pause, hidden mint, or mutable tax controls/);
   assert.doesNotMatch(contract, /function\s+(setFee|setTax|mint|pause|blacklist|setReceiver|setFeeReceiver)\b/i);
   assert.match(readme, /public\/x-banner\.png/);
