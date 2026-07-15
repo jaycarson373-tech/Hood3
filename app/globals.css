@@ -189,6 +189,30 @@ h3 {
   .market-strip__track {
     animation: none;
   }
+
+  .account-link,
+  .automation-card,
+  .button,
+  .contract-chip,
+  .feature-card,
+  .how-card,
+  .icon-button,
+  .nav-cta,
+  .risk-card,
+  .social-link,
+  .thesis-card {
+    transition: none;
+  }
+
+  .button.primary:hover,
+  .button.primary:focus-visible,
+  .feature-card:hover,
+  .how-card:hover,
+  .risk-card:hover,
+  .automation-card:hover,
+  .thesis-card:hover {
+    transform: none;
+  }
 }
 
 .main-nav {
@@ -260,6 +284,9 @@ h3 {
   font-weight: 760;
   min-height: 36px;
   padding: 10px 13px;
+  transition:
+    background 160ms ease,
+    color 160ms ease;
 }
 
 .nav-links a:hover,
@@ -288,6 +315,11 @@ h3 {
   font-weight: 900;
   height: 40px;
   justify-content: center;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
 }
 
 .contract-chip {
@@ -395,7 +427,10 @@ h3 {
   max-width: 680px;
 }
 
+.hero-power,
 .hero-lede,
+.hero-flow,
+.hero-close,
 .page-hero p,
 .landing-preamble > p,
 .feature-card p,
@@ -410,12 +445,37 @@ h3 {
   line-height: 1.58;
 }
 
+.hero-power {
+  color: #050805;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.18;
+  max-width: 760px;
+}
+
 .hero-lede {
   color: rgba(5, 8, 5, 0.78);
   font-size: 18px;
   max-width: 650px;
   overflow-wrap: break-word;
   width: 100%;
+}
+
+.hero-flow {
+  background: rgba(5, 8, 5, 0.08);
+  border: 1px solid rgba(5, 8, 5, 0.18);
+  border-radius: 8px;
+  color: #050805;
+  font-size: 15px;
+  font-weight: 900;
+  max-width: 700px;
+  padding: 12px 14px;
+}
+
+.hero-close {
+  color: rgba(5, 8, 5, 0.88);
+  font-size: 15px;
+  font-weight: 900;
 }
 
 .eyebrow {
@@ -450,6 +510,11 @@ h3 {
   justify-content: center;
   line-height: 1;
   padding: 0 15px;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
   white-space: nowrap;
 }
 
@@ -469,6 +534,7 @@ h3 {
 .nav-cta:focus-visible {
   background: var(--green-strong);
   outline: 3px solid rgba(200, 255, 0, 0.22);
+  transform: translateY(-1px);
 }
 
 .button.ghost,
@@ -614,6 +680,25 @@ h3 {
   display: grid;
   gap: 15px;
   padding: 20px;
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.automation-card,
+.thesis-card {
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.feature-card:hover,
+.how-card:hover,
+.risk-card:hover,
+.automation-card:hover,
+.thesis-card:hover {
+  border-color: var(--line-strong);
+  transform: translateY(-2px);
 }
 
 .icon-chip {
@@ -784,7 +869,7 @@ h3 {
   align-content: center;
   display: grid;
   gap: 12px;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
 }
 
 .flywheel-legend span {
@@ -1428,6 +1513,30 @@ h3 {
     width: 100%;
   }
 
+  .main-nav {
+    gap: 10px;
+    min-height: 0;
+    padding: 10px 0;
+  }
+
+  .brand-mark {
+    height: 36px;
+    width: 48px;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    min-height: 32px;
+    padding: 8px 10px;
+  }
+
+  .contract-chip,
+  .account-link,
+  .social-link,
+  .nav-cta {
+    height: 36px;
+  }
+
   .contract-chip {
     flex-basis: 100%;
     justify-content: flex-start;
@@ -1440,8 +1549,8 @@ h3 {
 
   .landing-hero {
     display: block;
-    min-height: 620px;
-    padding: 56px 14px 120px;
+    min-height: 0;
+    padding: 34px 14px 42px;
   }
 
   .landing-content,
@@ -1450,11 +1559,23 @@ h3 {
     width: calc(100vw - 28px);
   }
 
+  .landing-content {
+    gap: 16px;
+  }
+
+  .logo-stage {
+    margin-top: 16px;
+  }
+
+  .logo-stage img {
+    max-width: 168px;
+  }
+
   .hero-command {
-    bottom: 18px;
-    left: 14px;
+    margin-top: 14px;
     min-width: 0;
-    right: 14px;
+    padding: 12px;
+    position: static;
   }
 
   .landing-stat-row,
@@ -1496,6 +1617,21 @@ h3 {
   h1 {
     font-size: 34px;
     line-height: 0.96;
+  }
+
+  .hero-power {
+    font-size: 18px;
+  }
+
+  .hero-lede {
+    font-size: 15px;
+    line-height: 1.45;
+  }
+
+  .hero-flow {
+    font-size: 13px;
+    line-height: 1.35;
+    padding: 10px 12px;
   }
 
   .hero-actions,

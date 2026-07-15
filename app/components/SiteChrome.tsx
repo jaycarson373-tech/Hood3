@@ -35,7 +35,7 @@ export function SiteHeader() {
           </span>
           <span>
             <strong>Hood3</strong>
-            <small>NLT flywheel</small>
+            <small>NLT Flywheel</small>
           </span>
         </Link>
 
@@ -83,8 +83,8 @@ export function SiteFooter() {
   return (
     <footer className="site-footer">
       <p>
-        Prototype only. Not investment advice, not an offer to buy or sell securities, derivatives, crypto assets, or
-        HOODX/NLT tokens. Perpetuals and leverage can lose money quickly.
+        Early-stage and unaudited. Not investment advice, not an offer to buy or sell securities, derivatives, crypto
+        assets, or $HOOD3/NLT tokens. Perpetuals and leverage can lose money quickly.
       </p>
       <div className="source-links">
         {sourceLinks.map((source) => (

@@ -147,14 +147,14 @@ export function DashboardClient() {
   const [account, setAccount] = useState<HyperliquidAccount | null>(null);
   const [monthlyVolume, setMonthlyVolume] = useState(0);
   const [feeBps, setFeeBps] = useState(0);
-  const [allocation, setAllocation] = useState(0);
+  const [allocation, setAllocation] = useState(100);
   const [targetLeverage, setTargetLeverage] = useState(0);
   const [hoodMark, setHoodMark] = useState(0);
   const [nltSupply, setNltSupply] = useState(0);
   const [terminalRows, setTerminalRows] = useState<SupabaseTerminalRow[]>([]);
   const [latestPosition, setLatestPosition] = useState<SupabasePositionRow | null>(null);
   const [supabaseStatus, setSupabaseStatus] = useState(
-    "Supabase not connected. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.",
+    "Receipt feed waiting for live public events.",
   );
   const cleanAddress = address.trim();
   const isValidAddress = addressPattern.test(cleanAddress);
@@ -209,10 +209,10 @@ export function DashboardClient() {
 
         setTerminalRows(nextTerminalRows);
         setLatestPosition(nextPositionRows[0] ?? null);
-        setSupabaseStatus("Supabase connected. Polling public receipts every 15 seconds.");
-      } catch (error) {
+        setSupabaseStatus("Receipt feed connected. Polling public receipts every 15 seconds.");
+      } catch {
         if (!active) return;
-        setSupabaseStatus(error instanceof Error ? error.message : "Could not read Supabase public views.");
+        setSupabaseStatus("Receipt feed waiting for public receipt rows.");
       }
     }
 
@@ -309,9 +309,9 @@ export function DashboardClient() {
     <>
       <section className="page-hero compact-page-hero">
         <p className="eyebrow">Hood3 dashboard</p>
-        <h1>NLT flywheel desk</h1>
+        <h1>NLT Flywheel terminal</h1>
         <p>
-          Model fee flow, link a Hyperliquid account, and publish the HOOD long amount that backs the NLT flywheel.
+          Track the public HOOD long, creator fees deployed, realized profit, HOOD3 buybacks, and permanent burns.
         </p>
       </section>
 
@@ -322,8 +322,8 @@ export function DashboardClient() {
               <RefreshCcw size={18} aria-hidden="true" />
             </span>
             <div>
-              <p className="kicker">NLT flywheel</p>
-              <h2>Fee-to-long flywheel</h2>
+              <p className="kicker">Native Leverage Token (NLT) Flywheel</p>
+              <h2>Creator-fee flywheel</h2>
             </div>
           </div>
 
@@ -336,36 +336,38 @@ export function DashboardClient() {
               </div>
             </div>
             <div className="flywheel-legend">
-              <span>Fees</span>
+              <span>Creator Fees</span>
               <ArrowRight size={15} aria-hidden="true" />
-              <span>Margin</span>
+              <span>HOOD Long</span>
               <ArrowRight size={15} aria-hidden="true" />
-              <span>Long</span>
+              <span>Realized Profit</span>
               <ArrowRight size={15} aria-hidden="true" />
-              <span>NLT</span>
+              <span>HOOD3 Buyback</span>
+              <ArrowRight size={15} aria-hidden="true" />
+              <span>Permanent Burn</span>
             </div>
           </div>
 
           <div className="flywheel-steps">
             <div>
-              <span>Fees</span>
+              <span>Fees deployed</span>
               <strong>{money(monthlyFees)}</strong>
-              <small>monthly</small>
+              <small>creator fees</small>
             </div>
             <div>
-              <span>Margin allocation</span>
+              <span>HOOD long</span>
               <strong>{money(monthlyAllocation)}</strong>
-              <small>{percent(allocation)} to collateral</small>
+              <small>{percent(allocation)} deployed</small>
             </div>
             <div>
-              <span>Projected long</span>
+              <span>Realized profit</span>
               <strong>{money(projectedLongNotional)}</strong>
-              <small>{targetLeverage}x target</small>
+              <small>{targetLeverage}x model</small>
             </div>
             <div>
-              <span>Burn flow</span>
+              <span>Buyback burn</span>
               <strong>{money(burnFlow)}</strong>
-              <small>remaining fees</small>
+              <small>HOOD3 removed</small>
             </div>
           </div>
         </div>
@@ -377,12 +379,12 @@ export function DashboardClient() {
             </span>
             <div>
               <p className="kicker">Desk controls</p>
-              <h2>Fee routing model</h2>
+              <h2>Flywheel model</h2>
             </div>
           </div>
 
           <label className="control">
-            <span>Monthly feeable flow</span>
+            <span>Monthly creator fee flow</span>
             <input
               type="number"
               min="0"
@@ -407,12 +409,12 @@ export function DashboardClient() {
 
           <label className="range-control">
             <span>
-              Allocation to HOOD long <strong>{percent(allocation)}</strong>
+              Fees deployed to HOOD long <strong>{percent(allocation)}</strong>
             </span>
             <input
               type="range"
               min="0"
-              max="95"
+              max="100"
               value={allocation}
               onChange={(event) => setAllocation(safeNumber(event.target.value, allocation))}
             />
@@ -459,11 +461,11 @@ export function DashboardClient() {
               <strong>{new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(projectedShares)}</strong>
             </div>
             <div>
-              <span>Backing per NLT</span>
+              <span>NLT Flywheel signal</span>
               <strong>{money(backingPerNlt, 4)}</strong>
             </div>
             <div>
-              <span>Monthly refill</span>
+              <span>Deployment rate</span>
               <strong>{percent(refillRate)}</strong>
             </div>
           </div>
@@ -569,7 +571,7 @@ export function DashboardClient() {
             </span>
             <div>
               <p className="kicker">Published exposure</p>
-              <h2>HOOD long amount</h2>
+              <h2>Current HOOD long</h2>
             </div>
           </div>
 
@@ -600,7 +602,7 @@ export function DashboardClient() {
             ))}
             {!displayedPositions.length && (
               <div className="empty-row">
-                Link an account to populate public positions. Supabase can also publish the latest HOOD long here.
+                Live HOOD position rows will appear here when the public account or receipt feed posts a position.
               </div>
             )}
           </div>
@@ -624,8 +626,8 @@ export function DashboardClient() {
         </div>
 
         <p className="section-copy">
-          The live rail is automated once Supabase, wallet secrets, and risk limits are connected: claim fees, send SOL,
-          convert to USDC, fund the perp account, scale the HOOD long, and publish receipts.
+          The launch flow is simple: creator fees fund the public HOOD long, realized profits market buy HOOD3, and
+          bought tokens are permanently burned.
         </p>
 
         <div className="automation-grid">

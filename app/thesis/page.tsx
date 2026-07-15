@@ -1,11 +1,28 @@
+import type { Metadata } from "next";
 import { ArrowRight, ExternalLink, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { risks, sourceLinks, thesisPoints, thesisRisks } from "../data";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
-export const metadata = {
+const title = "Hood Thesis | Hood3";
+const description =
+  "The Hood3 bull thesis for a fee-backed HOOD long, the Native Leverage Token (NLT) Flywheel, and permanent HOOD3 burns.";
+
+export const metadata: Metadata = {
   title: "Hood Thesis | Hood3",
-  description: "The Hood3 bull case for a fee-backed HOOD long and NLT flywheel.",
+  description,
+  alternates: {
+    canonical: "/thesis",
+  },
+  openGraph: {
+    title,
+    description,
+    url: "/thesis",
+  },
+  twitter: {
+    title,
+    description,
+  },
 };
 
 export default function ThesisPage() {
@@ -54,8 +71,8 @@ export default function ThesisPage() {
         <p>
           Hood3 is built around the idea that Robinhood has multiple compounding surfaces: funded accounts, asset growth,
           margin balances, options activity, event contracts, Gold subscriptions, crypto infrastructure, and international
-          tokenized assets. A single HOOD long is a blunt instrument, but it gives the NLT flywheel a clear public
-          benchmark.
+          tokenized assets. The Native Leverage Token (NLT) Flywheel turns that thesis into a public loop: creator fees
+          fund a HOOD long, realized profits buy HOOD3, and burns make the supply side visible.
         </p>
       </section>
 
@@ -81,7 +98,7 @@ export default function ThesisPage() {
       </section>
 
       <section className="content-band legal-risk-list">
-        <h2>NLT-specific risks</h2>
+        <h2>NLT Flywheel risks</h2>
         <ul>
           {risks.map((risk) => (
             <li key={risk}>{risk}</li>

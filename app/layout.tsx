@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 
 const siteTitle = "Hood3 | NLT Flywheel";
 const siteDescription =
-  "Automated NLT flywheel for routing fees into a transparent HOOD long, with live Hyperliquid receipts, burns, and position tracking.";
+  "The leveraged bet on HOOD, powered by the Native Leverage Token (NLT) Flywheel: creator fees fund a public HOOD long, realized profits buy back and burn $HOOD3.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.hood3pump.fun"),

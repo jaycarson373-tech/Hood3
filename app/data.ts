@@ -46,57 +46,57 @@ export const hood3HyperliquidScanUrl = `https://hypurrscan.io/address/${hood3Hyp
 
 export const topMetrics: Metric[] = [
   {
-    label: "Current position",
-    value: "NO POSITION",
-    detail: "wallet not connected",
+    label: "Desk position",
+    value: "FLAT",
+    detail: "HOOD long idle",
   },
   {
-    label: "Hyperliquid account",
-    value: hood3HyperliquidAccountShort,
-    detail: "HypurrScan linked",
-  },
-  {
-    label: "Size",
+    label: "Current HOOD long",
     value: "$0",
-    detail: "0 HOOD",
+    detail: `HL ${hood3HyperliquidAccountShort}`,
   },
   {
-    label: "Total SOL bridged",
-    value: "0 SOL",
-    detail: "claim rail idle",
+    label: "Fees deployed",
+    value: "$0",
+    detail: "100% creator fees",
   },
   {
-    label: "HOODX price",
-    value: "$0.0000",
-    detail: "not trading yet",
+    label: "Realized profit",
+    value: "$0",
+    detail: "awaiting close",
   },
   {
-    label: "Total burnt",
+    label: "HOOD3 bought back",
+    value: "$0",
+    detail: "market buyback",
+  },
+  {
+    label: "HOOD3 burned",
     value: "0",
-    detail: "HOODX retired",
+    detail: "permanent burn",
   },
 ];
 
 export const landingStats: Metric[] = [
   {
-    label: "Fee run-rate",
+    label: "Current HOOD long",
     value: "$0",
-    detail: "awaiting live flow",
+    detail: "public Hyperliquid account",
   },
   {
-    label: "HOODX price",
-    value: "$0.0000",
-    detail: "price feed idle",
+    label: "Fees deployed",
+    value: "$0",
+    detail: "100% of creator fees",
   },
   {
-    label: "NLT backing",
-    value: "$0.0000",
-    detail: "per token",
+    label: "Realized profit",
+    value: "$0",
+    detail: "buyback fuel",
   },
   {
-    label: "Burn route",
-    value: "0%",
-    detail: "not active yet",
+    label: "HOOD3 burned",
+    value: "0",
+    detail: "permanent supply removal",
   },
 ];
 
@@ -141,43 +141,43 @@ export const thesisPoints: ThesisPoint[] = [
 
 export const howItWorks = [
   {
-    title: "Claim every 15 minutes",
-    text: "A Supabase scheduled worker claims eligible fee flow on a fixed 15-minute cadence and writes each attempt to the Hood3 terminal.",
+    title: "Capture creator fees",
+    text: "Creator fees are collected by the execution rail and written to the Hood3 terminal as public receipts.",
   },
   {
-    title: "Send to Hyperliquid",
-    text: "Claimed SOL is routed to the configured Hyperliquid wallet, with transaction hashes stored before the next automation stage runs.",
+    title: "Deploy into HOOD",
+    text: "The NLT Flywheel deploys 100% of creator fees into a public HOOD long on Hyperliquid.",
   },
   {
-    title: "Convert to perp collateral",
-    text: "The next execution stage sells SOL to USDC, transfers collateral into the perp account, and records the settlement details.",
+    title: "Realize profit",
+    text: "When the long realizes profit, that profit becomes the buyback budget for the next stage.",
   },
   {
-    title: "Scale the HOOD long",
-    text: "The executor opens or adds to the HOOD long, then publishes NLT backing and the live flywheel state.",
+    title: "Buy and burn HOOD3",
+    text: "Realized profits market buy HOOD3 and permanently burn the tokens, reducing supply.",
   },
 ];
 
 export const automationSteps: AutomationStep[] = [
   {
     label: "01",
-    title: "Auto claim",
-    text: "Supabase cron triggers every 15 minutes and logs claim status before funds move.",
+    title: "Capture fees",
+    text: "Creator fee receipts enter the public terminal before funds move.",
   },
   {
     label: "02",
-    title: "Auto send",
-    text: "Claimed SOL routes to the configured Hyperliquid wallet and posts a scan link.",
+    title: "Open HOOD long",
+    text: "Fees deploy into the public Hyperliquid HOOD long account.",
   },
   {
     label: "03",
-    title: "Auto swap",
-    text: "SOL-to-USDC execution is staged for the collateral account after wallet wiring is live.",
+    title: "Harvest profit",
+    text: "Realized profit is separated from the long and queued for buybacks.",
   },
   {
     label: "04",
-    title: "Auto long",
-    text: "USDC moves to the perp account and the executor scales the HOOD long inside risk limits.",
+    title: "Buy and burn",
+    text: "Profit buys HOOD3 on market and permanently removes it from supply.",
   },
 ];
 
@@ -187,7 +187,7 @@ export const terminalEvents: TerminalEvent[] = [
     stage: "SYSTEM",
     status: "IDLE",
     action: "No live transactions yet",
-    detail: "Connect Supabase to stream claims, transfers, swaps, perp deposits, HOOD orders, and burns here.",
+    detail: "Live receipts will stream creator fees, HOOD long orders, realized profit, HOOD3 buybacks, and burns here.",
   },
 ];
 
@@ -195,7 +195,7 @@ export const risks = [
   "Revenue can swing with markets, crypto activity, rates, and retail trading appetite.",
   "Tokenized equities, prediction markets, perps, and event contracts remain regulatory hot zones.",
   "Growth spending, acquisitions, and convertible-note financing can pressure margins or dilution.",
-  "The NLT design needs audits, risk limits, liquidation handling, and user disclosures before production.",
+  "The NLT Flywheel needs audits, risk limits, liquidation handling, and user disclosures before production.",
 ];
 
 export const sourceLinks = [
@@ -236,24 +236,24 @@ export const thesisRisks = [
   },
   {
     label: "Leverage risk",
-    text: "Hood3 adds a derivative layer. NLT mechanics need audited controls before any real user capital is involved.",
+    text: "Hood3 adds a derivative layer. NLT Flywheel mechanics need audited controls before any real user capital is involved.",
   },
 ];
 
 export const homePillars = [
   {
-    title: "Fee pressure becomes exposure",
-    text: "Hood3 treats usage as fuel: fees flow to margin, margin creates HOOD exposure, and the position is published back to the token layer.",
+    title: "Creator fees become exposure",
+    text: "The NLT Flywheel sends creator fees into a public HOOD long instead of leaving the mechanism opaque.",
     icon: ArrowUpRight,
   },
   {
-    title: "Burns stay visible",
-    text: "HOODX burn data sits in the header instead of being buried in a modal, making supply reduction part of the product surface.",
+    title: "Profits buy and burn",
+    text: "Realized profit becomes market buy pressure for HOOD3, then permanently removes those tokens from supply.",
     icon: Flame,
   },
   {
     title: "Automation with receipts",
-    text: "The execution rail keeps private keys server-side while the site publishes every claim, transfer, swap, order, and burn event.",
+    text: "The terminal keeps the flow legible: fees, HOOD long orders, realized profit, HOOD3 buybacks, and burns.",
     icon: ShieldCheck,
   },
 ];

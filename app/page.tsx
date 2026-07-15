@@ -11,12 +11,18 @@ export default function Home() {
 
       <section className="landing-hero">
         <div className="landing-content">
-          <p className="eyebrow">Hood3 automation terminal</p>
-          <h1>Hood3</h1>
+          <p className="eyebrow">Hood3</p>
+          <h1>The Leveraged Bet on HOOD.</h1>
+          <p className="hero-power">Powered by the Native Leverage Token (NLT) Flywheel.</p>
           <p className="hero-lede">
-            Fees route into a transparent HOOD long.
-            <br />
-            Receipts and burns stay visible.
+            100% of creator fees fund a public HOOD long on Hyperliquid. Realized profits buy back and permanently burn
+            $HOOD3.
+          </p>
+          <p className="hero-flow">
+            Creator Fees → HOOD Long → Realized Profit → HOOD3 Buyback → Permanent Burn
+          </p>
+          <p className="hero-close">
+            The more HOOD wins, the more HOOD3 disappears.
           </p>
 
           <div className="hero-actions">
@@ -35,9 +41,9 @@ export default function Home() {
         </div>
 
         <div className="hero-command">
-          <span>Desk mode</span>
-          <strong>Automation rail ready</strong>
-          <small>Zeroed until live Supabase events arrive</small>
+          <span>NLT Flywheel</span>
+          <strong>Public long + permanent burn</strong>
+          <small>HOOD long exposure is mechanism strength, not a holder claim.</small>
         </div>
       </section>
 
@@ -54,11 +60,11 @@ export default function Home() {
       <section className="content-band landing-preamble">
         <div>
           <p className="eyebrow">Why Hood3 exists</p>
-          <h2>A cleaner surface for an aggressive thesis.</h2>
+          <h2>A proprietary loop around the HOOD thesis.</h2>
         </div>
         <p>
-          The homepage stays focused on the visual identity and live desk snapshot. The dashboard holds the automation
-          rail, transaction terminal, and NLT backing logic; the HOOD bull case has its own dedicated page.
+          Hood3 is powered by the strength of the NLT Flywheel. Creator fees feed the HOOD long, realized profits buy
+          and burn HOOD3, and the dashboard keeps receipts visible.
         </p>
       </section>
 
@@ -85,7 +91,8 @@ export default function Home() {
           </span>
           <h2>Dashboard moved to its own page.</h2>
           <p>
-            Account linking, NLT backing, bridge metrics, and the “how it works” flow are grouped into the desk page.
+            Current HOOD long, fees deployed, realized profit, buybacks, burns, and the “how it works” flow are grouped
+            into the desk page.
           </p>
         </div>
         <Link className="button primary" href="/dashboard">
@@ -97,11 +104,11 @@ export default function Home() {
       <section className="content-band compliance-strip">
         <div>
           <Flame size={18} aria-hidden="true" />
-          <span>Burns and position size stay in the top header on every route.</span>
+          <span>Current HOOD long, realized profit, and burn metrics stay visible on every route.</span>
         </div>
         <div>
           <ShieldCheck size={18} aria-hidden="true" />
-          <span>Execution is server-side only, with browser keys kept out of the product surface.</span>
+          <span>The HOOD long is public mechanism strength, not a reserve claim.</span>
         </div>
       </section>
 
