@@ -244,7 +244,7 @@ h3 {
   height: 42px;
   justify-content: center;
   overflow: hidden;
-  width: 56px;
+  width: 42px;
 }
 
 .brand-mark img {
@@ -2631,7 +2631,8 @@ body:has(.longcat-meme-site) {
 .longcat-meme-site .brand-mark {
   background: #f8fff0;
   border-color: rgba(215, 255, 0, 0.65);
-  width: 68px;
+  height: 48px;
+  width: 48px;
 }
 
 .longcat-meme-site .brand strong {
