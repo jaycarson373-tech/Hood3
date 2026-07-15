@@ -2,7 +2,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import {
-  hood3ContractAddress,
   hood3HyperliquidAccount,
   hood3HyperliquidAccountShort,
   hood3HyperliquidScanUrl,
@@ -46,14 +45,6 @@ export function SiteHeader() {
         </nav>
 
         <div className="header-actions">
-          <div
-            className="contract-chip"
-            title={hood3ContractAddress}
-            aria-label={`Contract address ${hood3ContractAddress}`}
-          >
-            <span>CA</span>
-            <code>{hood3ContractAddress}</code>
-          </div>
           <a
             className="account-link"
             href={hood3HyperliquidScanUrl}

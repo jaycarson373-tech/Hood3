@@ -6,7 +6,7 @@ permanent burns, and the Hood Thesis.
 
 ## Routes
 
-- `/` - landing page with the Hood3 hero, CA, X link, Hyperliquid account link, and zeroed launch stats.
+- `/` - landing page with the Hood3 hero, X link, Hyperliquid account link, and zeroed launch stats.
 - `/dashboard` - read-only Hyperliquid account viewer, NLT Flywheel model, automation rail, and Hood3 terminal.
 - `/thesis` - Hood stock bull thesis, risks, and source links.
 

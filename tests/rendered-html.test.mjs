@@ -7,7 +7,6 @@ const requiredLaunchCopy = [
   "Hood3 | NLT Flywheel",
   "The Leveraged Bet on HOOD.",
   "Powered by the Native Leverage Token (NLT) Flywheel.",
-  "E5GgVo7dLPUgebUrNLDR6tWVWktgo74a2FfEJmrtpump",
   "https://x.com/HOOD3pf",
   "0xdF099e764bB99654a7BaE0c0FE89bD8b86ABf45f",
   "https://hypurrscan.io/address/0xdF099e764bB99654a7BaE0c0FE89bD8b86ABf45f",
