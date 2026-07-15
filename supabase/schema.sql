@@ -183,7 +183,7 @@ create table if not exists public.hood3_long_orders (
 create table if not exists public.hood3_burns (
   id uuid primary key default gen_random_uuid(),
   run_id uuid references public.hood3_automation_runs (id) on delete set null,
-  token_symbol text not null default 'HOODX',
+  token_symbol text not null default 'HOOD3',
   amount numeric(38, 18) not null default 0,
   tx_hash text,
   scan_url text,
