@@ -8,9 +8,9 @@
   --green: #d5fd51;
   --green-strong: #e4ff78;
   --green-deep: #142400;
-  --cyan: #39c8c4;
-  --amber: #ffc247;
-  --red: #ff5f52;
+  --cyan: #d5fd51;
+  --amber: #e7eadf;
+  --red: #d5fd51;
   --panel: rgba(11, 17, 10, 0.9);
   --panel-solid: #0b110a;
   --panel-soft: rgba(213, 253, 81, 0.08);
@@ -348,8 +348,8 @@ h3 {
 }
 
 .account-link {
-  background: rgba(57, 200, 196, 0.09);
-  border: 1px solid rgba(57, 200, 196, 0.36);
+  background: rgba(213, 253, 81, 0.09);
+  border: 1px solid rgba(213, 253, 81, 0.36);
   color: #f3ffe6;
   gap: 7px;
   min-width: 148px;
@@ -1056,12 +1056,12 @@ h3 {
 }
 
 .public-account-card {
-  background: rgba(57, 200, 196, 0.08);
-  border-color: rgba(57, 200, 196, 0.32);
+  background: rgba(213, 253, 81, 0.08);
+  border-color: rgba(213, 253, 81, 0.32);
 }
 
 .public-account-card span {
-  color: #aaf2ef;
+  color: #d5fd51;
 }
 
 .exposure-number {
@@ -1664,9 +1664,9 @@ h3 {
   --green: #d5fd51;
   --green-strong: #e4ff78;
   --green-deep: #101d05;
-  --cyan: #b8fff7;
-  --amber: #e8e0c8;
-  --red: #ff7064;
+  --cyan: #d5fd51;
+  --amber: #e7eadf;
+  --red: #d5fd51;
   --panel: rgba(8, 13, 8, 0.9);
   --panel-solid: #080d08;
   --panel-soft: rgba(213, 253, 81, 0.09);
