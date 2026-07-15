@@ -101,11 +101,12 @@ test("server-renders Longcat dashboard and thesis routes", async () => {
   assert.match(dashboardHtml, /Longcat terminal/);
   assert.match(dashboardHtml, /Cashcat position telemetry/);
   assert.match(dashboardHtml, /Longcat public position account/);
-  assert.match(dashboardHtml, /Awaiting public account/);
+  assert.match(dashboardHtml, /0x63c75f0fee6214a57ff4c0b5c6c18e88948cdf53/);
+  assert.match(dashboardHtml, /https:\/\/hypurrscan\.io\/address\/0x63c75f0fee6214a57ff4c0b5c6c18e88948cdf53/);
   assert.match(dashboardHtml, /When the long wins, Longcat gets shorter/);
   assert.match(dashboardHtml, /Awaiting live integration/);
   assert.doesNotMatch(dashboardHtml, /Desk controls|Projected long|Monthly \$LONGCAT trading flow|creator fee model/);
-  assert.doesNotMatch(dashboardHtml, /0xdF099e764bB99654a7BaE0c0FE89bD8b86ABf45f|0xdF09\.\.\.f45f|View live position on HypurrScan/);
+  assert.doesNotMatch(dashboardHtml, /0xdF099e764bB99654a7BaE0c0FE89bD8b86ABf45f|0xdF09\.\.\.f45f|Awaiting public account/);
   assert.doesNotMatch(dashboardHtml, bannedRenderedCopy);
 
   assert.match(thesisHtml, /Cashcat Thesis/);

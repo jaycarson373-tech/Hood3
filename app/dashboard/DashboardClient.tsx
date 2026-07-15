@@ -78,6 +78,8 @@ type SupabasePositionRow = {
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const addressPattern = /^0x[a-fA-F0-9]{40}$/;
+const publicHyperliquidAccount = "0x63c75f0fee6214a57ff4c0b5c6c18e88948cdf53";
+const publicHypurrScanUrl = `https://hypurrscan.io/address/${publicHyperliquidAccount}`;
 
 function safeNumber(value: unknown, fallback = 0) {
   const parsed = Number(value);
@@ -127,9 +129,9 @@ function normalizePositions(account: HyperliquidAccount | null): NormalizedPosit
 }
 
 export function DashboardClient() {
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState(publicHyperliquidAccount);
   const [status, setStatus] = useState<LoadState>("idle");
-  const [message, setMessage] = useState("Paste a Hyperliquid master or sub-account address to read public perps state.");
+  const [message, setMessage] = useState("Longcat public Hyperliquid account loaded. Read it to pull public perps state.");
   const [account, setAccount] = useState<HyperliquidAccount | null>(null);
   const [terminalRows, setTerminalRows] = useState<SupabaseTerminalRow[]>([]);
   const [latestPosition, setLatestPosition] = useState<SupabasePositionRow | null>(null);
@@ -270,10 +272,10 @@ export function DashboardClient() {
   }
 
   function clearAccount() {
-    setAddress("");
+    setAddress(publicHyperliquidAccount);
     setAccount(null);
     setStatus("idle");
-    setMessage("Paste a Hyperliquid master or sub-account address to read public perps state.");
+    setMessage("Longcat public Hyperliquid account loaded. Read it to pull public perps state.");
     window.localStorage.removeItem("longcat-hyperliquid-address");
   }
 
@@ -315,8 +317,13 @@ export function DashboardClient() {
 
           <div className="scan-card public-account-card">
             <span>Longcat public position account</span>
-            <strong>Awaiting public account.</strong>
-            <p>The live Hyperliquid account will be published after the first verified position.</p>
+            <strong>{shortAddress(publicHyperliquidAccount)}</strong>
+            <code>{publicHyperliquidAccount}</code>
+            <p>Public Hyperliquid verifier for the Longcat Cashcat position.</p>
+            <a href={publicHypurrScanUrl} target="_blank" rel="noreferrer">
+              View on HypurrScan
+              <ExternalLink size={14} aria-hidden="true" />
+            </a>
           </div>
 
           <label className="control address-control">

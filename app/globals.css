@@ -1079,6 +1079,14 @@ h3 {
   color: #d5fd51;
 }
 
+.public-account-card code {
+  color: rgba(255, 255, 255, 0.82);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 12px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
 .exposure-number {
   background: #060906;
   border: 1px solid var(--line-strong);
