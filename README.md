@@ -1,12 +1,12 @@
 # Longcat
 
-Longcat is a Robinhood-coded meme terminal built around one joke: the cat keeps
+Longcat is the longest cat on Robinhood: a meme terminal built around one joke, the cat keeps
 getting longer. Creator fees extend one public Cashcat long, and qualifying
 realized trading profits can buy back and burn $LONGCAT.
 
 ## Routes
 
-- `/` - Longcat landing page with a cleaned Longcat wallpaper backing, origin lore, live length placeholders, meme mechanics, burns, and FAQ.
+- `/` - Longcat landing page with a full-site Longcat wallpaper backing, original meme origin photo, live length placeholders, meme mechanics, burns, and FAQ.
 - `/dashboard` - read-only Hyperliquid account viewer, Cashcat long model, receipt terminal, and burn placeholders.
 - `/thesis` - Cashcat thesis, risks, and source links.
 

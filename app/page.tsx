@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { cashcatChartUrl, publicPositionScanUrl } from "./data";
-import { LongChart, LongcatSpine, SupplyShrink } from "./components/LongcatVisuals";
+import { LongcatSpine, MemeGraphicStack } from "./components/LongcatVisuals";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
 
 const lengthStats = [
@@ -31,7 +32,7 @@ const thesis = [
 const faq = [
   {
     question: "What is this?",
-    answer: "$LONGCAT is the longest long on Robinhood. Creator fees extend one public $CASHCAT long.",
+    answer: "$LONGCAT is the longest cat on Robinhood. Creator fees extend one public $CASHCAT long.",
   },
   {
     question: "Where do fees go?",
@@ -56,7 +57,7 @@ export default function Home() {
       <section className="cat-section meme-hero" id="buy-longcat">
         <div className="meme-hero__copy">
           <p className="meme-kicker">LONGCAT // ROBINHOOD CHAIN // STATUS: EXTENDING</p>
-          <h1>THE LONGEST LONG.</h1>
+          <h1>THE LONGEST CAT ON ROBINHOOD.</h1>
           <p className="meme-subtitle">Every fee makes the cat longer.</p>
           <div className="hero-actions meme-actions">
             <Link className="button primary long-button" href="#buy-longcat">
@@ -87,14 +88,20 @@ export default function Home() {
       <section className="cat-section origin-section" id="origin">
         <div className="section-label">ORIGIN LORE</div>
         <h2>BEFORE THE LONG WAS A POSITION, THE LONG WAS A CAT.</h2>
-        <div className="origin-board">
-          <span>2004-2005</span>
-          <strong>Futaba / 2chan</strong>
-          <p>
-            A white cat named Shiroi, also known as Nobiko, gets stretched into internet history. The instruction was
-            not complicated.
-          </p>
-          <em>Looooooooooooooooong.</em>
+        <div className="origin-grid">
+          <Image
+            className="origin-cat-photo"
+            src="/longcat-origin-real.jpg"
+            alt="Original Longcat meme photo"
+            width={180}
+            height={326}
+          />
+          <div className="origin-board">
+            <span>2004-2005</span>
+            <strong>Futaba / 2chan</strong>
+            <p>A white cat named Shiroi gets stretched into internet history. The instruction was simple.</p>
+            <em>Looooooooooooooooong.</em>
+          </div>
         </div>
         <a className="button ghost long-button" href={originUrl} target="_blank" rel="noreferrer">
           Know Your Meme
@@ -111,15 +118,6 @@ export default function Home() {
           ))}
         </div>
         <p className="microcopy">Every winning trade burns supply. Every losing trade is why disclaimers exist.</p>
-      </section>
-
-      <section className="cat-section chart-meme-section">
-        <div>
-          <p className="meme-kicker">CURRENT LONG</p>
-          <h2>$CASHCAT</h2>
-          <strong>Looooooooooooooooong</strong>
-        </div>
-        <LongChart />
       </section>
 
       <section className="cat-section thesis-section" id="cashcat-thesis">
@@ -175,7 +173,7 @@ export default function Home() {
           <h2>LONGCAT GETS SHORTER.</h2>
           <p className="microcopy">Realized profit buys. Bought tokens burn. Supply disappears.</p>
         </div>
-        <SupplyShrink />
+        <MemeGraphicStack />
       </section>
 
       <section className="cat-section faq-section meme-faq" id="faq">

@@ -66,7 +66,7 @@ export function SiteFooter() {
     <footer className="site-footer longcat-footer">
       <div>
         <strong>LONGCAT</strong>
-        <span>The longest long on Robinhood.</span>
+        <span>The longest cat on Robinhood.</span>
       </div>
       <div className="source-links">
         {sourceLinks.map((source) => (

@@ -4,8 +4,8 @@ import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
 const requiredLaunchCopy = [
-  "Longcat | The Longest Long on Robinhood",
-  "THE LONGEST LONG",
+  "Longcat | The Longest Cat on Robinhood",
+  "THE LONGEST CAT ON ROBINHOOD.",
   "Every fee makes the cat longer.",
   "Current Length",
   "Cat Extension Today",
@@ -57,6 +57,9 @@ test("server-renders the Longcat launch homepage", async () => {
   assert.match(html, /No win, no magic/);
   assert.match(html, /Loooo+ng\./);
   assert.match(html, /longcat-wallpaper-clean\.png/);
+  assert.match(html, /longcat-origin-real\.jpg/);
+  assert.match(html, /longcat-sky\.jpg/);
+  assert.match(html, /longcat-space\.jpg/);
   assert.match(html, /https:\/\/amp\.knowyourmeme\.com\/memes\/longcat/);
   assert.match(html, /Leveraged positions can lose money or get liquidated/);
   assert.match(html, /<meta[^>]+property=["']og:image["'][^>]+longcat-wallpaper-clean\.png/i);
@@ -97,13 +100,15 @@ test("repo no longer ships preview or legacy launch wiring", async () => {
 
   assert.match(packageJson, /"name": "longcat"/);
   assert.match(readme, /^# Longcat/m);
-  assert.match(layout, /Longcat \| The Longest Long on Robinhood/);
+  assert.match(layout, /Longcat \| The Longest Cat on Robinhood/);
   assert.match(layout, /favicon\.png/);
-  assert.match(page, /THE LONGEST LONG/);
+  assert.match(page, /THE LONGEST CAT ON ROBINHOOD/);
   assert.match(page, /ORIGIN LORE/);
   assert.match(visuals, /longcat-wallpaper-clean\.png/);
+  assert.match(visuals, /longcat-sky\.jpg/);
+  assert.match(visuals, /longcat-space\.jpg/);
   assert.doesNotMatch(visuals, /scaleY/);
-  assert.doesNotMatch(page, /hero-graphic-callout|scribble--|THE PLAN/);
+  assert.doesNotMatch(page, /hero-graphic-callout|scribble--|THE PLAN|chart-meme-section/);
   assert.doesNotMatch(`${page}\n${layout}\n${visuals}\n${packageJson}\n${readme}`, bannedLaunchCopy);
 
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));

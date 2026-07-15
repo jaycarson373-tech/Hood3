@@ -12,9 +12,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteTitle = "Longcat | The Longest Long on Robinhood";
+const siteTitle = "Longcat | The Longest Cat on Robinhood";
 const siteDescription =
-  "Longcat is the longest long on Robinhood. Every fee makes the cat longer; winning trades can buy back and burn $LONGCAT.";
+  "Longcat is the longest cat on Robinhood. Every fee makes the cat longer; winning trades can buy back and burn $LONGCAT.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.hood3pump.fun"),

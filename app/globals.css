@@ -2582,15 +2582,15 @@ body:has(.longcat-meme-site) {
 }
 
 .longcat-image-backdrop {
-  bottom: 0;
   display: flex;
   justify-content: center;
   left: 0;
   overflow: hidden;
   pointer-events: none;
-  position: absolute;
+  position: fixed;
   right: 0;
   top: 0;
+  bottom: 0;
   z-index: -2;
 }
 
@@ -2608,11 +2608,11 @@ body:has(.longcat-meme-site) {
 .longcat-wallpaper {
   display: block;
   filter: saturate(1.04) contrast(1.03) drop-shadow(0 0 30px rgba(215, 255, 0, 0.16));
-  height: 112vh;
+  height: 118vh;
   opacity: 0.7;
   object-fit: contain;
   position: relative;
-  transform: translateX(clamp(18px, 5vw, 92px)) translateY(-4vh);
+  transform: translateX(clamp(18px, 5vw, 92px)) translateY(-7vh);
   width: auto;
   z-index: 2;
 }
@@ -2736,11 +2736,11 @@ body:has(.longcat-meme-site) {
 
 .meme-hero h1 {
   color: #ffffff;
-  font-size: clamp(72px, 12vw, 168px);
+  font-size: clamp(66px, 10vw, 142px);
   font-weight: 950;
   letter-spacing: 0;
-  line-height: 0.78;
-  max-width: 760px;
+  line-height: 0.82;
+  max-width: 920px;
   text-shadow:
     0 0 18px rgba(215, 255, 0, 0.2),
     0 8px 0 rgba(215, 255, 0, 0.12);
@@ -2893,6 +2893,26 @@ body:has(.longcat-meme-site) {
   padding: 20px;
 }
 
+.origin-grid {
+  align-items: stretch;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: minmax(140px, 210px) minmax(0, 620px);
+  max-width: 860px;
+}
+
+.origin-cat-photo {
+  background: rgba(2, 4, 2, 0.42);
+  border: 1px solid rgba(215, 255, 0, 0.34);
+  border-radius: 10px;
+  box-shadow: 0 0 34px rgba(215, 255, 0, 0.16);
+  height: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+}
+
 .origin-board span,
 .origin-board strong,
 .origin-board em {
@@ -2965,116 +2985,6 @@ body:has(.longcat-meme-site) {
   max-width: 560px;
 }
 
-.chart-meme-section {
-  align-items: center;
-  display: grid;
-  gap: 28px;
-  grid-template-columns: minmax(0, 0.46fr) minmax(280px, 1fr);
-}
-
-.chart-meme-section h2 {
-  color: #ffffff;
-  font-size: clamp(48px, 8vw, 118px);
-  line-height: 0.8;
-}
-
-.chart-meme-section strong {
-  color: var(--green);
-  display: block;
-  font-family: var(--font-geist-mono), monospace;
-  font-size: clamp(22px, 4vw, 42px);
-  margin-top: 10px;
-  overflow-wrap: anywhere;
-}
-
-.long-chart {
-  align-items: end;
-  border: 1px solid rgba(215, 255, 0, 0.3);
-  border-radius: 10px;
-  display: flex;
-  gap: clamp(14px, 3vw, 34px);
-  height: clamp(280px, 52vw, 560px);
-  justify-content: center;
-  overflow: hidden;
-  padding: 32px;
-  position: relative;
-}
-
-.long-chart::before {
-  background:
-    linear-gradient(rgba(215, 255, 0, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(215, 255, 0, 0.05) 1px, transparent 1px);
-  background-size: 28px 28px;
-  content: "";
-  inset: 0;
-  opacity: 0.7;
-  position: absolute;
-}
-
-.long-candle {
-  animation: candle-grow 3s ease-in-out infinite;
-  background: var(--green);
-  box-shadow: 0 0 18px rgba(215, 255, 0, 0.35);
-  display: block;
-  position: relative;
-  width: clamp(10px, 2vw, 18px);
-  z-index: 1;
-}
-
-.long-candle::before,
-.long-candle::after {
-  background: var(--green);
-  content: "";
-  height: 42px;
-  left: 50%;
-  position: absolute;
-  transform: translateX(-50%);
-  width: 2px;
-}
-
-.long-candle::before {
-  top: -42px;
-}
-
-.long-candle::after {
-  bottom: -42px;
-}
-
-.long-candle--one {
-  height: 22%;
-}
-
-.long-candle--two {
-  height: 34%;
-}
-
-.long-candle--three {
-  height: 46%;
-}
-
-.long-candle--four {
-  height: 57%;
-}
-
-.long-candle--five {
-  height: 68%;
-}
-
-.long-candle--six {
-  height: 84%;
-}
-
-.long-arrow {
-  border-right: 3px solid var(--green);
-  border-top: 3px solid var(--green);
-  height: 42%;
-  position: absolute;
-  right: 50px;
-  top: 44px;
-  transform: rotate(-18deg);
-  width: 42%;
-}
-
 .thesis-section {
   display: grid;
   gap: 22px;
@@ -3130,42 +3040,28 @@ body:has(.longcat-meme-site) {
   align-items: center;
   display: grid;
   gap: 34px;
-  grid-template-columns: minmax(0, 0.8fr) minmax(220px, 0.42fr);
+  grid-template-columns: minmax(0, 0.68fr) minmax(300px, 0.74fr);
 }
 
-.supply-shrink {
-  align-items: center;
-  display: flex;
+.meme-graphic-stack {
+  display: grid;
   gap: 14px;
-  justify-content: center;
-  min-height: 220px;
+  grid-template-columns: 0.95fr 0.8fr;
+  min-height: 300px;
 }
 
-.supply-shrink span {
-  background: var(--green);
-  border-radius: 999px;
-  box-shadow: 0 0 24px rgba(215, 255, 0, 0.34);
+.meme-graphic {
+  border: 1px solid rgba(215, 255, 0, 0.28);
+  border-radius: 10px;
+  box-shadow: 0 0 42px rgba(215, 255, 0, 0.14);
   display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
 }
 
-.supply-shrink span:nth-child(1) {
-  height: 130px;
-  width: 44px;
-}
-
-.supply-shrink span:nth-child(2) {
-  height: 96px;
-  width: 34px;
-}
-
-.supply-shrink span:nth-child(3) {
-  height: 62px;
-  width: 24px;
-}
-
-.supply-shrink span:nth-child(4) {
-  height: 28px;
-  width: 14px;
+.meme-graphic--space {
+  margin-top: 46px;
 }
 
 .meme-faq {
@@ -3210,24 +3106,6 @@ body:has(.longcat-meme-site) {
   z-index: 1;
 }
 
-@keyframes candle-grow {
-  0%,
-  100% {
-    opacity: 0.72;
-  }
-
-  50% {
-    opacity: 1;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .long-candle {
-    animation: none;
-    transition: none;
-  }
-}
-
 @media (max-width: 980px) {
   .longcat-meme-site .main-nav.longcat-nav {
     grid-template-columns: 1fr auto;
@@ -3238,7 +3116,6 @@ body:has(.longcat-meme-site) {
   }
 
   .meme-hero,
-  .chart-meme-section,
   .burn-section {
     grid-template-columns: 1fr;
   }
@@ -3253,8 +3130,8 @@ body:has(.longcat-meme-site) {
   }
 
   .longcat-wallpaper {
-    height: 108vh;
-    transform: translateX(clamp(24px, 8vw, 84px)) translateY(-2vh);
+    height: 114vh;
+    transform: translateX(clamp(24px, 8vw, 84px)) translateY(-5vh);
   }
 }
 
@@ -3304,14 +3181,28 @@ body:has(.longcat-meme-site) {
   }
 
   .longcat-wallpaper {
-    height: 104vh;
+    height: 108vh;
     opacity: 0.7;
-    transform: translateX(25%) translateY(-1vh);
+    transform: translateX(25%) translateY(-3vh);
   }
 
   .meme-hero__copy::before {
-    background: linear-gradient(90deg, rgba(2, 4, 2, 0.96), rgba(2, 4, 2, 0.86) 78%, rgba(2, 4, 2, 0.28));
+    background: none;
+    display: none;
     inset: -18px -14px -18px -14px;
+  }
+
+  .origin-grid,
+  .meme-graphic-stack {
+    grid-template-columns: 1fr;
+  }
+
+  .origin-cat-photo {
+    max-height: 340px;
+  }
+
+  .meme-graphic--space {
+    margin-top: 0;
   }
 
   .terminal-strip span,

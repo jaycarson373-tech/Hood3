@@ -47,27 +47,11 @@ export function LongcatBackground() {
   return <LongcatSpine />;
 }
 
-export function LongChart() {
+export function MemeGraphicStack() {
   return (
-    <div className="long-chart" aria-hidden="true">
-      <span className="long-candle long-candle--one" />
-      <span className="long-candle long-candle--two" />
-      <span className="long-candle long-candle--three" />
-      <span className="long-candle long-candle--four" />
-      <span className="long-candle long-candle--five" />
-      <span className="long-candle long-candle--six" />
-      <span className="long-arrow" />
-    </div>
-  );
-}
-
-export function SupplyShrink() {
-  return (
-    <div className="supply-shrink" aria-hidden="true">
-      <span />
-      <span />
-      <span />
-      <span />
+    <div className="meme-graphic-stack" aria-label="Longcat meme graphics">
+      <Image className="meme-graphic meme-graphic--sky" src="/longcat-sky.jpg" alt="Longcat above the clouds" width={588} height={441} />
+      <Image className="meme-graphic meme-graphic--space" src="/longcat-space.jpg" alt="Longcat in space" width={500} height={360} />
     </div>
   );
 }
