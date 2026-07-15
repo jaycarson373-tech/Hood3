@@ -1,7 +1,7 @@
 # Longcat
 
 Longcat is the longest cat on Robinhood: a meme terminal built around one joke, the cat keeps
-getting longer. Creator fees extend one public Cashcat long, and qualifying
+getting longer. A 2% creator fee extends one public Cashcat long, and qualifying
 realized trading profits can buy back and burn $LONGCAT.
 
 ## Routes
@@ -9,6 +9,17 @@ realized trading profits can buy back and burn $LONGCAT.
 - `/` - Longcat landing page with a full-site Longcat wallpaper backing, original meme origin photo, live integration placeholders, meme mechanics, burns, and FAQ.
 - `/dashboard` - read-only Hyperliquid account viewer, Cashcat position telemetry, receipt terminal, and burn placeholders.
 - `/thesis` - Cashcat thesis, risks, and source links.
+
+## Contract
+
+- Source: `contracts/LongcatToken.sol`
+- Fee: fixed `2%`
+- Receiver: immutable public mechanism wallet
+- Controls: no owner, no pause, no blacklist, no hidden mint
+
+The contract only routes the 2% fee to the mechanism wallet. Cashcat execution,
+buybacks, and burns should be handled by audited server-side automation and
+published as public terminal receipts.
 
 ## X Assets And Copy
 
@@ -19,14 +30,14 @@ Bio:
 ```text
 The longest cat on Robinhood.
 
-Creator fees scale into a public $CASHCAT long on Hyperliquid.
+2% creator fees scale into a public $CASHCAT long on Hyperliquid.
 
 Profits buy back & burn $LONGCAT.
 ```
 
 Community description:
 ```text
-100% of creator fees scale into a public $CASHCAT long on Hyperliquid.
+100% of the 2% creator fee scales into a public $CASHCAT long on Hyperliquid.
 
 Realized profits buy back & permanently burn $LONGCAT.
 ```

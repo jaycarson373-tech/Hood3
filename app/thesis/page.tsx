@@ -74,7 +74,7 @@ export default function ThesisPage() {
             LONGCAT GETS LONGER.
           </h2>
         </div>
-        <p>Creator fees scale into a public $CASHCAT long. Realized profits buy back and burn $LONGCAT.</p>
+        <p>2% creator fees scale into a public $CASHCAT long. Realized profits buy back and burn $LONGCAT.</p>
       </section>
 
       <section className="content-band thesis-risk-grid">

@@ -284,7 +284,7 @@ export function DashboardClient() {
       <section className="page-hero compact-page-hero">
         <p className="eyebrow">Longcat terminal</p>
         <h1>One position. Extending in public.</h1>
-        <p>Track the public Cashcat long, creator fees deployed, realized profit, $LONGCAT buybacks, and burns.</p>
+        <p>Track the public Cashcat long, 2% creator fees deployed, realized profit, $LONGCAT buybacks, and burns.</p>
       </section>
 
       <section className="content-band live-long-section">
@@ -439,7 +439,7 @@ export function DashboardClient() {
         </div>
 
         <p className="section-copy">
-          The live route is straightforward: creator fees extend the public Cashcat long, qualifying realized profits buy
+          The live route is straightforward: 2% creator fees extend the public Cashcat long, qualifying realized profits buy
           $LONGCAT, and purchased tokens are permanently burned.
         </p>
 

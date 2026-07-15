@@ -22,7 +22,7 @@ const originUrl = "https://amp.knowyourmeme.com/memes/longcat";
 
 const flow = [
   "$LONGCAT trades",
-  "fees extend $CASHCAT",
+  "2% fees extend $CASHCAT",
   "realized profit buys back",
   "tokens burn",
   "repeat",
@@ -37,11 +37,11 @@ const thesis = [
 const faq = [
   {
     question: "What is this?",
-    answer: "$LONGCAT is the longest cat on Robinhood. Creator fees extend one public $CASHCAT long.",
+    answer: "$LONGCAT is the longest cat on Robinhood. A 2% creator fee extends one public $CASHCAT long.",
   },
   {
     question: "Where do fees go?",
-    answer: "Fees are designed to extend the Cashcat position, subject to execution, risk controls, and reality.",
+    answer: "The 2% creator fee is designed to extend the Cashcat position, subject to execution, risk controls, and reality.",
   },
   {
     question: "What happens if the long wins?",
@@ -66,7 +66,7 @@ export default function Home() {
             <span>ON ROBINHOOD.</span>
           </h1>
           <div className="hero-copy-lines">
-            <p>Creator fees scale into a public $CASHCAT long on Hyperliquid.</p>
+            <p>2% creator fees scale into a public $CASHCAT long on Hyperliquid.</p>
             <p>Realized profits buy back and burn $LONGCAT.</p>
           </div>
           <div className="hero-actions meme-actions">
@@ -119,7 +119,7 @@ export default function Home() {
 
       <section className="cat-section mechanic-section" id="mechanism">
         <div className="section-label">MECHANIC</div>
-        <h2>CREATOR FEES SCALE THE PUBLIC CASHCAT LONG.</h2>
+        <h2>2% CREATOR FEES SCALE THE PUBLIC CASHCAT LONG.</h2>
         <div className="long-flow">
           {flow.map((step) => (
             <span key={step}>{step}</span>

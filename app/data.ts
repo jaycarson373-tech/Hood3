@@ -64,7 +64,7 @@ export const topMetrics: Metric[] = [
   {
     label: "Total Fees Deployed",
     value: "$0",
-    detail: "100% creator fees",
+    detail: "2% creator fee",
   },
   {
     label: "Realized Profit",
@@ -92,7 +92,7 @@ export const landingStats: Metric[] = [
   {
     label: "Total Fees Deployed",
     value: "$0",
-    detail: "creator fees extend the long",
+    detail: "2% fee extends the long",
   },
   {
     label: "$LONGCAT Burned",
@@ -103,7 +103,7 @@ export const landingStats: Metric[] = [
 
 export const livePositionStats: Metric[] = [
   { label: "POSITION SIZE", value: "Awaiting live integration.", detail: "public position" },
-  { label: "TOTAL FEES DEPLOYED", value: "Awaiting live integration.", detail: "creator fees" },
+  { label: "TOTAL FEES DEPLOYED", value: "Awaiting live integration.", detail: "2% creator fee" },
   { label: "ENTRY PRICE", value: "Awaiting live integration.", detail: "execution data" },
   { label: "CURRENT PRICE", value: "Awaiting live integration.", detail: "market data" },
   { label: "LEVERAGE", value: "Awaiting live integration.", detail: "risk data" },
@@ -125,12 +125,12 @@ export const flywheelSteps: AutomationStep[] = [
   {
     label: "01",
     title: "$LONGCAT trades",
-    text: "Every transaction generates creator fees.",
+    text: "Every transaction generates the 2% creator fee.",
   },
   {
     label: "02",
     title: "Fees long $CASHCAT",
-    text: "100% of creator fees are strategically deployed into the public Cashcat position.",
+    text: "100% of the 2% creator fee is strategically deployed into the public Cashcat position.",
   },
   {
     label: "03",
@@ -191,11 +191,11 @@ export const cashcatThesisPoints: ThesisPoint[] = [
 export const howItWorks = [
   {
     title: "Creator fees accumulate",
-    text: "Trading activity creates creator fees for the Longcat mechanism.",
+    text: "Trading activity creates the 2% creator fee for the Longcat mechanism.",
   },
   {
     title: "Fees extend Cashcat",
-    text: "100% of creator fees allocated to the protocol are strategically deployed into the public $CASHCAT long.",
+    text: "100% of the 2% creator fee allocated to the protocol is strategically deployed into the public $CASHCAT long.",
   },
   {
     title: "Profit is realized",
@@ -292,7 +292,7 @@ export const thesisRisks = [
 export const homePillars = [
   {
     title: "Creator fees extend Cashcat",
-    text: "Every fee allocated to the protocol strategically extends one public leveraged long on $CASHCAT.",
+    text: "Every 2% creator fee allocated to the protocol strategically extends one public leveraged long on $CASHCAT.",
     icon: StretchHorizontal,
   },
   {
@@ -310,11 +310,11 @@ export const homePillars = [
 export const faqItems: FaqItem[] = [
   {
     question: "What is $LONGCAT?",
-    answer: "$LONGCAT is a native leverage token whose creator fees are deployed into a public leveraged long position on Cashcat.",
+    answer: "$LONGCAT is a native leverage token whose 2% creator fee is deployed into a public leveraged long position on Cashcat.",
   },
   {
     question: "Where do creator fees go?",
-    answer: "100% of creator fees allocated to the protocol are strategically deployed into the Cashcat position, subject to execution, risk controls and operating conditions.",
+    answer: "100% of the 2% creator fee allocated to the protocol is strategically deployed into the Cashcat position, subject to execution, risk controls and operating conditions.",
   },
   {
     question: "What happens to trading profits?",

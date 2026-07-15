@@ -4,7 +4,7 @@ import { DashboardClient } from "./DashboardClient";
 
 const title = "Live Position | Longcat";
 const description =
-  "Track Longcat's public Cashcat long, creator fees deployed, realized profit, $LONGCAT buybacks, and burns.";
+  "Track Longcat's public Cashcat long, 2% creator fees deployed, realized profit, $LONGCAT buybacks, and burns.";
 
 export const metadata: Metadata = {
   title,
