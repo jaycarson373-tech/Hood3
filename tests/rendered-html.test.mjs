@@ -15,7 +15,6 @@ const requiredLaunchCopy = [
   "Know Your Meme",
   "$LONGCAT trades",
   "fees extend $CASHCAT",
-  "tail not found",
   "POSITION EXTENDING IN PUBLIC.",
   "LONGCAT GETS SHORTER.",
 ];
@@ -62,7 +61,7 @@ test("server-renders the Longcat launch homepage", async () => {
   assert.match(html, /Leveraged positions can lose money or get liquidated/);
   assert.match(html, /<meta[^>]+property=["']og:image["'][^>]+longcat-wallpaper-clean\.png/i);
   assert.match(html, /<link[^>]+rel=["']icon["'][^>]+favicon\.png/i);
-  assert.doesNotMatch(html, /hero-graphic-callout|scribble|THE PLAN/);
+  assert.doesNotMatch(html, /hero-graphic-callout|scribble|THE PLAN|tail not found/);
   assert.doesNotMatch(html, bannedRenderedCopy);
 });
 

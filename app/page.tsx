@@ -84,13 +84,6 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="cat-section shout-section">
-        <span className="meme-word">LONG.</span>
-        <span className="meme-word">LONGER.</span>
-        <span className="meme-word">LONGEST.</span>
-        <p>tail not found</p>
-      </section>
-
       <section className="cat-section origin-section" id="origin">
         <div className="section-label">ORIGIN LORE</div>
         <h2>BEFORE THE LONG WAS A POSITION, THE LONG WAS A CAT.</h2>
