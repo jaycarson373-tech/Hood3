@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 500" role="img" aria-label="Longcat X banner">
+  <rect width="1500" height="500" fill="#d5fd51"/>
+  <g opacity=".16" fill="none" stroke="#050805" stroke-width="1">
+    <path d="M0 100h1500M0 200h1500M0 300h1500M0 400h1500"/>
+    <path d="M120 0v500M270 0v500M420 0v500M570 0v500M720 0v500M870 0v500M1020 0v500M1170 0v500M1320 0v500"/>
+  </g>
+  <path d="M725 360c84-82 164-106 236-71 75 37 142 15 204-66 53-69 111-91 174-66" fill="none" stroke="#050805" stroke-width="12" stroke-linecap="round" opacity=".2"/>
+  <path d="M690 388c97-78 184-94 263-48 79 45 151 26 216-58 56-72 116-95 180-68" fill="none" stroke="#050805" stroke-width="5" stroke-linecap="round" opacity=".18"/>
+  <g transform="translate(850 36) scale(.68)">
+    <path d="M96 330c130-86 278-112 506-80l16-70 62 52 85-18-38 72c36 26 48 79 16 116-54 62-190 52-314 14-121-37-215-34-344 24 2-46 4-79 11-110Z" fill="#f8fff0" stroke="#050805" stroke-width="12" stroke-linejoin="round"/>
+    <path d="M96 330c130-86 278-112 506-80" fill="none" stroke="#050805" stroke-width="17" stroke-linecap="round" opacity=".82"/>
+    <circle cx="662" cy="316" r="12" fill="#050805"/>
+    <circle cx="716" cy="318" r="12" fill="#050805"/>
+    <path d="M686 350c14 6 27 6 40 0" fill="none" stroke="#050805" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <text x="74" y="92" fill="#050805" font-family="Arial, Helvetica, sans-serif" font-size="42" font-weight="900" letter-spacing="0">LONGCAT</text>
+  <text x="72" y="238" fill="#050805" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="950" letter-spacing="0">THE LONGEST CAT</text>
+  <text x="72" y="338" fill="#050805" font-family="Arial, Helvetica, sans-serif" font-size="92" font-weight="950" letter-spacing="0">ON ROBINHOOD.</text>
+  <text x="76" y="420" fill="#050805" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="800" letter-spacing="0" opacity=".82">Creator fees scale into a public $CASHCAT long.</text>
+</svg>

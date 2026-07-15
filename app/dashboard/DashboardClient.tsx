@@ -2,10 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  ArrowRight,
   CircleDollarSign,
   ExternalLink,
-  Gauge,
   Link2,
   ListChecks,
   RefreshCcw,
@@ -96,12 +94,6 @@ function money(value: number, maximumFractionDigits = 0) {
   }).format(value);
 }
 
-function percent(value: number) {
-  return `${new Intl.NumberFormat("en-US", {
-    maximumFractionDigits: 1,
-  }).format(value)}%`;
-}
-
 function shortAddress(address: string) {
   if (!address) return "No account linked";
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
@@ -141,10 +133,6 @@ export function DashboardClient() {
   const [status, setStatus] = useState<LoadState>("idle");
   const [message, setMessage] = useState("Paste a Hyperliquid master or sub-account address to read public perps state.");
   const [account, setAccount] = useState<HyperliquidAccount | null>(null);
-  const [monthlyVolume, setMonthlyVolume] = useState(0);
-  const [feeBps, setFeeBps] = useState(0);
-  const [allocation, setAllocation] = useState(100);
-  const [targetLeverage, setTargetLeverage] = useState(0);
   const [terminalRows, setTerminalRows] = useState<SupabaseTerminalRow[]>([]);
   const [latestPosition, setLatestPosition] = useState<SupabasePositionRow | null>(null);
   const [supabaseStatus, setSupabaseStatus] = useState("Receipt feed waiting for live public events.");
@@ -241,14 +229,10 @@ export function DashboardClient() {
   const accountNotional = safeNumber(account?.marginSummary?.totalNtlPos ?? account?.crossMarginSummary?.totalNtlPos);
   const marginUsed = safeNumber(account?.marginSummary?.totalMarginUsed ?? account?.crossMarginSummary?.totalMarginUsed);
 
-  const monthlyFees = monthlyVolume * (feeBps / 10_000);
-  const monthlyAllocation = monthlyFees * (allocation / 100);
-  const projectedLongNotional = monthlyAllocation * targetLeverage;
-  const displayedLongNotional = liveCashcatLong > 0 ? liveCashcatLong : supabaseCashcatLong > 0 ? supabaseCashcatLong : projectedLongNotional;
+  const displayedLongNotional = liveCashcatLong > 0 ? liveCashcatLong : supabaseCashcatLong > 0 ? supabaseCashcatLong : 0;
   const displayedPnl = liveCashcatLong > 0 ? liveCashcatPnl : supabaseCashcatPnl;
   const exposureSource =
-    liveCashcatLong > 0 ? "Linked Cashcat long" : supabaseCashcatLong > 0 ? "Supabase Cashcat long" : "Projected Cashcat long";
-  const refillRate = displayedLongNotional > 0 ? (monthlyAllocation / displayedLongNotional) * 100 : 0;
+    liveCashcatLong > 0 ? "Linked Cashcat long" : supabaseCashcatLong > 0 ? "Supabase Cashcat long" : "Awaiting live integration.";
 
   async function linkAccount() {
     if (!isValidAddress) {
@@ -300,144 +284,7 @@ export function DashboardClient() {
       <section className="page-hero compact-page-hero">
         <p className="eyebrow">Longcat terminal</p>
         <h1>One position. Extending in public.</h1>
-        <p>
-          Track the public Cashcat long, creator fees deployed, realized profit, $LONGCAT buybacks, and permanent burns.
-          Placeholders remain flat until integrations are connected.
-        </p>
-      </section>
-
-      <section className="dashboard-grid content-band">
-        <div className="panel flywheel-panel">
-          <div className="section-heading">
-            <span className="icon-chip">
-              <RefreshCcw size={18} aria-hidden="true" />
-            </span>
-            <div>
-              <p className="kicker">Native leverage token</p>
-              <h2>Every fee makes the long longer.</h2>
-            </div>
-          </div>
-
-          <div className="flywheel-visual" aria-label="Longcat fee to Cashcat long flywheel">
-            <div className="flywheel-ring">
-              <div className="flywheel-core">
-                <span>Cashcat long</span>
-                <strong>{money(displayedLongNotional)}</strong>
-                <small>{liveCashcatLong > 0 ? "linked account" : "awaiting integration"}</small>
-              </div>
-            </div>
-            <div className="flywheel-legend">
-              <span>$LONGCAT Trades</span>
-              <ArrowRight size={15} aria-hidden="true" />
-              <span>Creator Fees</span>
-              <ArrowRight size={15} aria-hidden="true" />
-              <span>$CASHCAT Long</span>
-              <ArrowRight size={15} aria-hidden="true" />
-              <span>Buyback</span>
-              <ArrowRight size={15} aria-hidden="true" />
-              <span>Burn</span>
-            </div>
-          </div>
-
-          <div className="flywheel-steps">
-            <div>
-              <span>Fees generated</span>
-              <strong>{money(monthlyFees)}</strong>
-              <small>creator fee model</small>
-            </div>
-            <div>
-              <span>Fees deployed</span>
-              <strong>{money(monthlyAllocation)}</strong>
-              <small>{percent(allocation)} to Cashcat</small>
-            </div>
-            <div>
-              <span>Projected long</span>
-              <strong>{money(projectedLongNotional)}</strong>
-              <small>{targetLeverage}x model</small>
-            </div>
-            <div>
-              <span>Deployment rate</span>
-              <strong>{percent(refillRate)}</strong>
-              <small>against current long</small>
-            </div>
-          </div>
-        </div>
-
-        <div className="panel controls-panel">
-          <div className="section-heading compact-heading">
-            <span className="icon-chip">
-              <Gauge size={18} aria-hidden="true" />
-            </span>
-            <div>
-              <p className="kicker">Desk controls</p>
-              <h2>Cashcat long model</h2>
-            </div>
-          </div>
-
-          <label className="control">
-            <span>Monthly $LONGCAT trading flow</span>
-            <input
-              type="number"
-              min="0"
-              step="10000"
-              value={monthlyVolume}
-              onChange={(event) => setMonthlyVolume(safeNumber(event.target.value, monthlyVolume))}
-            />
-          </label>
-
-          <label className="range-control">
-            <span>
-              Protocol fee <strong>{feeBps} bps</strong>
-            </span>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={feeBps}
-              onChange={(event) => setFeeBps(safeNumber(event.target.value, feeBps))}
-            />
-          </label>
-
-          <label className="range-control">
-            <span>
-              Fees deployed to Cashcat long <strong>{percent(allocation)}</strong>
-            </span>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={allocation}
-              onChange={(event) => setAllocation(safeNumber(event.target.value, allocation))}
-            />
-          </label>
-
-          <label className="control">
-            <span>Target leverage</span>
-            <input
-              type="number"
-              min="0"
-              max="5"
-              step="0.25"
-              value={targetLeverage}
-              onChange={(event) => setTargetLeverage(safeNumber(event.target.value, targetLeverage))}
-            />
-          </label>
-
-          <div className="risk-strip">
-            <div>
-              <span>Cashcat long</span>
-              <strong>{money(displayedLongNotional)}</strong>
-            </div>
-            <div>
-              <span>Realized profit</span>
-              <strong>$0</strong>
-            </div>
-            <div>
-              <span>$LONGCAT burned</span>
-              <strong>0</strong>
-            </div>
-          </div>
-        </div>
+        <p>Track the public Cashcat long, creator fees deployed, realized profit, $LONGCAT buybacks, and burns.</p>
       </section>
 
       <section className="content-band live-long-section">
@@ -543,11 +390,11 @@ export function DashboardClient() {
 
           <div className="exposure-number">
             <span>{exposureSource}</span>
-            <strong>{money(displayedLongNotional)}</strong>
+            <strong>{displayedLongNotional > 0 ? money(displayedLongNotional) : "Awaiting live integration."}</strong>
             <small>
               {liveCashcatLong > 0 || supabaseCashcatLong > 0
                 ? `${money(displayedPnl)} unrealized PnL`
-                : "Waiting for live account or Supabase position row"}
+                : "Public position data will appear after integration."}
             </small>
           </div>
 

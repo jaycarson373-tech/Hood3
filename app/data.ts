@@ -1,8 +1,6 @@
 import {
-  ArrowUpRight,
   BadgeDollarSign,
   Flame,
-  LineChart,
   ShieldCheck,
   Sparkles,
   StretchHorizontal,
@@ -104,24 +102,23 @@ export const landingStats: Metric[] = [
 ];
 
 export const livePositionStats: Metric[] = [
-  { label: "Cashcat Position Size", value: "-", detail: "awaiting integration" },
-  { label: "Entry Price", value: "-", detail: "awaiting fill" },
-  { label: "Current Price", value: "-", detail: "awaiting feed" },
-  { label: "Leverage", value: "0.00x", detail: "not active" },
-  { label: "Unrealized PnL", value: "$0", detail: "awaiting position" },
-  { label: "Realized PnL", value: "$0", detail: "buyback budget" },
-  { label: "Liquidation Price", value: "-", detail: "risk level pending" },
-  { label: "Total Fees Deployed", value: "$0", detail: "public receipts pending" },
-  { label: "Last Position Increase", value: "-", detail: "no transaction yet" },
-  { label: "Transaction Hash", value: "-", detail: "awaiting first receipt" },
+  { label: "POSITION SIZE", value: "Awaiting live integration.", detail: "public position" },
+  { label: "TOTAL FEES DEPLOYED", value: "Awaiting live integration.", detail: "creator fees" },
+  { label: "ENTRY PRICE", value: "Awaiting live integration.", detail: "execution data" },
+  { label: "CURRENT PRICE", value: "Awaiting live integration.", detail: "market data" },
+  { label: "LEVERAGE", value: "Awaiting live integration.", detail: "risk data" },
+  { label: "UNREALIZED PNL", value: "Awaiting live integration.", detail: "position data" },
+  { label: "REALIZED PROFIT", value: "Awaiting live integration.", detail: "buyback fuel" },
+  { label: "TOTAL BUYBACKS", value: "Awaiting live integration.", detail: "receipts" },
+  { label: "TOTAL TOKENS BURNED", value: "Awaiting live integration.", detail: "burn receipts" },
+  { label: "LAST POSITION UPDATE", value: "Awaiting live integration.", detail: "latest receipt" },
 ];
 
 export const burnStats: Metric[] = [
-  { label: "Total $LONGCAT Burned", value: "0", detail: "awaiting burns" },
-  { label: "Total Buyback Value", value: "$0", detail: "realized profit only" },
-  { label: "Last Burn", value: "-", detail: "no burn receipt yet" },
-  { label: "Current Circulating Supply", value: "-", detail: "awaiting token data" },
-  { label: "Percentage of Supply Burned", value: "0%", detail: "awaiting burn history" },
+  { label: "TOTAL BUYBACKS", value: "Awaiting live integration.", detail: "realized profits" },
+  { label: "TOTAL TOKENS BURNED", value: "Awaiting live integration.", detail: "burn receipts" },
+  { label: "REALIZED PROFIT", value: "Awaiting live integration.", detail: "buyback fuel" },
+  { label: "LAST POSITION UPDATE", value: "Awaiting live integration.", detail: "latest receipt" },
 ];
 
 export const flywheelSteps: AutomationStep[] = [
@@ -172,40 +169,22 @@ export const timeline = [
 
 export const cashcatThesisPoints: ThesisPoint[] = [
   {
-    label: "Native meme",
-    value: "01",
-    text: "We believe Cashcat is one of the most recognizable and culturally native memes emerging from the Robinhood ecosystem.",
-    icon: Sparkles,
-  },
-  {
     label: "Retail rail",
-    value: "02",
-    text: "Our thesis is that Robinhood can bring a massive new class of retail users directly onchain.",
+    value: "01",
+    text: "Robinhood is bringing new retail onchain.",
     icon: TrendingUp,
   },
   {
-    label: "First trade",
+    label: "Native memes",
+    value: "02",
+    text: "Native ecosystems produce native memes.",
+    icon: Sparkles,
+  },
+  {
+    label: "Defining cat",
     value: "03",
-    text: "Memecoins are often the first assets new retail participants understand and trade.",
+    text: "Our thesis is Cashcat becomes Robinhood's defining cat.",
     icon: BadgeDollarSign,
-  },
-  {
-    label: "Mascot index",
-    value: "04",
-    text: "Strong native mascots can become cultural indexes for their chains.",
-    icon: LineChart,
-  },
-  {
-    label: "Chain beta",
-    value: "05",
-    text: "If Robinhood Chain grows, its most recognizable native cat has a chance to become one of its dominant speculative assets.",
-    icon: ArrowUpRight,
-  },
-  {
-    label: "Directional loop",
-    value: "06",
-    text: "$LONGCAT provides continuous directional exposure to that thesis through its fee mechanism.",
-    icon: StretchHorizontal,
   },
 ];
 

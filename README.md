@@ -6,9 +6,30 @@ realized trading profits can buy back and burn $LONGCAT.
 
 ## Routes
 
-- `/` - Longcat landing page with a full-site Longcat wallpaper backing, original meme origin photo, live length placeholders, meme mechanics, burns, and FAQ.
-- `/dashboard` - read-only Hyperliquid account viewer, Cashcat long model, receipt terminal, and burn placeholders.
+- `/` - Longcat landing page with a full-site Longcat wallpaper backing, original meme origin photo, live integration placeholders, meme mechanics, burns, and FAQ.
+- `/dashboard` - read-only Hyperliquid account viewer, Cashcat position telemetry, receipt terminal, and burn placeholders.
 - `/thesis` - Cashcat thesis, risks, and source links.
+
+## X Assets And Copy
+
+- Banner: `public/x-banner.png`
+- Avatar: `public/x-avatar.png`
+
+Bio:
+```text
+The longest cat on Robinhood.
+
+Creator fees scale into a public $CASHCAT long on Hyperliquid.
+
+Profits buy back & burn $LONGCAT.
+```
+
+Community description:
+```text
+100% of creator fees scale into a public $CASHCAT long on Hyperliquid.
+
+Realized profits buy back & permanently burn $LONGCAT.
+```
 
 ## Required Frontend Environment
 

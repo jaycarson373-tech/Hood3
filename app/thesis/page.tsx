@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { ArrowRight, ExternalLink, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { cashcatChartUrl, cashcatThesisPoints, risks, sourceLinks, thesisRisks } from "../data";
-import { LongcatMascot } from "../components/LongcatVisuals";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
 const title = "Cashcat Thesis | Longcat";
@@ -33,12 +32,8 @@ export default function ThesisPage() {
 
       <section className="page-hero thesis-hero longcat-thesis-hero">
         <p className="eyebrow">Cashcat Thesis</p>
-        <h1>The native cat of Robinhood deserves the longest position on Robinhood.</h1>
-        <p>
-          Our thesis is simple: if Robinhood Chain wins retail attention, Cashcat is positioned to become one of its
-          defining native speculative assets. $LONGCAT expresses that view through creator fees that extend one public
-          Cashcat long.
-        </p>
+        <h1>Cashcat is the directional bet.</h1>
+        <p>Three points. One public long. No certainty implied.</p>
         <div className="button-row">
           <Link className="button primary" href="/dashboard">
             View the long
@@ -73,26 +68,13 @@ export default function ThesisPage() {
       <section className="content-band thesis-memo cashcat-memo">
         <div>
           <p className="eyebrow">Core view</p>
-          <h2>IF ROBINHOOD BECOMES THE HOME OF RETAIL, CASHCAT CAN BECOME ITS CAT.</h2>
+          <h2>
+            IF CASHCAT WINS,
+            <br />
+            LONGCAT GETS LONGER.
+          </h2>
         </div>
-        <p>
-          We believe memecoins are often the first assets new retail participants understand and trade. Strong native
-          mascots can become cultural indexes for their chains. If Robinhood brings more retail activity onchain, Cashcat
-          has a chance to become one of its dominant speculative symbols.
-        </p>
-      </section>
-
-      <section className="content-band dual-visual-section">
-        <div className="dual-panel dual-panel--long">
-          <p className="eyebrow">Directional exposure</p>
-          <h2>The longer Longcat trades, the longer the long becomes.</h2>
-          <LongcatMascot variant="line" />
-        </div>
-        <div className="dual-panel dual-panel--short">
-          <p className="eyebrow">Supply pressure</p>
-          <h2>Realized trading profits buy back and burn $LONGCAT.</h2>
-          <p>No buyback is guaranteed. It only happens when qualifying realized profits exist.</p>
-        </div>
+        <p>Creator fees scale into a public $CASHCAT long. Realized profits buy back and burn $LONGCAT.</p>
       </section>
 
       <section className="content-band thesis-risk-grid">
