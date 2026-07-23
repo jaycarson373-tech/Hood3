@@ -75,9 +75,11 @@ export function SiteFooter() {
         ))}
       </div>
       <p className="footer-disclaimer">
-        $LONGCAT is a highly speculative community token. Leveraged trading can result in partial or total loss,
-        including liquidation. Nothing on this website is financial advice. $LONGCAT is not affiliated with Solana
-        Foundation, Hyperliquid, or any referenced third party.
+        Long Cat.
+        <br />
+        Long SOL.
+        <br />
+        The SOL Flywheel.
       </p>
     </footer>
   );
