@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
+import { HYPERLIQUID } from "../constants";
 
 type TerminalRow = {
   stage: string;
@@ -13,8 +14,27 @@ type TerminalRow = {
 
 type PositionRow = {
   side: string;
+  size?: string | number;
   notional_usdc: string | number;
   entry_price: string | number | null;
+  leverage?: string | number;
+};
+
+type HyperliquidPosition = {
+  coin: string;
+  szi: string;
+  entryPx: string | null;
+  positionValue: string;
+  leverage: {
+    type: string;
+    value: number;
+  };
+};
+
+type HyperliquidState = {
+  assetPositions?: Array<{
+    position: HyperliquidPosition;
+  }>;
 };
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
@@ -42,13 +62,42 @@ function tokenAmount(value: number) {
 export function HeroTerminal() {
   const [terminalRows, setTerminalRows] = useState<TerminalRow[]>([]);
   const [position, setPosition] = useState<PositionRow | null>(null);
+  const [hyperliquidPosition, setHyperliquidPosition] = useState<HyperliquidPosition | null>(null);
+  const [hyperliquidLoaded, setHyperliquidLoaded] = useState(false);
 
   useEffect(() => {
-    if (!supabaseUrl || !supabaseAnonKey) return;
-
     let active = true;
 
-    async function refresh() {
+    async function refreshHyperliquid() {
+      try {
+        const response = await fetch(HYPERLIQUID.apiUrl, {
+          method: "POST",
+          cache: "no-store",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            type: "clearinghouseState",
+            user: HYPERLIQUID.account,
+          }),
+        });
+
+        if (!response.ok) return;
+
+        const state = (await response.json()) as HyperliquidState;
+        const solPosition = state.assetPositions?.find(({ position: assetPosition }) => assetPosition.coin === "SOL")?.position ?? null;
+
+        if (!active) return;
+        setHyperliquidPosition(solPosition);
+        setHyperliquidLoaded(true);
+      } catch {
+        // Keep the last verified Hyperliquid state during a transient network failure.
+      }
+    }
+
+    async function refreshSupabase() {
+      if (!supabaseUrl || !supabaseAnonKey) return;
+
       try {
         const headers = {
           apikey: supabaseAnonKey ?? "",
@@ -78,7 +127,11 @@ export function HeroTerminal() {
       }
     }
 
-    void refresh();
+    function refresh() {
+      void Promise.all([refreshHyperliquid(), refreshSupabase()]);
+    }
+
+    refresh();
     const timer = window.setInterval(refresh, 15_000);
 
     return () => {
@@ -88,28 +141,31 @@ export function HeroTerminal() {
   }, []);
 
   const metrics = useMemo(() => {
-    const longSize = Math.abs(safeNumber(position?.notional_usdc));
-    const entryPrice = safeNumber(position?.entry_price);
-    const solBridged = terminalRows
-      .filter((row) => row.stage.toUpperCase() === "BRIDGE" && row.asset?.toUpperCase() === "SOL")
-      .reduce((total, row) => total + safeNumber(row.amount), 0);
+    const solSize = Math.abs(safeNumber(hyperliquidPosition?.szi || position?.size));
+    const longSize = Math.abs(safeNumber(hyperliquidPosition?.positionValue || position?.notional_usdc));
+    const entryPrice = safeNumber(hyperliquidPosition?.entryPx || position?.entry_price);
+    const leverage = safeNumber(hyperliquidPosition?.leverage.value || position?.leverage);
     const tokensBurned = terminalRows
       .filter((row) => row.stage.toUpperCase() === "BURN" && ["LONGCAT", "$LONGCAT"].includes(row.asset?.toUpperCase() ?? ""))
       .reduce((total, row) => total + safeNumber(row.amount), 0);
-    const status = position
-      ? position.side.toLowerCase() === "long" && longSize > 0
-        ? "LONG OPEN"
-        : "FLAT"
-      : "NOT PUBLISHED";
+    const hasLong = solSize > 0 || longSize > 0;
+    const status = hasLong
+      ? leverage > 0
+        ? `LONG · ${leverage.toFixed(0)}X`
+        : "LONG OPEN"
+      : hyperliquidLoaded || position
+        ? "FLAT"
+        : "NOT PUBLISHED";
 
     return [
       { label: "STATUS", value: status },
-      { label: "LONG SIZE", value: longSize > 0 ? money(longSize) : "NOT PUBLISHED" },
+      { label: "SOL LONG", value: solSize > 0 ? `${solSize.toFixed(2)} SOL` : "NOT PUBLISHED" },
+      { label: "POSITION VALUE", value: longSize > 0 ? money(longSize) : "NOT PUBLISHED" },
       { label: "ENTRY PRICE", value: entryPrice > 0 ? money(entryPrice) : "NOT PUBLISHED" },
-      { label: "SOL BRIDGED", value: solBridged > 0 ? `${solBridged.toFixed(4)} SOL` : "NOT PUBLISHED" },
+      { label: "FIRST HL DEPOSIT", value: money(HYPERLIQUID.initialDepositUsd) },
       { label: "$LONGCAT BURNED", value: tokensBurned > 0 ? tokenAmount(tokensBurned) : "NOT PUBLISHED" },
     ];
-  }, [position, terminalRows]);
+  }, [hyperliquidLoaded, hyperliquidPosition, position, terminalRows]);
 
   return (
     <aside className="hero-terminal" aria-label="Live Longcat terminal">

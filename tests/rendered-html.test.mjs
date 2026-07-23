@@ -10,8 +10,9 @@ const requiredHomeCopy = [
   "Creator fees scale into a public SOL long on Hyperliquid.",
   "Realized profits bridge back, buy back, and burn $LONGCAT.",
   "LONGCAT TERMINAL",
-  "LONG SIZE",
-  "SOL BRIDGED",
+  "SOL LONG",
+  "POSITION VALUE",
+  "FIRST HL DEPOSIT",
   "$LONGCAT BURNED",
   "Enter Dashboard",
   "FEES LONG SOL. PROFITS BURN $LONGCAT.",
@@ -113,7 +114,8 @@ test("production assets and server-only launch configuration are present", async
 
   assert.match(packageJson, /"name": "longcat"/);
   assert.match(constants, /https:\/\/www\.longcatsolana\.fun/);
-  assert.match(constants, /hyperliquidPosition: null/);
+  assert.match(constants, /0x68F6723727EF5306122D666F92bEDF4d8382E2Fc/);
+  assert.match(constants, /initialDepositUsd: 96/);
   assert.match(layout, /apple-touch-icon\.png/);
   assert.match(launchState, /process\.env\.LAUNCH_STATE/);
   assert.doesNotMatch(launchState, /NEXT_PUBLIC/);

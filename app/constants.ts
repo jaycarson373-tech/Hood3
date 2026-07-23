@@ -9,6 +9,12 @@ export const SITE = {
 
 export const CONTRACT_ADDRESS: string | null = null;
 
+export const HYPERLIQUID = {
+  account: "0x68F6723727EF5306122D666F92bEDF4d8382E2Fc",
+  apiUrl: "https://api.hyperliquid.xyz/info",
+  initialDepositUsd: 96,
+} as const;
+
 export const EXTERNAL_LINKS: {
   pump: string | null;
   dexScreener: string | null;
@@ -22,7 +28,7 @@ export const EXTERNAL_LINKS: {
   dexScreener: null,
   x: null,
   community: null,
-  hyperliquidPosition: null,
+  hyperliquidPosition: `https://app.hyperliquid.xyz/explorer/address/${HYPERLIQUID.account}`,
   solMarket: "https://app.hyperliquid.xyz/trade/SOL",
   buy: null,
 };
@@ -43,4 +49,3 @@ const optionalLinks: Array<[string, string | null]> = [
 export const externalLinks: SiteLink[] = optionalLinks.flatMap(([label, href]) =>
   href ? [{ label, href }] : [],
 );
-
