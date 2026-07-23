@@ -5,15 +5,14 @@ profits can buy back and permanently burn `$LONGCAT`.
 
 ## Routes
 
-- `/` - Longcat launch page with white Solana-coded terminal visuals, live integration placeholders, mechanism, thesis, burns, and FAQ.
-- `/dashboard` - Hyperliquid-facing read-only terminal for SOL position telemetry, receipts, and burn placeholders.
+- `/` - Longcat launch page with Solana-coded terminal visuals, mechanism, thesis, burns, and FAQ.
+- `/dashboard` - Hyperliquid-facing public terminal for verified SOL position telemetry and receipts.
 - `/thesis` - SOL thesis, risks, and source links.
 
-## Contract
+## Mechanism
 
-- CA: soon on Solana
 - Fee: creator fees
-- Mechanism: fees extend the public SOL long; qualifying realized profits buy back and burn `$LONGCAT`
+- Flow: fees extend the public SOL long; qualifying realized profits buy back and burn `$LONGCAT`
 
 Solana token creation, fee routing, Hyperliquid execution, SOL position
 management, buybacks, and burns should be handled by audited server-side
@@ -43,10 +42,13 @@ Qualifying realized profits buy back & permanently burn $LONGCAT.
 ## Required Frontend Environment
 
 ```bash
-SITE_URL=
+LAUNCH_STATE=prelaunch
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
+
+`LAUNCH_STATE` is server-only. Change it to `live` only after verified public
+position and receipt rows are available.
 
 The frontend only reads browser-safe Supabase views. Keep service-role keys,
 wallet keys, and Hyperliquid signing keys server-side.

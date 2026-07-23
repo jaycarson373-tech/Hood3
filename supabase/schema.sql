@@ -382,9 +382,8 @@ on public.longcat_terminal_events
 for select
 using (true);
 
-drop policy if exists "public read cashcat positions" on public.longcat_positions;
-drop policy if exists "public read hood positions" on public.longcat_positions;
-create policy "public read hood positions"
+drop policy if exists "public read longcat positions" on public.longcat_positions;
+create policy "public read longcat positions"
 on public.longcat_positions
 for select
 using (true);

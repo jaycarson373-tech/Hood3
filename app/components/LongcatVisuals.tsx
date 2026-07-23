@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import type { Metric } from "../data";
 
 type MetricGridProps = {
@@ -15,7 +15,7 @@ type LongcatScrollBackdropProps = {
 };
 
 export function LongcatScrollBackdrop({ variant = "landing", extension = 0 }: LongcatScrollBackdropProps) {
-  const [progress, setProgress] = useState(0);
+  const backdropRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let frame = 0;
@@ -25,7 +25,7 @@ export function LongcatScrollBackdrop({ variant = "landing", extension = 0 }: Lo
       frame = window.requestAnimationFrame(() => {
         const scrollable = document.documentElement.scrollHeight - window.innerHeight;
         const nextProgress = scrollable > 0 ? window.scrollY / scrollable : 0;
-        setProgress(Math.min(1, Math.max(0, nextProgress)));
+        backdropRef.current?.style.setProperty("--longcat-scroll", String(Math.min(1, Math.max(0, nextProgress))));
       });
     }
 
@@ -42,11 +42,12 @@ export function LongcatScrollBackdrop({ variant = "landing", extension = 0 }: Lo
 
   return (
     <div
+      ref={backdropRef}
       className={`longcat-scroll-backdrop longcat-scroll-backdrop--${variant}`}
       aria-hidden="true"
       style={
         {
-          "--longcat-scroll": progress,
+          "--longcat-scroll": 0,
           "--longcat-extension": Math.min(1, Math.max(0, extension)),
         } as CSSProperties
       }
@@ -56,14 +57,14 @@ export function LongcatScrollBackdrop({ variant = "landing", extension = 0 }: Lo
 
 export function LongcatSignalField() {
   return (
-    <div className="hood3-signal-field" aria-hidden="true">
-      <div className="hood3-signal-grid" />
-      <div className="hood3-signal-chart">
+    <div className="launch-signal-field" aria-hidden="true">
+      <div className="launch-signal-grid" />
+      <div className="launch-signal-chart">
         <span />
         <span />
         <span />
       </div>
-      <div className="hood3-signal-beam" />
+      <div className="launch-signal-beam" />
     </div>
   );
 }
@@ -73,7 +74,7 @@ export function SignalGraphicStack() {
     <div className="signal-graphic-stack" aria-label="Longcat Hyperliquid flywheel graphic">
       <div className="signal-card signal-card--position">
         <span>SOL LONG</span>
-        <strong>Awaiting live integration.</strong>
+        <strong>PUBLIC SOL EXPOSURE</strong>
       </div>
       <div className="signal-card signal-card--flow">
         <span>FEES</span>

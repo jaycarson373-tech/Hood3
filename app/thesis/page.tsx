@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { ArrowRight, ExternalLink, TriangleAlert } from "lucide-react";
 import Link from "next/link";
-import { hoodChartUrl, hoodThesisPoints, risks, sourceLinks, thesisRisks } from "../data";
+import { EXTERNAL_LINKS, SITE, externalLinks } from "../constants";
+import { risks, solThesisPoints, thesisRisks } from "../data";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
 const title = "SOL Thesis | Longcat";
@@ -18,16 +19,26 @@ export const metadata: Metadata = {
     title,
     description,
     url: "/thesis",
+    images: [
+      {
+        url: SITE.ogImage,
+        width: 1200,
+        height: 630,
+        alt: "Long Cat, the longest cat on Solana",
+      },
+    ],
   },
   twitter: {
+    card: "summary_large_image",
     title,
     description,
+    images: [SITE.ogImage],
   },
 };
 
 export default function ThesisPage() {
   return (
-    <main className="site-shell hood3-shell hood3-terminal-site longcat-sol-site">
+    <main className="site-shell longcat-shell launch-terminal-site longcat-sol-site">
       <SiteHeader />
 
       <section className="page-hero thesis-hero longcat-thesis-hero">
@@ -39,15 +50,17 @@ export default function ThesisPage() {
             View the long
             <ArrowRight size={17} aria-hidden="true" />
           </Link>
-          <a className="button ghost" href={hoodChartUrl}>
-            View SOL
-            <ExternalLink size={17} aria-hidden="true" />
-          </a>
+          {EXTERNAL_LINKS.solMarket ? (
+            <a className="button ghost" href={EXTERNAL_LINKS.solMarket} target="_blank" rel="noreferrer">
+              View SOL
+              <ExternalLink size={17} aria-hidden="true" />
+            </a>
+          ) : null}
         </div>
       </section>
 
       <section className="thesis-grid content-band">
-        {hoodThesisPoints.map((point) => {
+        {solThesisPoints.map((point) => {
           const Icon = point.icon;
 
           return (
@@ -107,17 +120,19 @@ export default function ThesisPage() {
         </ul>
       </section>
 
-      <section className="content-band source-panel">
-        <p className="eyebrow">Links</p>
-        <div className="source-panel-links">
-          {sourceLinks.map((source) => (
-            <a key={source.href} href={source.href} target={source.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
-              {source.label}
-              <ExternalLink size={14} aria-hidden="true" />
-            </a>
-          ))}
-        </div>
-      </section>
+      {externalLinks.length ? (
+        <section className="content-band source-panel">
+          <p className="eyebrow">Links</p>
+          <div className="source-panel-links">
+            {externalLinks.map((source) => (
+              <a key={source.href} href={source.href} target="_blank" rel="noreferrer">
+                {source.label}
+                <ExternalLink size={14} aria-hidden="true" />
+              </a>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <SiteFooter />
     </main>

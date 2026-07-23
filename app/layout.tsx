@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SITE } from "./constants";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -12,43 +13,45 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteTitle = "Longcat | The Longest Cat on Solana";
-const siteDescription =
-  "Longcat is a Solana native leverage token: creator fees build a public SOL long on Hyperliquid, and qualifying realized profits buy back and burn $LONGCAT.";
-const siteUrl = process.env.SITE_URL;
-
 export const metadata: Metadata = {
-  ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
-  title: siteTitle,
-  description: siteDescription,
+  metadataBase: new URL(SITE.url),
+  title: SITE.title,
+  description: SITE.description,
   alternates: {
     canonical: "/",
   },
   icons: {
-    icon: "/longcat-logo.png",
-    shortcut: "/longcat-logo.png",
-    apple: "/longcat-logo.png",
+    icon: [
+      { url: "/favicon.png", type: "image/png", sizes: "512x512" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.png",
+    apple: [{ url: "/apple-touch-icon.png", type: "image/png", sizes: "180x180" }],
   },
   openGraph: {
-    title: siteTitle,
-    description: siteDescription,
+    title: SITE.title,
+    description: SITE.description,
     url: "/",
-    siteName: "Longcat",
+    siteName: SITE.name,
     type: "website",
     images: [
       {
-        url: "/og.png",
+        url: SITE.ogImage,
         width: 1200,
         height: 630,
-        alt: "Longcat social card",
+        alt: "Long Cat, the longest cat on Solana",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: siteTitle,
-    description: siteDescription,
-    images: ["/og.png"],
+    title: SITE.title,
+    description: SITE.description,
+    images: [SITE.ogImage],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -58,7 +61,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
     </html>
   );

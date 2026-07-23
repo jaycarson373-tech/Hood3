@@ -12,7 +12,7 @@ The database view names currently preserve the earlier prefix for migration safe
 Frontend env vars:
 
 ```bash
-SITE_URL=
+LAUNCH_STATE=prelaunch
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```

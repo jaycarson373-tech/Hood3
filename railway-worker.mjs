@@ -272,7 +272,7 @@ async function executeOnce() {
       bridge_response: bridge,
       note: bridge ? "Bridge endpoint returned a response." : "Set LONGCAT_BRIDGE_ENDPOINT to move SOL/collateral toward Hyperliquid.",
     });
-    await logEvent(runId, "BRIDGE", dryRun ? "skipped" : bridge ? "succeeded" : "pending", "Route SOL toward Hyperliquid", bridge ? "Bridge route recorded." : "Bridge endpoint awaiting integration.", {
+    await logEvent(runId, "BRIDGE", dryRun ? "skipped" : bridge ? "succeeded" : "pending", "Route SOL toward Hyperliquid", bridge ? "Bridge route recorded." : "Bridge endpoint not configured.", {
       asset: "SOL",
       amount: routeableSol,
       tx_hash: bridgeTx,
@@ -306,7 +306,7 @@ async function executeOnce() {
       run_id: runId,
       dry_run: dryRun,
     }, env("LONGCAT_PROFIT_API_KEY") ? { Authorization: `Bearer ${env("LONGCAT_PROFIT_API_KEY")}` } : {});
-    await logEvent(runId, "PROFIT", dryRun ? "skipped" : profit ? "succeeded" : "pending", "Check realized profit", profit ? "Profit route recorded." : "Profit-taking endpoint awaiting integration.", {
+    await logEvent(runId, "PROFIT", dryRun ? "skipped" : profit ? "succeeded" : "pending", "Check realized profit", profit ? "Profit route recorded." : "Profit-taking endpoint not configured.", {
       asset: "USDC",
       amount: profit?.realized_profit_usdc ?? null,
       metadata: { dry_run: dryRun, profit_response: profit },
@@ -318,7 +318,7 @@ async function executeOnce() {
       dry_run: dryRun,
       profit,
     }, env("LONGCAT_BUYBACK_BURN_API_KEY") ? { Authorization: `Bearer ${env("LONGCAT_BUYBACK_BURN_API_KEY")}` } : {});
-    await logEvent(runId, "BURN", dryRun ? "skipped" : burn ? "succeeded" : "pending", "Buy back and burn $LONGCAT", burn ? "Buyback/burn route recorded." : "Buyback/burn endpoint awaiting integration.", {
+    await logEvent(runId, "BURN", dryRun ? "skipped" : burn ? "succeeded" : "pending", "Buy back and burn $LONGCAT", burn ? "Buyback/burn route recorded." : "Buyback/burn endpoint not configured.", {
       asset: "LONGCAT",
       amount: burn?.tokens_burned ?? null,
       tx_hash: burn?.tx_hash ?? burn?.signature ?? null,

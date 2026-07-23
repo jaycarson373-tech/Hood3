@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
-import { hood3XUrl, sourceLinks } from "../data";
+import { EXTERNAL_LINKS, externalLinks } from "../constants";
 
 const navLinks = [
   { label: "Solana Thesis", href: "/#origin" },
@@ -13,12 +13,14 @@ const navLinks = [
 ];
 
 export function SiteHeader() {
+  const hasActions = Boolean(EXTERNAL_LINKS.x || EXTERNAL_LINKS.buy);
+
   return (
     <header className="site-header">
-      <div className="main-nav hood3-nav">
+      <div className="main-nav launch-nav">
         <Link className="brand" href="/" aria-label="Longcat home">
-          <span className="brand-mark hood3-brand-mark" aria-hidden="true">
-            <Image src="/longcat-logo.png" alt="" width={1024} height={1024} />
+          <span className="brand-mark launch-brand-mark" aria-hidden="true">
+            <Image src="/longcat-logo.png" alt="" width={512} height={512} sizes="44px" priority />
           </span>
           <span>
             <strong>LONGCAT</strong>
@@ -34,15 +36,21 @@ export function SiteHeader() {
           ))}
         </nav>
 
-        <div className="header-actions">
-          <a className="social-link x-header-link" href={hood3XUrl} target="_blank" rel="noreferrer" aria-label="Open Longcat on X">
-            X
-            <ExternalLink size={13} aria-hidden="true" />
-          </a>
-          <Link className="nav-cta" href="/#buy-longcat">
-            Buy $LONGCAT
-          </Link>
-        </div>
+        {hasActions ? (
+          <div className="header-actions">
+            {EXTERNAL_LINKS.x ? (
+              <a className="social-link x-header-link" href={EXTERNAL_LINKS.x} target="_blank" rel="noreferrer" aria-label="Open Longcat on X">
+                X
+                <ExternalLink size={13} aria-hidden="true" />
+              </a>
+            ) : null}
+            {EXTERNAL_LINKS.buy ? (
+              <a className="nav-cta" href={EXTERNAL_LINKS.buy} target="_blank" rel="noreferrer">
+                Buy $LONGCAT
+              </a>
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </header>
   );
@@ -50,24 +58,17 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="site-footer hood3-footer">
+    <footer className="site-footer launch-footer">
       <div className="footer-brand">
         <strong>LONGCAT</strong>
         <span>The longest cat on Solana.</span>
       </div>
-      <div className="footer-market-strip" aria-label="Longcat market prices">
-        <div>
-          <span>SOL PRICE</span>
-          <strong>Awaiting live integration.</strong>
-        </div>
-        <div>
-          <span>$LONGCAT PRICE</span>
-          <strong>Awaiting launch.</strong>
-        </div>
-      </div>
       <div className="source-links">
-        {sourceLinks.map((source) => (
-          <a key={source.href} href={source.href} target={source.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
+        <Link href="/dashboard">Dashboard</Link>
+        <Link href="/thesis">Thesis</Link>
+        <Link href="/#burns">Burns</Link>
+        {externalLinks.map((source) => (
+          <a key={source.href} href={source.href} target="_blank" rel="noreferrer">
             {source.label}
             <ExternalLink size={14} aria-hidden="true" />
           </a>
