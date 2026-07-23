@@ -51,7 +51,7 @@ export function SiteHeader() {
 export function SiteFooter() {
   return (
     <footer className="site-footer hood3-footer">
-      <div>
+      <div className="footer-brand">
         <strong>LONGCAT</strong>
         <span>The longest cat on Solana.</span>
       </div>
@@ -73,7 +73,7 @@ export function SiteFooter() {
           </a>
         ))}
       </div>
-      <p>
+      <p className="footer-disclaimer">
         $LONGCAT is a highly speculative community token. Leveraged trading can result in partial or total loss,
         including liquidation. Nothing on this website is financial advice. $LONGCAT is not affiliated with Solana
         Foundation, Hyperliquid, or any referenced third party.

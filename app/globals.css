@@ -4636,10 +4636,37 @@ body:has(.longcat-sol-site) {
 }
 
 .longcat-sol-site .site-footer {
-  background:
-    linear-gradient(180deg, rgba(5, 0, 20, 0.42), rgba(5, 0, 20, 0.9)),
-    url("/longcat-space-banner.jpg") center bottom / cover no-repeat;
+  backdrop-filter: blur(18px);
+  background: linear-gradient(180deg, rgba(7, 4, 24, 0.76), rgba(5, 0, 20, 0.96));
   border-top: 1px solid rgba(0, 194, 255, 0.2);
+  padding-left: 22px;
+  padding-right: 22px;
+}
+
+.longcat-sol-site .footer-brand {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+}
+
+.longcat-sol-site .footer-brand strong {
+  color: #ffffff;
+  font-size: 20px;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.longcat-sol-site .footer-brand span {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.longcat-sol-site .footer-disclaimer {
+  font-size: 13px;
+  line-height: 1.65;
+  margin: 4px 0 0;
+  max-width: 760px;
 }
 
 .longcat-dashboard-site .page-hero,
@@ -4848,6 +4875,45 @@ body:has(.longcat-sol-site) {
 
   .longcat-sol-site .footer-market-strip {
     grid-template-columns: 1fr;
+    margin-top: 6px;
+  }
+
+  .longcat-sol-site .site-footer {
+    gap: 14px;
+    margin-top: 20px;
+    padding: 24px 16px calc(30px + env(safe-area-inset-bottom));
+    width: calc(100% - 24px);
+  }
+
+  .longcat-sol-site .footer-brand {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .longcat-sol-site .footer-brand strong {
+    font-size: 18px;
+  }
+
+  .longcat-sol-site .footer-brand span {
+    font-size: 14px;
+  }
+
+  .longcat-sol-site .source-links {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .longcat-sol-site .source-links a {
+    justify-content: space-between;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .longcat-sol-site .footer-disclaimer {
+    font-size: 12px;
+    line-height: 1.55;
   }
 }
 
