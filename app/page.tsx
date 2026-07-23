@@ -79,23 +79,6 @@ export default function Home() {
 
       {!isLive ? <PrelaunchNotice /> : null}
 
-      <section className="launch-section origin-section" id="origin">
-        <div className="section-label">SOLANA THESIS</div>
-        <h2>LONGCAT TURNS MEME FLOW INTO DIRECTIONAL SOL EXPOSURE.</h2>
-        <div className="origin-grid launch-origin-grid">
-          <div className="origin-board">
-            <span>01</span>
-            <strong>Solana speed</strong>
-            <p>Longcat is built for the chain where memes, retail attention, and liquidity move fast.</p>
-          </div>
-          <div className="origin-board">
-            <span>02</span>
-            <strong>Hyperliquid execution</strong>
-            <p>The mechanism is designed to route creator fees into a transparent SOL long on Hyperliquid.</p>
-          </div>
-        </div>
-      </section>
-
       <section className="launch-section mechanic-section" id="mechanism">
         <div className="section-label">MECHANISM</div>
         <h2>FEES LONG SOL. PROFITS BURN $LONGCAT.</h2>

@@ -14,7 +14,6 @@ const requiredHomeCopy = [
   "Every buyback.",
   "Every burn.",
   "Published here.",
-  "SOLANA THESIS",
   "FEES LONG SOL. PROFITS BURN $LONGCAT.",
 ];
 const bannedRenderedCopy =
