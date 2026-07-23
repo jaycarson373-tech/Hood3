@@ -1,12 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { hoodChartUrl } from "./data";
-import { LongcatSignalField, SignalGraphicStack } from "./components/LongcatVisuals";
+import { LongcatScrollBackdrop, LongcatSignalField, SignalGraphicStack } from "./components/LongcatVisuals";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
 
 const liveStats = [
   "SOL LONG SIZE",
+  "TOTAL SOL BRIDGED",
   "TOTAL FEES DEPLOYED",
   "ENTRY PRICE",
   "CURRENT PRICE",
@@ -15,15 +15,16 @@ const liveStats = [
   "REALIZED PROFIT",
   "TOTAL BUYBACKS",
   "TOTAL $LONGCAT BURNED",
+  "LAST FEE CLAIM",
   "LAST HYPERLIQUID UPDATE",
 ];
 
 const flow = [
   "$LONGCAT trades",
-  "fees route",
-  "Hyperliquid longs SOL",
-  "realized profit buys $LONGCAT",
-  "tokens burn",
+  "fees claim every 15 minutes",
+  "bridge to Hyperliquid",
+  "auto-long SOL",
+  "profit buys + burns",
 ];
 
 const thesis = [
@@ -55,6 +56,7 @@ export default function Home() {
   return (
     <main className="site-shell hood3-shell hood3-terminal-site longcat-sol-site">
       <SiteHeader />
+      <LongcatScrollBackdrop />
       <LongcatSignalField />
 
       <section className="hood-section hood-hero" id="buy-longcat">
@@ -66,7 +68,7 @@ export default function Home() {
           </h1>
           <div className="hero-copy-lines">
             <p>Creator fees scale into a public SOL long on Hyperliquid.</p>
-            <p>Realized profits buy back and burn $LONGCAT. The long gets longer. The supply gets shorter.</p>
+            <p>Realized profits bridge back, buy back, and burn $LONGCAT.</p>
           </div>
           <div className="hero-actions meme-actions">
             <Link className="button primary long-button" href="#buy-longcat">
@@ -78,11 +80,6 @@ export default function Home() {
             </Link>
           </div>
           <p className="hero-ca">CA: soon on Solana</p>
-        </div>
-
-        <div className="hood-hero__mark" aria-hidden="true">
-          <Image src="/longcat-logo.png" alt="" width={1024} height={1024} priority />
-          <span>HYPERLIQUID</span>
         </div>
       </section>
 
@@ -123,7 +120,9 @@ export default function Home() {
             <span key={step}>{step}</span>
           ))}
         </div>
-        <p className="mechanism-note">Not yield. Not a payout. A transparent, highly risky directional flywheel.</p>
+        <p className="mechanism-note">
+          The terminal is built to publish each claim, bridge, SOL order, profit take, buyback, and burn.
+        </p>
       </section>
 
       <section className="hood-section thesis-section" id="hood-thesis">
@@ -147,9 +146,11 @@ export default function Home() {
 
       <section className="hood-section terminal-section" id="live-position">
         <div className="section-label">LIVE LONG</div>
-        <h2>THE HYPERLIQUID POSITION UPDATES IN PUBLIC.</h2>
+        <h2>CLAIMS, BRIDGES, LONGS, BUYBACKS, AND BURNS UPDATE IN PUBLIC.</h2>
         <div className="terminal-strip">
           <span>POSITION SIZE</span>
+          <strong>Awaiting live integration.</strong>
+          <span>TOTAL SOL BRIDGED</span>
           <strong>Awaiting live integration.</strong>
           <span>REALIZED PROFIT</span>
           <strong>Awaiting live integration.</strong>

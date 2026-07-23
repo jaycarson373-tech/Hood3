@@ -8,9 +8,10 @@ const requiredLaunchCopy = [
   "THE LONGEST CAT",
   "ON SOLANA.",
   "Creator fees scale into a public SOL long on Hyperliquid.",
-  "Realized profits buy back and burn $LONGCAT.",
+  "Realized profits bridge back, buy back, and burn $LONGCAT.",
   "CA: soon on Solana",
   "SOL LONG SIZE",
+  "TOTAL SOL BRIDGED",
   "TOTAL FEES DEPLOYED",
   "TOTAL $LONGCAT BURNED",
   "LAST HYPERLIQUID UPDATE",
@@ -72,6 +73,8 @@ test("server-renders Longcat dashboard and thesis routes", async () => {
 
   assert.match(dashboardHtml, /Longcat terminal/);
   assert.match(dashboardHtml, /SOL position telemetry/);
+  assert.match(dashboardHtml, /Claims every 15 minutes/);
+  assert.match(dashboardHtml, /The page gets longer as the receipts stack/);
   assert.match(dashboardHtml, /Longcat public Hyperliquid account/);
   assert.match(dashboardHtml, /Current SOL long/);
   assert.match(dashboardHtml, /When the long wins, Longcat gets scarcer/);
@@ -87,7 +90,7 @@ test("server-renders Longcat dashboard and thesis routes", async () => {
 });
 
 test("repo no longer ships preview or stale Hood3 launch copy", async () => {
-  const [page, data, layout, visuals, packageJson, readme, supabaseSchema, supabaseReadme, railwayEnv] = await Promise.all([
+  const [page, data, layout, visuals, packageJson, readme, supabaseSchema, supabaseReadme, railwayEnv, railwayWorker, globals] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/data.ts", import.meta.url), "utf8"),
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
@@ -97,6 +100,8 @@ test("repo no longer ships preview or stale Hood3 launch copy", async () => {
     readFile(new URL("../supabase/schema.sql", import.meta.url), "utf8"),
     readFile(new URL("../supabase/README.md", import.meta.url), "utf8"),
     readFile(new URL("../railway.env.example", import.meta.url), "utf8"),
+    readFile(new URL("../railway-worker.mjs", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
   ]);
 
   assert.match(packageJson, /"name": "longcat"/);
@@ -114,6 +119,12 @@ test("repo no longer ships preview or stale Hood3 launch copy", async () => {
   assert.match(supabaseReadme, /Solana/);
   assert.match(railwayEnv, /SOLANA_RPC_URL=/);
   assert.match(railwayEnv, /LONGCAT_HYPERLIQUID_ACCOUNT=/);
+  assert.match(railwayEnv, /FLAP_CLAIM_ENDPOINT=/);
+  assert.match(packageJson, /start:railway/);
+  assert.match(railwayWorker, /claim_bridge_long_buyback_burn/);
+  assert.match(railwayWorker, /LONGCAT_SOL_FEE_BUFFER_SOL/);
+  assert.match(globals, /longcat-scroll-bg\.jpg/);
+  assert.match(globals, /longcat-dashboard-bg\.jpg/);
   assert.doesNotMatch(`${page}\n${data}\n${layout}\n${visuals}\n${readme}\n${supabaseReadme}\n${railwayEnv}`, bannedRenderedCopy);
 
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));

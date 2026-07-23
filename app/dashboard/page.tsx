@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    <main className="site-shell hood3-shell hood3-terminal-site longcat-sol-site">
+    <main className="site-shell hood3-shell hood3-terminal-site longcat-sol-site longcat-dashboard-site">
       <SiteHeader />
       <DashboardClient />
       <SiteFooter />

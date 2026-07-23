@@ -59,10 +59,19 @@ npm run dev
 npm run lint
 npm run build:vercel
 npm run build
+npm run start:railway
+npm run worker:once
 npm test
 ```
 
 ## Backend Notes
 
 Run `supabase/schema.sql` in Supabase before connecting live receipts. The
-automation worker should stay in dry-run mode until Solana wallet authority, fee claiming, swap routing, Hyperliquid collateral movement, SOL order sizing, risk limits, and terminal logging are verified end to end.
+Railway worker lives in `railway-worker.mjs` and is started with
+`npm run start:railway`. It creates a run every 15 minutes, keeps the 0.05 SOL
+wallet buffer, checks the fee wallet, and writes every claim, bridge, SOL long,
+profit, buyback, and burn stage to Supabase.
+
+Keep `DRY_RUN=true` until Solana wallet authority, fee claiming, bridge routing,
+Hyperliquid order execution, profit-taking, buybacks, burns, risk limits, and
+terminal logging are verified end to end.

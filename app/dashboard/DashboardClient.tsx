@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 import {
   CircleDollarSign,
@@ -20,7 +21,7 @@ import {
   livePositionStats,
   terminalEvents,
 } from "../data";
-import { MetricGrid } from "../components/LongcatVisuals";
+import { LongcatScrollBackdrop, MetricGrid } from "../components/LongcatVisuals";
 
 type LoadState = "idle" | "loading" | "linked" | "error";
 
@@ -61,6 +62,8 @@ type SupabaseTerminalRow = {
   status: string;
   action: string;
   message: string | null;
+  asset: string | null;
+  amount: string | number | null;
   tx_hash: string | null;
   scan_url: string | null;
 };
@@ -72,8 +75,11 @@ type SupabasePositionRow = {
   side: string;
   size: string | number;
   notional_usdc: string | number;
+  entry_price: string | number | null;
+  mark_price: string | number | null;
   leverage: string | number;
   unrealized_pnl_usdc: string | number;
+  margin_used_usdc: string | number;
 };
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
@@ -91,6 +97,11 @@ function money(value: number, maximumFractionDigits = 0) {
     currency: "USD",
     maximumFractionDigits,
   }).format(value);
+}
+
+function signedMoney(value: number) {
+  const formatted = money(Math.abs(value), 2);
+  return value < 0 ? `-${formatted}` : formatted;
 }
 
 function shortAddress(address: string) {
@@ -232,6 +243,81 @@ export function DashboardClient() {
   const displayedPnl = liveLongcatLong > 0 ? liveLongcatPnl : supabaseLongcatPnl;
   const exposureSource =
     liveLongcatLong > 0 ? "Linked SOL long" : supabaseLongcatLong > 0 ? "Supabase SOL long" : "Awaiting live integration.";
+  const extensionEvents = terminalRows.filter((row) => ["BURN", "LONG", "BRIDGE", "PROFIT"].includes(row.stage.toUpperCase())).length;
+  const pageExtension = Math.min(1, (terminalRows.length + extensionEvents * 2) / 36);
+  const totalSolBridged = terminalRows
+    .filter((row) => row.stage.toUpperCase() === "BRIDGE" && row.asset?.toUpperCase() === "SOL")
+    .reduce((sum, row) => sum + safeNumber(row.amount), 0);
+  const totalFeesClaimed = terminalRows
+    .filter((row) => row.stage.toUpperCase() === "CLAIM" && row.asset?.toUpperCase() === "SOL")
+    .reduce((sum, row) => sum + safeNumber(row.amount), 0);
+  const lastFeeClaim = terminalRows.find((row) => row.stage.toUpperCase() === "CLAIM");
+  const dashboardStats = livePositionStats.map((metric) => {
+    if (metric.label === "POSITION SIZE") {
+      return {
+        ...metric,
+        value: displayedLongNotional > 0 ? money(displayedLongNotional, 2) : metric.value,
+      };
+    }
+
+    if (metric.label === "TOTAL SOL BRIDGED") {
+      return {
+        ...metric,
+        value: totalSolBridged > 0 ? `${totalSolBridged.toFixed(4)} SOL` : metric.value,
+      };
+    }
+
+    if (metric.label === "TOTAL FEES DEPLOYED") {
+      return {
+        ...metric,
+        value: totalFeesClaimed > 0 ? `${totalFeesClaimed.toFixed(4)} SOL` : metric.value,
+      };
+    }
+
+    if (metric.label === "UNREALIZED PNL") {
+      return {
+        ...metric,
+        value: displayedLongNotional > 0 ? signedMoney(displayedPnl) : metric.value,
+      };
+    }
+
+    if (metric.label === "LEVERAGE") {
+      return {
+        ...metric,
+        value: safeNumber(latestPosition?.leverage) > 0 ? `${safeNumber(latestPosition?.leverage).toFixed(2)}x` : metric.value,
+      };
+    }
+
+    if (metric.label === "ENTRY PRICE") {
+      return {
+        ...metric,
+        value: safeNumber(latestPosition?.entry_price) > 0 ? money(safeNumber(latestPosition?.entry_price), 2) : metric.value,
+      };
+    }
+
+    if (metric.label === "CURRENT PRICE") {
+      return {
+        ...metric,
+        value: safeNumber(latestPosition?.mark_price) > 0 ? money(safeNumber(latestPosition?.mark_price), 2) : metric.value,
+      };
+    }
+
+    if (metric.label === "LAST FEE CLAIM") {
+      return {
+        ...metric,
+        value: lastFeeClaim ? terminalTime(lastFeeClaim.created_at) : metric.value,
+      };
+    }
+
+    if (metric.label === "LAST POSITION UPDATE") {
+      return {
+        ...metric,
+        value: latestPosition ? terminalTime(latestPosition.recorded_at) : metric.value,
+      };
+    }
+
+    return metric;
+  });
 
   async function linkAccount() {
     if (!isValidAddress) {
@@ -256,10 +342,13 @@ export function DashboardClient() {
 
   return (
     <>
+      <LongcatScrollBackdrop variant="dashboard" extension={pageExtension} />
       <section className="page-hero compact-page-hero">
         <p className="eyebrow">Longcat terminal</p>
         <h1>One position. Extending in public.</h1>
-        <p>Track the public SOL long on Hyperliquid, creator fees deployed, realized profit, $LONGCAT buybacks, and burns.</p>
+        <p>
+          Track 15-minute claims, SOL bridged to Hyperliquid, the public SOL long, profit-taking, $LONGCAT buybacks, and burns.
+        </p>
       </section>
 
       <section className="content-band live-long-section">
@@ -268,9 +357,9 @@ export function DashboardClient() {
             <p className="eyebrow">Live long</p>
             <h2>SOL position telemetry.</h2>
           </div>
-          <p>Structured for real API data later. Until then, every value is explicitly marked as awaiting integration.</p>
+          <p>Live rows appear from Supabase receipts. Until then, every value is explicitly marked as awaiting integration.</p>
         </div>
-        <MetricGrid metrics={livePositionStats} className="terminal-metric-grid" />
+        <MetricGrid metrics={dashboardStats} className="terminal-metric-grid" />
       </section>
 
       <section className="dashboard-grid content-band">
@@ -293,7 +382,7 @@ export function DashboardClient() {
           <div className="scan-card public-account-card">
             <span>Longcat public Hyperliquid account</span>
             <strong>Awaiting Hyperliquid account.</strong>
-            <p>The live Hyperliquid account will be published after the first verified SOL position.</p>
+            <p>The public Hyperliquid account will be published after the first verified SOL position.</p>
             <a href={lighterUrl} target="_blank" rel="noreferrer">
               Open Hyperliquid
               <ExternalLink size={14} aria-hidden="true" />
@@ -410,13 +499,13 @@ export function DashboardClient() {
           </span>
           <div>
             <p className="kicker">Automation rail</p>
-            <h2>Designed to run end to end.</h2>
+            <h2>Claims every 15 minutes.</h2>
           </div>
         </div>
 
         <p className="section-copy">
-          The live route is straightforward: creator fees extend the public SOL long on Hyperliquid, qualifying realized profits buy
-          $LONGCAT, and purchased tokens are permanently burned.
+          The Railway worker is structured to claim fees, keep the SOL buffer, route collateral to Hyperliquid, scale the SOL long,
+          take qualifying profit, bridge it back, and publish buyback plus burn receipts.
         </p>
 
         <div className="automation-grid">
@@ -473,6 +562,23 @@ export function DashboardClient() {
                 ))}
           </div>
           <p className="terminal-status">{supabaseStatus}</p>
+        </div>
+      </section>
+
+      <section
+        className="content-band dashboard-extension-section"
+        aria-label="Longcat extension meter"
+        style={{ "--dashboard-extension": pageExtension } as CSSProperties}
+      >
+        <div>
+          <p className="eyebrow">Longcat length</p>
+          <h2>The page gets longer as the receipts stack.</h2>
+        </div>
+        <p>
+          Burns, profit events, bridges, and SOL long increases extend the dashboard. Live receipts will make this section grow with the cat.
+        </p>
+        <div className="extension-track">
+          <span style={{ width: `${Math.max(8, pageExtension * 100)}%` }} />
         </div>
       </section>
 

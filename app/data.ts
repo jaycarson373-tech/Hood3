@@ -104,6 +104,7 @@ export const landingStats: Metric[] = [
 
 export const livePositionStats: Metric[] = [
   { label: "POSITION SIZE", value: "Awaiting live integration.", detail: "public SOL long" },
+  { label: "TOTAL SOL BRIDGED", value: "Awaiting live integration.", detail: "Hyperliquid route" },
   { label: "TOTAL FEES DEPLOYED", value: "Awaiting live integration.", detail: "creator fees" },
   { label: "ENTRY PRICE", value: "Awaiting live integration.", detail: "execution data" },
   { label: "CURRENT PRICE", value: "Awaiting live integration.", detail: "market data" },
@@ -112,6 +113,7 @@ export const livePositionStats: Metric[] = [
   { label: "REALIZED PROFIT", value: "Awaiting live integration.", detail: "buyback fuel" },
   { label: "TOTAL BUYBACKS", value: "Awaiting live integration.", detail: "receipts" },
   { label: "TOTAL TOKENS BURNED", value: "Awaiting live integration.", detail: "burn receipts" },
+  { label: "LAST FEE CLAIM", value: "Awaiting live integration.", detail: "15-minute worker" },
   { label: "LAST POSITION UPDATE", value: "Awaiting live integration.", detail: "latest receipt" },
 ];
 
@@ -130,23 +132,23 @@ export const flywheelSteps: AutomationStep[] = [
   },
   {
     label: "02",
-    title: "Fees long SOL",
-    text: "100% of protocol creator fees are designed to build a public SOL long on Hyperliquid.",
+    title: "Claim every 15 minutes",
+    text: "The worker is structured to claim creator fees on a recurring 15-minute rail.",
   },
   {
     label: "03",
-    title: "Profits buy $LONGCAT",
-    text: "Qualifying realized trading profits can market-buy the native token.",
+    title: "Bridge to Hyperliquid",
+    text: "Routeable SOL above the fee buffer is designed to move toward the public execution account.",
   },
   {
     label: "04",
-    title: "$LONGCAT is burned",
-    text: "Every purchased token is permanently removed from circulation.",
+    title: "Auto-long SOL",
+    text: "Fees scale into a public SOL long subject to execution and risk controls.",
   },
   {
     label: "05",
-    title: "Repeat",
-    text: "More trading creates more SOL exposure, more potential buybacks, and a smaller supply.",
+    title: "Profit buys + burns",
+    text: "Qualifying realized profits bridge back, market-buy $LONGCAT, and permanently burn it.",
   },
 ];
 
@@ -191,43 +193,43 @@ export const hoodThesisPoints: ThesisPoint[] = [
 
 export const howItWorks = [
   {
-    title: "Creator fees accumulate",
-    text: "Trading activity creates fees for the Longcat mechanism.",
+    title: "Creator fees claim",
+    text: "The worker is designed to check and claim creator fees every 15 minutes.",
   },
   {
-    title: "Fees build the SOL long",
-    text: "100% of creator fees allocated to the protocol are designed to add to the public SOL long on Hyperliquid.",
+    title: "SOL bridges to Hyperliquid",
+    text: "Routeable SOL above the 0.05 SOL buffer is queued for Hyperliquid execution.",
   },
   {
-    title: "Profit is realized",
-    text: "When the position generates qualifying realized gains, those gains become buyback fuel.",
+    title: "The SOL long scales",
+    text: "The automation is structured to add to the public SOL long and record every order.",
   },
   {
-    title: "Longcat supply contracts",
-    text: "Realized trading profits buy back $LONGCAT and permanently burn the purchased tokens.",
+    title: "Profit buys and burns",
+    text: "Qualifying realized profits bridge back, buy $LONGCAT, and permanently burn the purchased tokens.",
   },
 ];
 
 export const automationSteps: AutomationStep[] = [
   {
     label: "01",
-    title: "Collect fees",
-    text: "Creator fee receipts enter the public terminal before funds move.",
+    title: "Claim fees",
+    text: "Every 15 minutes, the Railway worker checks the fee wallet and logs the claim stage.",
   },
   {
     label: "02",
-    title: "Extend the long",
-    text: "Fees strategically add to the public SOL long on Hyperliquid inside execution and risk limits.",
+    title: "Bridge SOL",
+    text: "It keeps the 0.05 SOL buffer untouched and routes the remainder toward Hyperliquid.",
   },
   {
     label: "03",
-    title: "Harvest gains",
-    text: "Qualifying realized profit is separated from the position and queued for buybacks.",
+    title: "Long SOL",
+    text: "The execution rail is structured to scale into SOL and record the public position.",
   },
   {
     label: "04",
-    title: "Buy and burn",
-    text: "Profit buys $LONGCAT on market and permanently removes it from supply.",
+    title: "Take profit + burn",
+    text: "Qualifying profit bridges back, buys $LONGCAT, and publishes permanent burn receipts.",
   },
 ];
 
@@ -237,7 +239,7 @@ export const terminalEvents: TerminalEvent[] = [
     stage: "SYSTEM",
     status: "IDLE",
     action: "No live transactions yet",
-    detail: "Live receipts will stream creator fees, Hyperliquid SOL orders, realized profit, $LONGCAT buybacks, and burns here.",
+    detail: "Live receipts will stream 15-minute claims, SOL bridges, Hyperliquid SOL orders, realized profit, $LONGCAT buybacks, and burns here.",
   },
 ];
 

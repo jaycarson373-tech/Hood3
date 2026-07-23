@@ -19,7 +19,7 @@
   --shadow: 0 18px 48px rgba(0, 0, 0, 0.28);
 }
 
-/* Hood3 Robinhood Chain / Lighter rebrand layer */
+/* Terminal launch layer */
 body:has(.hood3-terminal-site) {
   background:
     radial-gradient(circle at 78% 16%, rgba(213, 253, 81, 0.16), transparent 32%),
@@ -3682,7 +3682,7 @@ body:has(.longcat-meme-site) {
   }
 }
 
-/* Hood3 premium launch motion polish */
+/* Premium launch motion polish */
 .hood3-terminal-site {
   isolation: isolate;
 }
@@ -4278,6 +4278,44 @@ body:has(.longcat-sol-site) {
   color: #f7fbff;
 }
 
+.longcat-scroll-backdrop {
+  background-position: center calc(var(--longcat-scroll, 0) * 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  inset: 0;
+  opacity: 0.72;
+  pointer-events: none;
+  position: fixed;
+  transition:
+    background-position 120ms linear,
+    opacity 240ms ease;
+  z-index: 0;
+}
+
+.longcat-scroll-backdrop::after {
+  background:
+    linear-gradient(90deg, rgba(5, 0, 20, 0.82), rgba(5, 0, 20, 0.4) 42%, rgba(5, 0, 20, 0.18) 72%, rgba(5, 0, 20, 0.78)),
+    linear-gradient(180deg, rgba(5, 0, 20, 0.42), rgba(5, 0, 20, 0.1) 44%, rgba(5, 0, 20, 0.84));
+  content: "";
+  inset: 0;
+  position: absolute;
+}
+
+.longcat-scroll-backdrop--landing {
+  background-image: url("/longcat-scroll-bg.jpg");
+  background-position: center calc(var(--longcat-scroll, 0) * 100%);
+}
+
+.longcat-scroll-backdrop--dashboard {
+  background-image: url("/longcat-dashboard-bg.jpg");
+  background-position: center calc(36% + (var(--longcat-scroll, 0) * 34%));
+  opacity: calc(0.54 + (var(--longcat-extension, 0) * 0.12));
+}
+
+.longcat-dashboard-site .hood3-signal-field {
+  opacity: 0.36;
+}
+
 .longcat-sol-site {
   --green: #14f195;
   --green-strong: #bda7ff;
@@ -4386,6 +4424,7 @@ body:has(.longcat-sol-site) {
 
 .longcat-sol-site .hood-hero {
   border-radius: 0;
+  grid-template-columns: minmax(0, 1fr);
   isolation: isolate;
   max-width: none;
   overflow: hidden;
@@ -4393,14 +4432,17 @@ body:has(.longcat-sol-site) {
   padding-right: max(24px, calc((100vw - 1180px) / 2 + 24px));
 }
 
+.longcat-sol-site .hood-hero__copy {
+  max-width: 760px;
+}
+
 .longcat-sol-site .hood-hero::before {
   background:
-    linear-gradient(90deg, rgba(5, 0, 20, 0.92) 0%, rgba(5, 0, 20, 0.72) 44%, rgba(5, 0, 20, 0.14) 100%),
-    linear-gradient(180deg, rgba(5, 0, 20, 0.12), rgba(5, 0, 20, 0.86)),
-    url("/longcat-space-banner.jpg") center / cover no-repeat;
+    linear-gradient(90deg, rgba(5, 0, 20, 0.88) 0%, rgba(5, 0, 20, 0.56) 44%, rgba(5, 0, 20, 0.1) 100%),
+    linear-gradient(180deg, rgba(5, 0, 20, 0.05), rgba(5, 0, 20, 0.72));
   content: "";
   inset: 0;
-  opacity: 0.95;
+  opacity: 0.88;
   position: absolute;
   z-index: -2;
 }
@@ -4416,6 +4458,14 @@ body:has(.longcat-sol-site) {
   pointer-events: none;
   position: absolute;
   z-index: -1;
+}
+
+.longcat-sol-site .hood-section,
+.longcat-sol-site .content-band,
+.longcat-sol-site .page-hero,
+.longcat-sol-site .site-footer {
+  position: relative;
+  z-index: 1;
 }
 
 .longcat-sol-site .hood-hero h1 {
@@ -4479,10 +4529,10 @@ body:has(.longcat-sol-site) {
 .longcat-sol-site .risk-card,
 .longcat-sol-site .how-card,
 .longcat-sol-site .signal-card {
-  backdrop-filter: blur(22px);
+  backdrop-filter: blur(18px);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035)),
-    rgba(9, 7, 28, 0.64);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.03)),
+    rgba(9, 7, 28, 0.54);
   border-color: rgba(0, 194, 255, 0.22);
   box-shadow:
     0 18px 55px rgba(0, 0, 0, 0.32),
@@ -4592,6 +4642,47 @@ body:has(.longcat-sol-site) {
   border-top: 1px solid rgba(0, 194, 255, 0.2);
 }
 
+.longcat-dashboard-site .page-hero,
+.longcat-dashboard-site .content-band {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.028)),
+    rgba(6, 4, 22, 0.5);
+  border-color: rgba(0, 194, 255, 0.2);
+  box-shadow:
+    0 28px 90px rgba(0, 0, 0, 0.26),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.dashboard-extension-section {
+  min-height: calc(32vh + (var(--dashboard-extension, 0) * 54vh));
+  transition: min-height 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dashboard-extension-section h2 {
+  max-width: 760px;
+}
+
+.extension-track {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(0, 194, 255, 0.24);
+  border-radius: 999px;
+  height: 14px;
+  margin-top: 12px;
+  max-width: 720px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.extension-track span {
+  background: linear-gradient(90deg, #14f195, #00c2ff, #9945ff);
+  border-radius: inherit;
+  box-shadow: 0 0 28px rgba(0, 194, 255, 0.28);
+  display: block;
+  height: 100%;
+  min-width: 8%;
+  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .longcat-sol-site .footer-market-strip {
   display: grid;
   gap: 10px;
@@ -4698,10 +4789,23 @@ body:has(.longcat-sol-site) {
 }
 
 @media (max-width: 900px) {
+  .longcat-scroll-backdrop--landing {
+    background-position: center calc(var(--longcat-scroll, 0) * 100%);
+  }
+
+  .longcat-scroll-backdrop--dashboard {
+    background-position: center calc(30% + (var(--longcat-scroll, 0) * 30%));
+  }
+
+  .longcat-scroll-backdrop::after {
+    background:
+      linear-gradient(180deg, rgba(5, 0, 20, 0.62), rgba(5, 0, 20, 0.22) 38%, rgba(5, 0, 20, 0.86)),
+      linear-gradient(90deg, rgba(5, 0, 20, 0.68), rgba(5, 0, 20, 0.22), rgba(5, 0, 20, 0.7));
+  }
+
   .longcat-sol-site .hood-hero::before {
     background:
-      linear-gradient(180deg, rgba(5, 0, 20, 0.72) 0%, rgba(5, 0, 20, 0.9) 74%),
-      url("/longcat-space-banner.jpg") 66% center / cover no-repeat;
+      linear-gradient(180deg, rgba(5, 0, 20, 0.55) 0%, rgba(5, 0, 20, 0.92) 78%);
   }
 
   .longcat-sol-site .origin-section::after,
@@ -4720,6 +4824,19 @@ body:has(.longcat-sol-site) {
 }
 
 @media (max-width: 680px) {
+  .longcat-scroll-backdrop {
+    opacity: 0.58;
+  }
+
+  .longcat-scroll-backdrop--landing {
+    background-size: cover;
+  }
+
+  .longcat-scroll-backdrop--dashboard {
+    background-size: cover;
+    opacity: 0.5;
+  }
+
   .longcat-sol-site .hood-hero {
     padding-bottom: 56px;
   }
@@ -4731,5 +4848,13 @@ body:has(.longcat-sol-site) {
 
   .longcat-sol-site .footer-market-strip {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .longcat-scroll-backdrop,
+  .dashboard-extension-section,
+  .extension-track span {
+    transition: none;
   }
 }
