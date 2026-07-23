@@ -235,28 +235,28 @@ async function executeOnce() {
       return;
     }
 
-    const flapClaim = await optionalPost(env("FLAP_CLAIM_ENDPOINT"), {
+    const pumpFunClaim = await optionalPost(env("PUMP_FUN_CLAIM_ENDPOINT"), {
       wallet: solWallet,
       token: env("LONGCAT_TOKEN_ADDRESS", ""),
       run_id: runId,
       dry_run: dryRun,
-    }, env("FLAP_API_KEY") ? { Authorization: `Bearer ${env("FLAP_API_KEY")}` } : {});
+    }, env("PUMP_FUN_API_KEY") ? { Authorization: `Bearer ${env("PUMP_FUN_API_KEY")}` } : {});
 
-    const claimTx = flapClaim?.tx_hash ?? flapClaim?.signature ?? null;
+    const claimTx = pumpFunClaim?.tx_hash ?? pumpFunClaim?.signature ?? null;
     await recordClaim(runId, routeableSol, dryRun ? "skipped" : claimTx ? "succeeded" : "pending", claimTx, {
       balance_sol: balanceSol,
       buffer_sol: bufferSol,
       routeable_sol: routeableSol,
-      flap_response: flapClaim,
-      note: flapClaim ? "Flap claim endpoint returned a response." : "Set FLAP_CLAIM_ENDPOINT to perform real creator-fee claiming.",
+      pump_fun_response: pumpFunClaim,
+      note: pumpFunClaim ? "Pump.fun claim endpoint returned a response." : "Set PUMP_FUN_CLAIM_ENDPOINT to perform real creator-fee claiming.",
     });
-    await logEvent(runId, "CLAIM", dryRun ? "skipped" : flapClaim ? "succeeded" : "pending", "Creator fees checked", `${routeableSol.toFixed(6)} SOL available after fee buffer.`, {
+    await logEvent(runId, "CLAIM", dryRun ? "skipped" : pumpFunClaim ? "succeeded" : "pending", "Creator fees checked", `${routeableSol.toFixed(6)} SOL available after fee buffer.`, {
       wallet_address: solWallet || null,
       asset: "SOL",
       amount: routeableSol,
       tx_hash: claimTx,
       scan_url: solScanUrl(claimTx),
-      metadata: { dry_run: dryRun, flap_response: flapClaim },
+      metadata: { dry_run: dryRun, pump_fun_response: pumpFunClaim },
     });
 
     const bridge = await optionalPost(env("LONGCAT_BRIDGE_ENDPOINT"), {
@@ -331,7 +331,7 @@ async function executeOnce() {
       routeable_sol: routeableSol,
       dry_run: dryRun,
       live_integrations: {
-        flap_claim: Boolean(env("FLAP_CLAIM_ENDPOINT")),
+        pump_fun_claim: Boolean(env("PUMP_FUN_CLAIM_ENDPOINT")),
         bridge: Boolean(env("LONGCAT_BRIDGE_ENDPOINT")),
         hyperliquid_order: Boolean(env("HYPERLIQUID_ORDER_ENDPOINT")),
         profit: Boolean(env("LONGCAT_PROFIT_ENDPOINT")),

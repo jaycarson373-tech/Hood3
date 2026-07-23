@@ -163,7 +163,7 @@ export function HeroTerminal() {
       { label: "POSITION VALUE", value: longSize > 0 ? money(longSize) : "NOT PUBLISHED" },
       { label: "ENTRY PRICE", value: entryPrice > 0 ? money(entryPrice) : "NOT PUBLISHED" },
       { label: "FIRST HL DEPOSIT", value: money(HYPERLIQUID.initialDepositUsd) },
-      { label: "$LONGCAT BURNED", value: tokensBurned > 0 ? tokenAmount(tokensBurned) : "NOT PUBLISHED" },
+      { label: "$LONGCAT BURNED", value: tokensBurned > 0 ? tokenAmount(tokensBurned) : "0" },
     ];
   }, [hyperliquidLoaded, hyperliquidPosition, position, terminalRows]);
 
