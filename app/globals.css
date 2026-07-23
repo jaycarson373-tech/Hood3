@@ -4267,3 +4267,427 @@ body:has(.longcat-sol-site) {
     font-size: clamp(50px, 16vw, 78px);
   }
 }
+
+/* Longcat cosmic Solana launch skin */
+body:has(.longcat-sol-site) {
+  background:
+    radial-gradient(circle at 74% 12%, rgba(153, 69, 255, 0.34), transparent 24%),
+    radial-gradient(circle at 18% 68%, rgba(0, 194, 255, 0.2), transparent 28%),
+    radial-gradient(circle at 90% 84%, rgba(20, 241, 149, 0.12), transparent 25%),
+    #050014;
+  color: #f7fbff;
+}
+
+.longcat-sol-site {
+  --green: #14f195;
+  --green-strong: #bda7ff;
+  --soft: #00c2ff;
+  --panel: rgba(9, 7, 28, 0.66);
+  --line: rgba(184, 136, 255, 0.22);
+  --line-strong: rgba(0, 194, 255, 0.42);
+  background:
+    radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px),
+    radial-gradient(circle at 72% 22%, rgba(255, 255, 255, 0.14) 0 1px, transparent 1px),
+    radial-gradient(circle at 33% 78%, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px),
+    linear-gradient(rgba(0, 194, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(153, 69, 255, 0.055) 1px, transparent 1px),
+    radial-gradient(circle at 78% 17%, rgba(153, 69, 255, 0.3), transparent 36%),
+    radial-gradient(circle at 20% 80%, rgba(0, 194, 255, 0.18), transparent 38%),
+    #050014;
+  background-size:
+    340px 340px,
+    460px 460px,
+    390px 390px,
+    54px 54px,
+    54px 54px,
+    auto,
+    auto,
+    auto;
+  color: #f7fbff;
+}
+
+.longcat-sol-site::before {
+  background:
+    linear-gradient(90deg, transparent, rgba(0, 194, 255, 0.3), rgba(153, 69, 255, 0.28), transparent),
+    linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+  opacity: 0.75;
+}
+
+.longcat-sol-site::after {
+  background:
+    radial-gradient(circle at 76% 18%, rgba(153, 69, 255, 0.3), transparent 30%),
+    radial-gradient(circle at 56% 42%, rgba(0, 194, 255, 0.14), transparent 28%),
+    linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.035) 48%, transparent 100%);
+  mix-blend-mode: screen;
+}
+
+.longcat-sol-site .site-header {
+  background: linear-gradient(180deg, rgba(5, 0, 20, 0.88), rgba(5, 0, 20, 0.48));
+  border-bottom: 1px solid rgba(176, 132, 255, 0.16);
+}
+
+.longcat-sol-site .main-nav.hood3-nav {
+  background: rgba(8, 7, 28, 0.7);
+  border-color: rgba(0, 194, 255, 0.24);
+  box-shadow:
+    0 0 0 1px rgba(20, 241, 149, 0.08),
+    0 24px 70px rgba(0, 0, 0, 0.44),
+    0 0 44px rgba(153, 69, 255, 0.14);
+}
+
+.longcat-sol-site .hood3-brand-mark {
+  background: #08071c;
+  border-color: rgba(0, 194, 255, 0.5);
+  border-radius: 9px;
+}
+
+.longcat-sol-site .hood3-brand-mark img {
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.22);
+  width: 100%;
+}
+
+.longcat-sol-site .brand strong,
+.longcat-sol-site .nav-links a,
+.longcat-sol-site .source-links a,
+.longcat-sol-site .hood-hero h1,
+.longcat-sol-site .hood-section h2,
+.longcat-sol-site .page-hero h1,
+.longcat-sol-site .page-hero h2,
+.longcat-sol-site .faq-item h3,
+.longcat-sol-site .origin-board strong,
+.longcat-sol-site .signal-card strong,
+.longcat-sol-site .thesis-card h3,
+.longcat-sol-site .risk-card h3,
+.longcat-sol-site .how-card h3 {
+  color: #f7fbff;
+}
+
+.longcat-sol-site .brand small,
+.longcat-sol-site .section-label,
+.longcat-sol-site .eyebrow,
+.longcat-sol-site .kicker,
+.longcat-sol-site .hero-ca,
+.longcat-sol-site .thesis-closing,
+.longcat-sol-site .terminal-strip strong,
+.longcat-sol-site .length-stat strong,
+.longcat-sol-site .exposure-number strong {
+  color: #7df9ff;
+}
+
+.longcat-sol-site .nav-links a:hover,
+.longcat-sol-site .nav-links a:focus-visible,
+.longcat-sol-site .source-links a:hover,
+.longcat-sol-site .source-links a:focus-visible {
+  color: #14f195;
+  text-shadow: 0 0 18px rgba(20, 241, 149, 0.38);
+}
+
+.longcat-sol-site .hood-hero {
+  border-radius: 0;
+  isolation: isolate;
+  max-width: none;
+  overflow: hidden;
+  padding-left: max(24px, calc((100vw - 1180px) / 2 + 24px));
+  padding-right: max(24px, calc((100vw - 1180px) / 2 + 24px));
+}
+
+.longcat-sol-site .hood-hero::before {
+  background:
+    linear-gradient(90deg, rgba(5, 0, 20, 0.92) 0%, rgba(5, 0, 20, 0.72) 44%, rgba(5, 0, 20, 0.14) 100%),
+    linear-gradient(180deg, rgba(5, 0, 20, 0.12), rgba(5, 0, 20, 0.86)),
+    url("/longcat-space-banner.jpg") center / cover no-repeat;
+  content: "";
+  inset: 0;
+  opacity: 0.95;
+  position: absolute;
+  z-index: -2;
+}
+
+.longcat-sol-site .hood-hero::after {
+  background:
+    radial-gradient(circle at 88% 20%, rgba(20, 241, 149, 0.16), transparent 19%),
+    radial-gradient(circle at 48% 12%, rgba(255, 255, 255, 0.1) 0 1px, transparent 1px),
+    linear-gradient(90deg, transparent, rgba(0, 194, 255, 0.12), transparent);
+  background-size: auto, 170px 170px, auto;
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+  z-index: -1;
+}
+
+.longcat-sol-site .hood-hero h1 {
+  text-shadow:
+    0 0 24px rgba(255, 255, 255, 0.18),
+    0 18px 60px rgba(0, 0, 0, 0.4);
+}
+
+.longcat-sol-site .hood-hero h1 span {
+  color: #cbbcff;
+  text-shadow:
+    0 0 22px rgba(153, 69, 255, 0.58),
+    0 0 42px rgba(0, 194, 255, 0.22);
+}
+
+.longcat-sol-site .hood-hero .hero-copy-lines p,
+.longcat-sol-site .microcopy,
+.longcat-sol-site .mechanism-note,
+.longcat-sol-site .faq-item p,
+.longcat-sol-site .origin-board p,
+.longcat-sol-site .risk-card p,
+.longcat-sol-site .how-card p,
+.longcat-sol-site .section-copy,
+.longcat-sol-site .page-hero p,
+.longcat-sol-site .site-footer p,
+.longcat-sol-site .site-footer span {
+  color: rgba(247, 251, 255, 0.72);
+}
+
+.longcat-sol-site .button.primary,
+.longcat-sol-site .nav-cta {
+  background: linear-gradient(135deg, #14f195, #00c2ff 42%, #9945ff);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.24),
+    0 18px 54px rgba(0, 194, 255, 0.25);
+  color: #060616;
+}
+
+.longcat-sol-site .button.ghost,
+.longcat-sol-site .social-link {
+  background: rgba(9, 7, 28, 0.58);
+  border-color: rgba(0, 194, 255, 0.38);
+  color: #d9d1ff;
+}
+
+.longcat-sol-site .button.ghost:hover,
+.longcat-sol-site .button.ghost:focus-visible,
+.longcat-sol-site .social-link:hover,
+.longcat-sol-site .social-link:focus-visible {
+  background: rgba(20, 241, 149, 0.12);
+  border-color: rgba(20, 241, 149, 0.62);
+  color: #ffffff;
+}
+
+.longcat-sol-site .length-stat,
+.longcat-sol-site .faq-item,
+.longcat-sol-site .origin-board,
+.longcat-sol-site .terminal-strip,
+.longcat-sol-site .panel,
+.longcat-sol-site .thesis-card,
+.longcat-sol-site .risk-card,
+.longcat-sol-site .how-card,
+.longcat-sol-site .signal-card {
+  backdrop-filter: blur(22px);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035)),
+    rgba(9, 7, 28, 0.64);
+  border-color: rgba(0, 194, 255, 0.22);
+  box-shadow:
+    0 18px 55px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    0 0 36px rgba(153, 69, 255, 0.08);
+}
+
+.longcat-sol-site .length-stat:hover,
+.longcat-sol-site .faq-item:hover,
+.longcat-sol-site .origin-board:hover,
+.longcat-sol-site .signal-card:hover,
+.longcat-sol-site .terminal-strip:hover {
+  border-color: rgba(20, 241, 149, 0.64);
+  box-shadow:
+    0 24px 68px rgba(0, 0, 0, 0.38),
+    0 0 48px rgba(0, 194, 255, 0.18);
+}
+
+.longcat-sol-site .origin-section,
+.longcat-sol-site .mechanic-section,
+.longcat-sol-site .thesis-section,
+.longcat-sol-site .terminal-section,
+.longcat-sol-site .burn-section,
+.longcat-sol-site .faq-section {
+  position: relative;
+}
+
+.longcat-sol-site .origin-section::after,
+.longcat-sol-site .burn-section::after {
+  background: url("/longcat-space-logo.jpg") center / cover no-repeat;
+  border: 1px solid rgba(0, 194, 255, 0.18);
+  border-radius: 18px;
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.34),
+    0 0 54px rgba(153, 69, 255, 0.16);
+  content: "";
+  height: min(420px, 52vw);
+  opacity: 0.32;
+  position: absolute;
+  right: max(20px, calc((100vw - 1180px) / 2));
+  top: 50%;
+  transform: translateY(-50%);
+  width: min(420px, 42vw);
+  z-index: -1;
+}
+
+.longcat-sol-site .burn-section::after {
+  left: max(20px, calc((100vw - 1180px) / 2));
+  right: auto;
+}
+
+.longcat-sol-site .hood-hero__mark {
+  aspect-ratio: 1;
+  background: rgba(6, 4, 22, 0.42);
+  border-color: rgba(0, 194, 255, 0.34);
+  border-radius: 26px;
+  box-shadow:
+    inset 0 0 80px rgba(0, 194, 255, 0.08),
+    0 30px 90px rgba(0, 0, 0, 0.34),
+    0 0 64px rgba(153, 69, 255, 0.18);
+  overflow: hidden;
+}
+
+.longcat-sol-site .hood-hero__mark::before {
+  background:
+    radial-gradient(circle, rgba(20, 241, 149, 0.18), transparent 58%),
+    radial-gradient(circle at 30% 70%, rgba(153, 69, 255, 0.18), transparent 42%);
+  z-index: 2;
+}
+
+.longcat-sol-site .hood-hero__mark img {
+  filter: saturate(1.1) contrast(1.04);
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  width: 100%;
+}
+
+.longcat-sol-site .hood-hero__mark span {
+  background: rgba(5, 0, 20, 0.82);
+  border: 1px solid rgba(20, 241, 149, 0.34);
+  color: #14f195;
+}
+
+.longcat-sol-site .hood3-signal-field {
+  opacity: 0.8;
+}
+
+.longcat-sol-site .hood3-signal-chart span {
+  background: linear-gradient(90deg, transparent, #14f195, #00c2ff, #9945ff, transparent);
+  box-shadow: 0 0 28px rgba(0, 194, 255, 0.28);
+}
+
+.longcat-sol-site .hood3-signal-beam {
+  background: radial-gradient(circle, rgba(153, 69, 255, 0.28), rgba(0, 194, 255, 0.14), transparent 64%);
+}
+
+.longcat-sol-site .terminal-strip span,
+.longcat-sol-site .terminal-strip strong {
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.longcat-sol-site .site-footer {
+  background:
+    linear-gradient(180deg, rgba(5, 0, 20, 0.42), rgba(5, 0, 20, 0.9)),
+    url("/longcat-space-banner.jpg") center bottom / cover no-repeat;
+  border-top: 1px solid rgba(0, 194, 255, 0.2);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .longcat-sol-site {
+    animation: longcat-star-drift 48s linear infinite;
+  }
+
+  .longcat-sol-site .hood-hero::after {
+    animation: longcat-orbit-drift 18s ease-in-out infinite;
+  }
+
+  .longcat-sol-site .origin-section::after,
+  .longcat-sol-site .burn-section::after {
+    animation: longcat-space-card 10s ease-in-out infinite;
+  }
+}
+
+@keyframes longcat-star-drift {
+  from {
+    background-position:
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0,
+      0 0;
+  }
+
+  to {
+    background-position:
+      340px 170px,
+      -230px 460px,
+      180px -390px,
+      54px 54px,
+      54px 54px,
+      0 0,
+      0 0,
+      0 0;
+  }
+}
+
+@keyframes longcat-orbit-drift {
+  0%,
+  100% {
+    opacity: 0.58;
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    opacity: 0.86;
+    transform: translate3d(-1.5vw, 1vh, 0);
+  }
+}
+
+@keyframes longcat-space-card {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: translateY(-50%) translateX(0);
+  }
+
+  50% {
+    opacity: 0.42;
+    transform: translateY(-52%) translateX(-8px);
+  }
+}
+
+@media (max-width: 900px) {
+  .longcat-sol-site .hood-hero::before {
+    background:
+      linear-gradient(180deg, rgba(5, 0, 20, 0.72) 0%, rgba(5, 0, 20, 0.9) 74%),
+      url("/longcat-space-banner.jpg") 66% center / cover no-repeat;
+  }
+
+  .longcat-sol-site .origin-section::after,
+  .longcat-sol-site .burn-section::after {
+    height: 320px;
+    opacity: 0.16;
+    right: -80px;
+    top: 18%;
+    width: 320px;
+  }
+
+  .longcat-sol-site .burn-section::after {
+    left: -100px;
+    right: auto;
+  }
+}
+
+@media (max-width: 680px) {
+  .longcat-sol-site .hood-hero {
+    padding-bottom: 56px;
+  }
+
+  .longcat-sol-site .hood-hero__mark {
+    max-width: 320px;
+    width: min(78vw, 320px);
+  }
+}
