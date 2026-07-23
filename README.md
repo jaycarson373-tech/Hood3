@@ -1,25 +1,23 @@
-# Hood3
+# Longcat
 
-Hood3 is a Robinhood Chain native leverage token powered by Lighter. A fixed
-2% creator fee is designed to build one public HOOD long; qualifying realized
-profits can buy back and permanently burn `$HOOD3`.
+Longcat is a Solana native leverage token powered by Hyperliquid. Creator fees are designed to build one public SOL long; qualifying realized
+profits can buy back and permanently burn `$LONGCAT`.
 
 ## Routes
 
-- `/` - Hood3 launch page with black/neon Robinhood-coded terminal visuals, live integration placeholders, mechanism, thesis, burns, and FAQ.
-- `/dashboard` - Lighter-facing read-only terminal for HOOD position telemetry, receipts, and burn placeholders.
-- `/thesis` - HOOD thesis, risks, and source links.
+- `/` - Longcat launch page with white Solana-coded terminal visuals, live integration placeholders, mechanism, thesis, burns, and FAQ.
+- `/dashboard` - Hyperliquid-facing read-only terminal for SOL position telemetry, receipts, and burn placeholders.
+- `/thesis` - SOL thesis, risks, and source links.
 
 ## Contract
 
-- Source: `contracts/Hood3Token.sol`
-- Fee: fixed `2%`
-- Receiver: immutable public mechanism wallet
-- Controls: no owner, no pause, no blacklist, no hidden mint
+- CA: soon on Solana
+- Fee: creator fees
+- Mechanism: fees extend the public SOL long; qualifying realized profits buy back and burn `$LONGCAT`
 
-The contract only routes the 2% fee to the mechanism wallet. Lighter execution,
-HOOD position management, buybacks, and burns should be handled by audited
-server-side automation and published as public terminal receipts.
+Solana token creation, fee routing, Hyperliquid execution, SOL position
+management, buybacks, and burns should be handled by audited server-side
+automation and published as public terminal receipts.
 
 ## X Assets And Copy
 
@@ -28,18 +26,18 @@ server-side automation and published as public terminal receipts.
 
 Bio:
 ```text
-The leveraged bet on HOOD.
+The longest cat on Solana.
 
-2% creator fees scale into a public HOOD long on Lighter.
+Creator fees scale into a public SOL long on Hyperliquid.
 
-Profits buy back & burn $HOOD3.
+Profits buy back & burn $LONGCAT.
 ```
 
 Community description:
 ```text
-100% of the 2% creator fee is designed to scale into a public HOOD long on Lighter.
+100% of creator fees are designed to scale into a public SOL long on Hyperliquid.
 
-Qualifying realized profits buy back & permanently burn $HOOD3.
+Qualifying realized profits buy back & permanently burn $LONGCAT.
 ```
 
 ## Required Frontend Environment
@@ -51,7 +49,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
 The frontend only reads browser-safe Supabase views. Keep service-role keys,
-wallet keys, and Lighter signing keys server-side.
+wallet keys, and Hyperliquid signing keys server-side.
 
 ## Useful Commands
 
@@ -67,6 +65,4 @@ npm test
 ## Backend Notes
 
 Run `supabase/schema.sql` in Supabase before connecting live receipts. The
-automation worker should stay in dry-run mode until Robinhood ETH wallet
-authority, gas buffer, transfer routing, swaps, Lighter collateral movement,
-HOOD order sizing, risk limits, and terminal logging are verified end to end.
+automation worker should stay in dry-run mode until Solana wallet authority, fee claiming, swap routing, Hyperliquid collateral movement, SOL order sizing, risk limits, and terminal logging are verified end to end.

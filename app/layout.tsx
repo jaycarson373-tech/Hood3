@@ -12,9 +12,9 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const siteTitle = "Hood3 | The Leveraged Bet on HOOD";
+const siteTitle = "Longcat | The Longest Cat on Solana";
 const siteDescription =
-  "Hood3 is a Robinhood Chain native leverage token powered by Lighter: creator fees build a public HOOD long, and qualifying realized profits buy back and burn $HOOD3.";
+  "Longcat is a Solana native leverage token: creator fees build a public SOL long on Hyperliquid, and qualifying realized profits buy back and burn $LONGCAT.";
 const siteUrl = process.env.SITE_URL;
 
 export const metadata: Metadata = {
@@ -25,22 +25,22 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   icons: {
-    icon: "/favicon.png",
-    shortcut: "/favicon.png",
-    apple: "/hood3-logo.png",
+    icon: "/longcat-logo.png",
+    shortcut: "/longcat-logo.png",
+    apple: "/longcat-logo.png",
   },
   openGraph: {
     title: siteTitle,
     description: siteDescription,
     url: "/",
-    siteName: "Hood3",
+    siteName: "Longcat",
     type: "website",
     images: [
       {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "Hood3 social card",
+        alt: "Longcat social card",
       },
     ],
   },

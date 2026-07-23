@@ -5,7 +5,7 @@ type MetricGridProps = {
   className?: string;
 };
 
-export function Hood3SignalField() {
+export function LongcatSignalField() {
   return (
     <div className="hood3-signal-field" aria-hidden="true">
       <div className="hood3-signal-grid" />
@@ -21,18 +21,18 @@ export function Hood3SignalField() {
 
 export function SignalGraphicStack() {
   return (
-    <div className="signal-graphic-stack" aria-label="Hood3 Lighter flywheel graphic">
+    <div className="signal-graphic-stack" aria-label="Longcat Hyperliquid flywheel graphic">
       <div className="signal-card signal-card--position">
-        <span>HOOD LONG</span>
+        <span>SOL LONG</span>
         <strong>Awaiting live integration.</strong>
       </div>
       <div className="signal-card signal-card--flow">
         <span>FEES</span>
-        <strong>2% - LIGHTER - HOOD</strong>
+        <strong>FEES - HYPERLIQUID - SOL</strong>
       </div>
       <div className="signal-card signal-card--burn">
         <span>BURN</span>
-        <strong>PROFIT - $HOOD3</strong>
+        <strong>PROFIT - $LONGCAT</strong>
       </div>
     </div>
   );

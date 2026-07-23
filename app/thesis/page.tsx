@@ -4,9 +4,9 @@ import Link from "next/link";
 import { hoodChartUrl, hoodThesisPoints, risks, sourceLinks, thesisRisks } from "../data";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
-const title = "HOOD Thesis | Hood3";
+const title = "SOL Thesis | Longcat";
 const description =
-  "The Hood3 thesis for HOOD: Robinhood Chain distribution, Lighter-based leverage, and $HOOD3 buyback burns from qualifying realized trading profits.";
+  "The Longcat thesis for SOL: Solana retail liquidity, Hyperliquid-based leverage, and $LONGCAT buyback burns from qualifying realized trading profits.";
 
 export const metadata: Metadata = {
   title,
@@ -27,20 +27,20 @@ export const metadata: Metadata = {
 
 export default function ThesisPage() {
   return (
-    <main className="site-shell hood3-shell hood3-terminal-site">
+    <main className="site-shell hood3-shell hood3-terminal-site longcat-sol-site">
       <SiteHeader />
 
-      <section className="page-hero thesis-hero hood3-thesis-hero">
-        <p className="eyebrow">HOOD Thesis</p>
-        <h1>HOOD is the directional bet.</h1>
-        <p>Robinhood Chain distribution. Lighter execution. Public leverage. No certainty implied.</p>
+      <section className="page-hero thesis-hero longcat-thesis-hero">
+        <p className="eyebrow">SOL Thesis</p>
+        <h1>SOL is the directional bet.</h1>
+        <p>Solana liquidity. Hyperliquid execution. Public leverage. No certainty implied.</p>
         <div className="button-row">
           <Link className="button primary" href="/dashboard">
             View the long
             <ArrowRight size={17} aria-hidden="true" />
           </Link>
           <a className="button ghost" href={hoodChartUrl}>
-            View HOOD
+            View SOL
             <ExternalLink size={17} aria-hidden="true" />
           </a>
         </div>
@@ -65,16 +65,16 @@ export default function ThesisPage() {
         })}
       </section>
 
-      <section className="content-band thesis-memo hood3-memo">
+      <section className="content-band thesis-memo longcat-memo">
         <div>
           <p className="eyebrow">Core view</p>
           <h2>
-            IF HOOD WINS,
+            IF SOL WINS,
             <br />
-            HOOD3 GETS SCARCER.
+            LONGCAT GETS SCARCER.
           </h2>
         </div>
-        <p>2% creator fees are designed to scale into a public HOOD long on Lighter. Qualifying realized profits buy back and burn $HOOD3.</p>
+        <p>Creator fees are designed to scale into a public SOL long on Hyperliquid. Qualifying realized profits buy back and burn $LONGCAT.</p>
       </section>
 
       <section className="content-band thesis-risk-grid">
@@ -99,7 +99,7 @@ export default function ThesisPage() {
       </section>
 
       <section className="content-band legal-risk-list">
-        <h2>Hood3 risks</h2>
+        <h2>Longcat risks</h2>
         <ul>
           {risks.map((risk) => (
             <li key={risk}>{risk}</li>

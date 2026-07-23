@@ -4,7 +4,7 @@ import { ExternalLink } from "lucide-react";
 import { hood3XUrl, sourceLinks } from "../data";
 
 const navLinks = [
-  { label: "Robinhood Chain", href: "/#origin" },
+  { label: "Solana Thesis", href: "/#origin" },
   { label: "Mechanism", href: "/#mechanism" },
   { label: "Thesis", href: "/thesis" },
   { label: "The Long", href: "/dashboard" },
@@ -16,13 +16,13 @@ export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="main-nav hood3-nav">
-        <Link className="brand" href="/" aria-label="Hood3 home">
+        <Link className="brand" href="/" aria-label="Longcat home">
           <span className="brand-mark hood3-brand-mark" aria-hidden="true">
-            <Image src="/hood3-logo.png" alt="" width={1280} height={1195} />
+            <Image src="/longcat-logo.png" alt="" width={1024} height={1024} />
           </span>
           <span>
-            <strong>HOOD3</strong>
-            <small>$HOOD3</small>
+            <strong>LONGCAT</strong>
+            <small>$LONGCAT</small>
           </span>
         </Link>
 
@@ -35,12 +35,12 @@ export function SiteHeader() {
         </nav>
 
         <div className="header-actions">
-          <a className="social-link x-header-link" href={hood3XUrl} target="_blank" rel="noreferrer" aria-label="Open Hood3 on X">
+          <a className="social-link x-header-link" href={hood3XUrl} target="_blank" rel="noreferrer" aria-label="Open Longcat on X">
             X
             <ExternalLink size={13} aria-hidden="true" />
           </a>
-          <Link className="nav-cta" href="/#buy-hood3">
-            Buy $HOOD3
+          <Link className="nav-cta" href="/#buy-longcat">
+            Buy $LONGCAT
           </Link>
         </div>
       </div>
@@ -52,8 +52,8 @@ export function SiteFooter() {
   return (
     <footer className="site-footer hood3-footer">
       <div>
-        <strong>HOOD3</strong>
-        <span>The leveraged bet on HOOD, powered by Lighter.</span>
+        <strong>LONGCAT</strong>
+        <span>The longest cat on Solana.</span>
       </div>
       <div className="source-links">
         {sourceLinks.map((source) => (
@@ -64,9 +64,9 @@ export function SiteFooter() {
         ))}
       </div>
       <p>
-        $HOOD3 is a highly speculative community token. Leveraged trading can result in partial or total loss,
-        including liquidation. Nothing on this website is financial advice. $HOOD3 is not affiliated with Robinhood
-        Markets, Lighter, HOOD, or any referenced third party.
+        $LONGCAT is a highly speculative community token. Leveraged trading can result in partial or total loss,
+        including liquidation. Nothing on this website is financial advice. $LONGCAT is not affiliated with Solana
+        Foundation, Hyperliquid, or any referenced third party.
       </p>
     </footer>
   );

@@ -24,7 +24,7 @@ import { MetricGrid } from "../components/LongcatVisuals";
 
 type LoadState = "idle" | "loading" | "linked" | "error";
 
-type LighterPosition = {
+type HyperliquidPosition = {
   position?: {
     coin?: string;
     szi?: string;
@@ -33,7 +33,7 @@ type LighterPosition = {
   };
 };
 
-type LighterAccount = {
+type HyperliquidAccount = {
   marginSummary?: {
     accountValue?: string;
     totalNtlPos?: string;
@@ -44,7 +44,7 @@ type LighterAccount = {
     totalNtlPos?: string;
     totalMarginUsed?: string;
   };
-  assetPositions?: LighterPosition[];
+  assetPositions?: HyperliquidPosition[];
 };
 
 type NormalizedPosition = {
@@ -67,7 +67,7 @@ type SupabaseTerminalRow = {
 
 type SupabasePositionRow = {
   recorded_at: string;
-  lighter_account: string;
+  hyperliquid_account: string;
   market: string;
   side: string;
   size: string | number;
@@ -115,7 +115,7 @@ function terminalTime(value: string) {
   }).format(date);
 }
 
-function normalizePositions(account: LighterAccount | null): NormalizedPosition[] {
+function normalizePositions(account: HyperliquidAccount | null): NormalizedPosition[] {
   return (account?.assetPositions ?? [])
     .map((item) => item.position)
     .filter(Boolean)
@@ -130,8 +130,8 @@ function normalizePositions(account: LighterAccount | null): NormalizedPosition[
 export function DashboardClient() {
   const [address, setAddress] = useState("");
   const [status, setStatus] = useState<LoadState>("idle");
-  const [message, setMessage] = useState("Awaiting public Lighter account integration. Paste an address to label the dashboard locally.");
-  const [account, setAccount] = useState<LighterAccount | null>(null);
+  const [message, setMessage] = useState("Awaiting public Hyperliquid account integration. Paste an address to label the dashboard locally.");
+  const [account, setAccount] = useState<HyperliquidAccount | null>(null);
   const [terminalRows, setTerminalRows] = useState<SupabaseTerminalRow[]>([]);
   const [latestPosition, setLatestPosition] = useState<SupabasePositionRow | null>(null);
   const [supabaseStatus, setSupabaseStatus] = useState("Receipt feed waiting for live public events.");
@@ -141,7 +141,7 @@ export function DashboardClient() {
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
-      const savedAddress = window.localStorage.getItem("hood3-lighter-address");
+      const savedAddress = window.localStorage.getItem("longcat-hyperliquid-address");
 
       if (savedAddress) {
         setAddress(savedAddress);
@@ -168,7 +168,7 @@ export function DashboardClient() {
           fetch(`${supabaseUrl}/rest/v1/longcat_public_terminal?select=*&order=created_at.desc&limit=12`, {
             headers,
           }),
-          fetch(`${supabaseUrl}/rest/v1/longcat_latest_position?select=*&market=eq.HOOD&limit=1`, {
+          fetch(`${supabaseUrl}/rest/v1/longcat_latest_position?select=*&market=eq.SOL&limit=1`, {
             headers,
           }),
         ]);
@@ -201,72 +201,72 @@ export function DashboardClient() {
   }, []);
 
   const positions = useMemo(() => normalizePositions(account), [account]);
-  const hoodPositions = positions.filter((position) => position.coin.toUpperCase().includes("HOOD"));
-  const supabaseHoodLong =
+  const solPositions = positions.filter((position) => position.coin.toUpperCase().includes("SOL"));
+  const supabaseLongcatLong =
     latestPosition?.side?.toLowerCase() === "long" ? Math.abs(safeNumber(latestPosition.notional_usdc)) : 0;
-  const supabaseHoodPnl = safeNumber(latestPosition?.unrealized_pnl_usdc);
+  const supabaseLongcatPnl = safeNumber(latestPosition?.unrealized_pnl_usdc);
   const supabasePositionRows: NormalizedPosition[] = latestPosition
     ? [
         {
           coin: latestPosition.market,
           size: safeNumber(latestPosition.size),
           notional: Math.abs(safeNumber(latestPosition.notional_usdc)),
-          pnl: supabaseHoodPnl,
+          pnl: supabaseLongcatPnl,
         },
       ]
     : [];
-  const displayedPositions = hoodPositions.length
-    ? hoodPositions
+  const displayedPositions = solPositions.length
+    ? solPositions
     : positions.length
       ? positions.slice(0, 3)
       : supabasePositionRows;
-  const liveHoodLong = hoodPositions
+  const liveLongcatLong = solPositions
     .filter((position) => position.size > 0)
     .reduce((sum, position) => sum + position.notional, 0);
-  const liveHoodPnl = hoodPositions.reduce((sum, position) => sum + position.pnl, 0);
+  const liveLongcatPnl = solPositions.reduce((sum, position) => sum + position.pnl, 0);
   const accountValue = safeNumber(account?.marginSummary?.accountValue ?? account?.crossMarginSummary?.accountValue);
   const accountNotional = safeNumber(account?.marginSummary?.totalNtlPos ?? account?.crossMarginSummary?.totalNtlPos);
   const marginUsed = safeNumber(account?.marginSummary?.totalMarginUsed ?? account?.crossMarginSummary?.totalMarginUsed);
 
-  const displayedLongNotional = liveHoodLong > 0 ? liveHoodLong : supabaseHoodLong > 0 ? supabaseHoodLong : 0;
-  const displayedPnl = liveHoodLong > 0 ? liveHoodPnl : supabaseHoodPnl;
+  const displayedLongNotional = liveLongcatLong > 0 ? liveLongcatLong : supabaseLongcatLong > 0 ? supabaseLongcatLong : 0;
+  const displayedPnl = liveLongcatLong > 0 ? liveLongcatPnl : supabaseLongcatPnl;
   const exposureSource =
-    liveHoodLong > 0 ? "Linked HOOD long" : supabaseHoodLong > 0 ? "Supabase HOOD long" : "Awaiting live integration.";
+    liveLongcatLong > 0 ? "Linked SOL long" : supabaseLongcatLong > 0 ? "Supabase SOL long" : "Awaiting live integration.";
 
   async function linkAccount() {
     if (!isValidAddress) {
       setStatus("error");
-      setMessage("Enter a 42-character 0x Lighter account address.");
+      setMessage("Enter a 42-character 0x Hyperliquid account address.");
       return;
     }
 
     setAccount(null);
     setStatus("linked");
-    setMessage("Lighter account saved locally. Live Lighter account reads will activate after API integration.");
-    window.localStorage.setItem("hood3-lighter-address", cleanAddress);
+    setMessage("Hyperliquid account saved locally. Live Hyperliquid account reads will activate after API integration.");
+    window.localStorage.setItem("longcat-hyperliquid-address", cleanAddress);
   }
 
   function clearAccount() {
     setAddress("");
     setAccount(null);
     setStatus("idle");
-    setMessage("Awaiting public Lighter account integration. Paste an address to label the dashboard locally.");
-    window.localStorage.removeItem("hood3-lighter-address");
+    setMessage("Awaiting public Hyperliquid account integration. Paste an address to label the dashboard locally.");
+    window.localStorage.removeItem("longcat-hyperliquid-address");
   }
 
   return (
     <>
       <section className="page-hero compact-page-hero">
-        <p className="eyebrow">Hood3 terminal</p>
+        <p className="eyebrow">Longcat terminal</p>
         <h1>One position. Extending in public.</h1>
-        <p>Track the public HOOD long on Lighter, 2% creator fees deployed, realized profit, $HOOD3 buybacks, and burns.</p>
+        <p>Track the public SOL long on Hyperliquid, creator fees deployed, realized profit, $LONGCAT buybacks, and burns.</p>
       </section>
 
       <section className="content-band live-long-section">
         <div className="section-split-heading">
           <div>
             <p className="eyebrow">Live long</p>
-            <h2>HOOD position telemetry.</h2>
+            <h2>SOL position telemetry.</h2>
           </div>
           <p>Structured for real API data later. Until then, every value is explicitly marked as awaiting integration.</p>
         </div>
@@ -280,7 +280,7 @@ export function DashboardClient() {
               <WalletCards size={18} aria-hidden="true" />
             </span>
             <div>
-              <p className="kicker">Lighter account</p>
+              <p className="kicker">Hyperliquid account</p>
               <h2>Read-only link</h2>
             </div>
           </div>
@@ -291,11 +291,11 @@ export function DashboardClient() {
           </div>
 
           <div className="scan-card public-account-card">
-            <span>Hood3 public Lighter account</span>
-            <strong>Awaiting Lighter account.</strong>
-            <p>The live Lighter account will be published after the first verified HOOD position.</p>
+            <span>Longcat public Hyperliquid account</span>
+            <strong>Awaiting Hyperliquid account.</strong>
+            <p>The live Hyperliquid account will be published after the first verified SOL position.</p>
             <a href={lighterUrl} target="_blank" rel="noreferrer">
-              Open Lighter
+              Open Hyperliquid
               <ExternalLink size={14} aria-hidden="true" />
             </a>
           </div>
@@ -318,12 +318,12 @@ export function DashboardClient() {
             {scanUrl ? (
               <a className="button ghost" href={scanUrl} target="_blank" rel="noreferrer">
                 <ExternalLink size={17} aria-hidden="true" />
-                Open Lighter
+                Open Hyperliquid
               </a>
             ) : (
-              <button className="button ghost" type="button" disabled title="Enter a valid 0x wallet to open Lighter">
+              <button className="button ghost" type="button" disabled title="Enter a valid 0x wallet to open Hyperliquid">
                 <ExternalLink size={17} aria-hidden="true" />
-                Open Lighter
+                Open Hyperliquid
               </button>
             )}
             <button className="icon-button" type="button" onClick={clearAccount} aria-label="Clear linked account">
@@ -360,7 +360,7 @@ export function DashboardClient() {
             </span>
             <div>
               <p className="kicker">Published exposure</p>
-              <h2>Current HOOD long</h2>
+              <h2>Current SOL long</h2>
             </div>
           </div>
 
@@ -368,9 +368,9 @@ export function DashboardClient() {
             <span>{exposureSource}</span>
             <strong>{displayedLongNotional > 0 ? money(displayedLongNotional) : "Awaiting live integration."}</strong>
             <small>
-              {liveHoodLong > 0 || supabaseHoodLong > 0
+              {liveLongcatLong > 0 || supabaseLongcatLong > 0
                 ? `${money(displayedPnl)} unrealized PnL`
-                : "Public Lighter position data will appear after integration."}
+                : "Public Hyperliquid position data will appear after integration."}
             </small>
           </div>
 
@@ -391,7 +391,7 @@ export function DashboardClient() {
             ))}
             {!displayedPositions.length && (
               <div className="empty-row">
-                Live HOOD position rows will appear here when the public Lighter account or receipt feed posts a position.
+                Live SOL position rows will appear here when the public Hyperliquid account or receipt feed posts a position.
               </div>
             )}
           </div>
@@ -415,8 +415,8 @@ export function DashboardClient() {
         </div>
 
         <p className="section-copy">
-          The live route is straightforward: 2% creator fees extend the public HOOD long on Lighter, qualifying realized profits buy
-          $HOOD3, and purchased tokens are permanently burned.
+          The live route is straightforward: creator fees extend the public SOL long on Hyperliquid, qualifying realized profits buy
+          $LONGCAT, and purchased tokens are permanently burned.
         </p>
 
         <div className="automation-grid">
@@ -432,12 +432,12 @@ export function DashboardClient() {
         <div className="terminal-panel">
           <div className="terminal-head">
             <div>
-              <p className="kicker">Hood3 terminal</p>
+              <p className="kicker">Longcat terminal</p>
               <h2>Transaction feed.</h2>
             </div>
             <Terminal size={20} aria-hidden="true" />
           </div>
-          <div className="terminal-log" aria-label="Hood3 transaction terminal">
+          <div className="terminal-log" aria-label="Longcat transaction terminal">
             {terminalRows.length
               ? terminalRows.map((event) => (
                   <div className="terminal-row" key={event.id}>
@@ -480,7 +480,7 @@ export function DashboardClient() {
         <div className="section-split-heading">
           <div>
             <p className="eyebrow">Burn telemetry</p>
-            <h2>When the long wins, Hood3 gets scarcer.</h2>
+            <h2>When the long wins, Longcat gets scarcer.</h2>
           </div>
           <p>Burns only update when qualifying realized profit exists and buyback/burn receipts are connected.</p>
         </div>
@@ -494,7 +494,7 @@ export function DashboardClient() {
           </span>
           <div>
             <p className="kicker">How it works</p>
-            <h2>From fee to HOOD long.</h2>
+            <h2>From fee to SOL long.</h2>
           </div>
         </div>
 

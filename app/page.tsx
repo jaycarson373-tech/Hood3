@@ -2,11 +2,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { hoodChartUrl } from "./data";
-import { Hood3SignalField, SignalGraphicStack } from "./components/LongcatVisuals";
+import { LongcatSignalField, SignalGraphicStack } from "./components/LongcatVisuals";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
 
 const liveStats = [
-  "HOOD LONG SIZE",
+  "SOL LONG SIZE",
   "TOTAL FEES DEPLOYED",
   "ENTRY PRICE",
   "CURRENT PRICE",
@@ -14,36 +14,36 @@ const liveStats = [
   "UNREALIZED PNL",
   "REALIZED PROFIT",
   "TOTAL BUYBACKS",
-  "TOTAL $HOOD3 BURNED",
-  "LAST LIGHTER UPDATE",
+  "TOTAL $LONGCAT BURNED",
+  "LAST HYPERLIQUID UPDATE",
 ];
 
 const flow = [
-  "$HOOD3 trades",
-  "2% fees route",
-  "Lighter longs HOOD",
-  "realized profit buys $HOOD3",
+  "$LONGCAT trades",
+  "fees route",
+  "Hyperliquid longs SOL",
+  "realized profit buys $LONGCAT",
   "tokens burn",
 ];
 
 const thesis = [
-  "Robinhood Chain can bring a new retail class onchain.",
-  "HOOD is the clean directional proxy for Robinhood's own expansion.",
-  "Lighter gives the flywheel a public leverage venue.",
+  "Solana remains one of crypto's fastest retail arenas.",
+  "SOL is the clean directional proxy for Solana's liquidity and attention cycle.",
+  "Hyperliquid gives the flywheel a public leverage venue.",
 ];
 
 const faq = [
   {
-    question: "What is Hood3?",
-    answer: "$HOOD3 is a Robinhood Chain native leverage token designed around a public HOOD long on Lighter.",
+    question: "What is Longcat?",
+    answer: "$LONGCAT is a Solana native leverage token designed around a public SOL long on Hyperliquid.",
   },
   {
     question: "Where do fees go?",
-    answer: "The 2% creator fee is designed to build the HOOD position, subject to execution, risk controls, and operating conditions.",
+    answer: "Creator fees are designed to build the SOL position, subject to execution, risk controls, and operating conditions.",
   },
   {
     question: "What happens if the long wins?",
-    answer: "Qualifying realized profit can market-buy $HOOD3 and permanently burn it.",
+    answer: "Qualifying realized profit can market-buy $LONGCAT and permanently burn it.",
   },
   {
     question: "Guaranteed?",
@@ -53,36 +53,36 @@ const faq = [
 
 export default function Home() {
   return (
-    <main className="site-shell hood3-shell hood3-terminal-site">
+    <main className="site-shell hood3-shell hood3-terminal-site longcat-sol-site">
       <SiteHeader />
-      <Hood3SignalField />
+      <LongcatSignalField />
 
-      <section className="hood-section hood-hero" id="buy-hood3">
+      <section className="hood-section hood-hero" id="buy-longcat">
         <div className="hood-hero__copy">
-          <p className="eyebrow">Robinhood Chain native leverage</p>
+          <p className="eyebrow">Solana native leverage cat</p>
           <h1>
-            THE LEVERAGED BET
-            <span>ON HOOD.</span>
+            THE LONGEST CAT
+            <span>ON SOLANA.</span>
           </h1>
           <div className="hero-copy-lines">
-            <p>Powered by Lighter.</p>
-            <p>2% creator fees build a public HOOD long. Realized profits buy back and burn $HOOD3.</p>
+            <p>Creator fees scale into a public SOL long on Hyperliquid.</p>
+            <p>Realized profits buy back and burn $LONGCAT. The long gets longer. The supply gets shorter.</p>
           </div>
           <div className="hero-actions meme-actions">
-            <Link className="button primary long-button" href="#buy-hood3">
-              Buy $HOOD3
+            <Link className="button primary long-button" href="#buy-longcat">
+              Buy $LONGCAT
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
             <Link className="button ghost long-button" href="/dashboard">
               View The Long
             </Link>
           </div>
-          <p className="hero-ca">CA: soon on Robinhood Chain</p>
+          <p className="hero-ca">CA: soon on Solana</p>
         </div>
 
         <div className="hood-hero__mark" aria-hidden="true">
-          <Image src="/hood3-logo.png" alt="" width={1280} height={1195} priority />
-          <span>LIGHTER</span>
+          <Image src="/longcat-logo.png" alt="" width={1024} height={1024} priority />
+          <span>HYPERLIQUID</span>
         </div>
       </section>
 
@@ -99,25 +99,25 @@ export default function Home() {
       </section>
 
       <section className="hood-section origin-section" id="origin">
-        <div className="section-label">ROBINHOOD CHAIN</div>
-        <h2>HOOD3 TURNS RETAIL FLOW INTO DIRECTIONAL HOOD EXPOSURE.</h2>
+        <div className="section-label">SOLANA THESIS</div>
+        <h2>LONGCAT TURNS MEME FLOW INTO DIRECTIONAL SOL EXPOSURE.</h2>
         <div className="origin-grid hood-origin-grid">
           <div className="origin-board">
             <span>01</span>
-            <strong>Robinhood Chain</strong>
-            <p>Hood3 is built for the Robinhood-native onchain era: familiar retail culture, faster rails, and public receipts.</p>
+            <strong>Solana speed</strong>
+            <p>Longcat is built for the chain where memes, retail attention, and liquidity move fast.</p>
           </div>
           <div className="origin-board">
             <span>02</span>
-            <strong>Lighter execution</strong>
-            <p>The mechanism is designed to route creator fees into a transparent HOOD long on Lighter.</p>
+            <strong>Hyperliquid execution</strong>
+            <p>The mechanism is designed to route creator fees into a transparent SOL long on Hyperliquid.</p>
           </div>
         </div>
       </section>
 
       <section className="hood-section mechanic-section" id="mechanism">
         <div className="section-label">MECHANISM</div>
-        <h2>FEES LONG HOOD. PROFITS BURN $HOOD3.</h2>
+        <h2>FEES LONG SOL. PROFITS BURN $LONGCAT.</h2>
         <div className="long-flow">
           {flow.map((step) => (
             <span key={step}>{step}</span>
@@ -127,34 +127,34 @@ export default function Home() {
       </section>
 
       <section className="hood-section thesis-section" id="hood-thesis">
-        <div className="section-label">WHY HOOD?</div>
-        <h2>THE ROBINHOOD BET NEEDS A ROBINHOOD LONG.</h2>
+        <div className="section-label">WHY SOL?</div>
+        <h2>THE SOLANA BET NEEDS THE LONGEST CAT.</h2>
         <div className="thesis-tape">
           {thesis.map((item) => (
             <span key={item}>{item}</span>
           ))}
         </div>
         <p className="thesis-closing">
-          IF HOOD WINS,
+          IF SOL WINS,
           <br />
-          HOOD3 GETS SCARCER.
+          LONGCAT GETS SCARCER.
         </p>
         <a className="button ghost long-button" href={hoodChartUrl}>
-          View HOOD
+          View SOL
           <ExternalLink size={16} aria-hidden="true" />
         </a>
       </section>
 
       <section className="hood-section terminal-section" id="live-position">
         <div className="section-label">LIVE LONG</div>
-        <h2>THE LIGHTER POSITION UPDATES IN PUBLIC.</h2>
+        <h2>THE HYPERLIQUID POSITION UPDATES IN PUBLIC.</h2>
         <div className="terminal-strip">
           <span>POSITION SIZE</span>
           <strong>Awaiting live integration.</strong>
           <span>REALIZED PROFIT</span>
           <strong>Awaiting live integration.</strong>
           <span>LAST POSITION UPDATE</span>
-          <strong>AWAITING FIRST LIGHTER RECEIPT</strong>
+          <strong>AWAITING FIRST HYPERLIQUID RECEIPT</strong>
         </div>
         <div className="button-row">
           <Link className="button primary long-button" href="/dashboard">
@@ -162,7 +162,7 @@ export default function Home() {
             <ArrowRight size={16} aria-hidden="true" />
           </Link>
           <Link className="button ghost long-button" href="/dashboard">
-            Hood3 Terminal
+            Longcat Terminal
           </Link>
         </div>
       </section>
@@ -170,7 +170,7 @@ export default function Home() {
       <section className="hood-section burn-section" id="burns">
         <div>
           <p className="section-label">BUYBACKS AND BURNS</p>
-          <h2>REALIZED PROFITS BUY BACK AND BURN $HOOD3.</h2>
+          <h2>REALIZED PROFITS BUY BACK AND BURN $LONGCAT.</h2>
           <p className="microcopy">Only qualifying realized trading profits can trigger buybacks and permanent burns.</p>
         </div>
         <SignalGraphicStack />

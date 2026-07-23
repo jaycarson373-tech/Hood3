@@ -40,19 +40,19 @@ export type FaqItem = {
   answer: string;
 };
 
-export const hood3Ticker = "$HOOD3";
-export const hoodTicker = "HOOD";
-export const hood3XUrl = "https://x.com/HOOD3pf";
+export const hood3Ticker = "$LONGCAT";
+export const hoodTicker = "SOL";
+export const hood3XUrl = "https://x.com/LongcatRH_";
 export const hood3ChartUrl = "#chart";
-export const hood3ContractUrl = "/Hood3Token.sol";
-export const hoodChartUrl = "#hood-chart";
-export const lighterUrl = "https://lighter.xyz/";
+export const hood3ContractUrl = "/#buy-longcat";
+export const hoodChartUrl = "https://app.hyperliquid.xyz/trade/SOL";
+export const lighterUrl = "https://app.hyperliquid.xyz/";
 
 export const topMetrics: Metric[] = [
   {
-    label: "HOOD Long",
+    label: "SOL Long",
     value: "$0",
-    detail: "Lighter integration pending",
+    detail: "Hyperliquid integration pending",
   },
   {
     label: "Current Leverage",
@@ -62,7 +62,7 @@ export const topMetrics: Metric[] = [
   {
     label: "Total Fees Deployed",
     value: "$0",
-    detail: "2% creator fee",
+    detail: "creator fees",
   },
   {
     label: "Realized Profit",
@@ -70,7 +70,7 @@ export const topMetrics: Metric[] = [
     detail: "buyback fuel",
   },
   {
-    label: "$HOOD3 Burned",
+    label: "$LONGCAT Burned",
     value: "0",
     detail: "permanent removal",
   },
@@ -78,7 +78,7 @@ export const topMetrics: Metric[] = [
 
 export const landingStats: Metric[] = [
   {
-    label: "HOOD Long",
+    label: "SOL Long",
     value: "$0",
     detail: "public position",
   },
@@ -90,18 +90,18 @@ export const landingStats: Metric[] = [
   {
     label: "Total Fees Deployed",
     value: "$0",
-    detail: "2% fee extends the long",
+    detail: "fees extend the long",
   },
   {
-    label: "$HOOD3 Burned",
+    label: "$LONGCAT Burned",
     value: "0",
     detail: "supply removed",
   },
 ];
 
 export const livePositionStats: Metric[] = [
-  { label: "POSITION SIZE", value: "Awaiting live integration.", detail: "public position" },
-  { label: "TOTAL FEES DEPLOYED", value: "Awaiting live integration.", detail: "2% creator fee" },
+  { label: "POSITION SIZE", value: "Awaiting live integration.", detail: "public SOL long" },
+  { label: "TOTAL FEES DEPLOYED", value: "Awaiting live integration.", detail: "creator fees" },
   { label: "ENTRY PRICE", value: "Awaiting live integration.", detail: "execution data" },
   { label: "CURRENT PRICE", value: "Awaiting live integration.", detail: "market data" },
   { label: "LEVERAGE", value: "Awaiting live integration.", detail: "risk data" },
@@ -122,66 +122,66 @@ export const burnStats: Metric[] = [
 export const flywheelSteps: AutomationStep[] = [
   {
     label: "01",
-    title: "$HOOD3 trades",
-    text: "Every transaction generates the 2% creator fee.",
+    title: "$LONGCAT trades",
+    text: "Every transaction generates creator fees for the mechanism.",
   },
   {
     label: "02",
-    title: "Fees long HOOD",
-    text: "100% of protocol creator fees are designed to build a public HOOD long on Lighter.",
+    title: "Fees long SOL",
+    text: "100% of protocol creator fees are designed to build a public SOL long on Hyperliquid.",
   },
   {
     label: "03",
-    title: "Profits buy $HOOD3",
+    title: "Profits buy $LONGCAT",
     text: "Qualifying realized trading profits can market-buy the native token.",
   },
   {
     label: "04",
-    title: "$HOOD3 is burned",
+    title: "$LONGCAT is burned",
     text: "Every purchased token is permanently removed from circulation.",
   },
   {
     label: "05",
     title: "Repeat",
-    text: "More trading creates more exposure, more potential buybacks, and a smaller supply.",
+    text: "More trading creates more SOL exposure, more potential buybacks, and a smaller supply.",
   },
 ];
 
 export const timeline = [
   {
-    label: "Robinhood Chain",
-    title: "Retail moves onchain",
-    text: "Hood3 is built around the thesis that Robinhood-native rails can pull a new retail class into onchain markets.",
+    label: "Solana",
+    title: "Retail moves at speed",
+    text: "Longcat is built around the thesis that Solana remains the fastest retail arena for meme-native speculation.",
   },
   {
-    label: "Lighter",
+    label: "Hyperliquid",
     title: "The leverage layer",
-    text: "Lighter provides the perp venue Hood3 is designed to use for transparent HOOD exposure.",
+    text: "Hyperliquid provides the perp venue Longcat is designed to use for transparent SOL exposure.",
   },
   {
     label: "Flywheel",
     title: "Fees become direction",
-    text: "Creator fees build exposure; realized profits can buy and burn $HOOD3.",
+    text: "Creator fees build exposure; realized profits can buy and burn $LONGCAT.",
   },
 ];
 
 export const hoodThesisPoints: ThesisPoint[] = [
   {
-    label: "Retail rail",
+    label: "Fast retail rail",
     value: "01",
-    text: "Robinhood Chain can bring mainstream retail directly onchain.",
+    text: "Solana has become one of crypto's clearest retail venues: fast, liquid, meme-native, and relentlessly online.",
     icon: TrendingUp,
   },
   {
-    label: "Native equity",
+    label: "Native asset",
     value: "02",
-    text: "HOOD is the clean directional proxy for Robinhood's own onchain expansion.",
+    text: "SOL is the clean directional expression of Solana network activity, liquidity, and attention.",
     icon: Sparkles,
   },
   {
-    label: "Lighter execution",
+    label: "Hyperliquid execution",
     value: "03",
-    text: "Hood3 turns token activity into transparent Lighter-based HOOD exposure.",
+    text: "Longcat turns token activity into a transparent Hyperliquid-based SOL long.",
     icon: BadgeDollarSign,
   },
 ];
@@ -189,19 +189,19 @@ export const hoodThesisPoints: ThesisPoint[] = [
 export const howItWorks = [
   {
     title: "Creator fees accumulate",
-    text: "Trading activity creates the 2% creator fee for the Hood3 mechanism.",
+    text: "Trading activity creates fees for the Longcat mechanism.",
   },
   {
-    title: "Fees build the HOOD long",
-    text: "100% of the 2% creator fee allocated to the protocol is designed to add to the public HOOD long on Lighter.",
+    title: "Fees build the SOL long",
+    text: "100% of creator fees allocated to the protocol are designed to add to the public SOL long on Hyperliquid.",
   },
   {
     title: "Profit is realized",
     text: "When the position generates qualifying realized gains, those gains become buyback fuel.",
   },
   {
-    title: "Hood3 supply contracts",
-    text: "Realized trading profits buy back $HOOD3 and permanently burn the purchased tokens.",
+    title: "Longcat supply contracts",
+    text: "Realized trading profits buy back $LONGCAT and permanently burn the purchased tokens.",
   },
 ];
 
@@ -214,7 +214,7 @@ export const automationSteps: AutomationStep[] = [
   {
     label: "02",
     title: "Extend the long",
-    text: "Fees strategically add to the public HOOD long on Lighter inside execution and risk limits.",
+    text: "Fees strategically add to the public SOL long on Hyperliquid inside execution and risk limits.",
   },
   {
     label: "03",
@@ -224,7 +224,7 @@ export const automationSteps: AutomationStep[] = [
   {
     label: "04",
     title: "Buy and burn",
-    text: "Profit buys $HOOD3 on market and permanently removes it from supply.",
+    text: "Profit buys $LONGCAT on market and permanently removes it from supply.",
   },
 ];
 
@@ -234,13 +234,13 @@ export const terminalEvents: TerminalEvent[] = [
     stage: "SYSTEM",
     status: "IDLE",
     action: "No live transactions yet",
-    detail: "Live receipts will stream creator fees, Lighter HOOD orders, realized profit, $HOOD3 buybacks, and burns here.",
+    detail: "Live receipts will stream creator fees, Hyperliquid SOL orders, realized profit, $LONGCAT buybacks, and burns here.",
   },
 ];
 
 export const risks = [
   "Leveraged trading can lose money quickly, including through liquidation.",
-  "HOOD, Robinhood Chain, memecoins, and tokenized markets can face sharp volatility and regulatory review.",
+  "SOL, Solana memecoins, perp venues, and token markets can face sharp volatility and regulatory review.",
   "Buybacks and burns only occur when qualifying realized profits exist; they are not guaranteed.",
   "Execution, liquidity, slippage, automation, and wallet operations need audited controls before full automation.",
 ];
@@ -255,11 +255,11 @@ export const sourceLinks = [
     href: hood3ChartUrl,
   },
   {
-    label: "Contract",
+    label: "CA soon",
     href: hood3ContractUrl,
   },
   {
-    label: "Lighter",
+    label: "Hyperliquid",
     href: lighterUrl,
   },
   {
@@ -271,7 +271,7 @@ export const sourceLinks = [
 export const thesisRisks = [
   {
     label: "Market risk",
-    text: "HOOD can move against the position. A long thesis is not a guarantee.",
+    text: "SOL can move against the position. A long thesis is not a guarantee.",
   },
   {
     label: "Liquidation risk",
@@ -283,19 +283,19 @@ export const thesisRisks = [
   },
   {
     label: "Narrative risk",
-    text: "The thesis assumes Robinhood Chain and Lighter-linked onchain activity keep expanding.",
+    text: "The thesis assumes Solana liquidity, retail attention, and Hyperliquid execution remain strong.",
   },
 ];
 
 export const homePillars = [
   {
-    title: "Creator fees long HOOD",
-    text: "Every 2% creator fee allocated to the protocol is designed to extend one public leveraged HOOD position on Lighter.",
+    title: "Creator fees long SOL",
+    text: "Every creator fee allocated to the protocol is designed to extend one public leveraged SOL position on Hyperliquid.",
     icon: StretchHorizontal,
   },
   {
     title: "Winning trades create scarcity",
-    text: "Realized trading profits buy back $HOOD3 and permanently burn it.",
+    text: "Realized trading profits buy back $LONGCAT and permanently burn it.",
     icon: Flame,
   },
   {
@@ -307,31 +307,31 @@ export const homePillars = [
 
 export const faqItems: FaqItem[] = [
   {
-    question: "What is $HOOD3?",
-    answer: "$HOOD3 is a Robinhood Chain native leverage token designed to route its 2% creator fee into a public leveraged HOOD position on Lighter.",
+    question: "What is $LONGCAT?",
+    answer: "$LONGCAT is a Solana native leverage token designed to route creator fees into a public leveraged SOL position on Hyperliquid.",
   },
   {
     question: "Where do creator fees go?",
-    answer: "100% of the 2% creator fee allocated to the protocol is designed to build the HOOD long, subject to execution, risk controls and operating conditions.",
+    answer: "100% of creator fees allocated to the protocol are designed to build the SOL long, subject to execution, risk controls, and operating conditions.",
   },
   {
     question: "What happens to trading profits?",
-    answer: "Qualifying realized profits designated by the mechanism are used to buy $HOOD3 from the market and permanently burn the purchased tokens.",
+    answer: "Qualifying realized profits designated by the mechanism are used to buy $LONGCAT from the market and permanently burn the purchased tokens.",
   },
   {
     question: "Are profits or burns guaranteed?",
-    answer: "No. Leveraged trading involves significant risk. The HOOD position can lose money, and buybacks only occur when qualifying realized profits exist.",
+    answer: "No. Leveraged trading involves significant risk. The SOL position can lose money, and buybacks only occur when qualifying realized profits exist.",
   },
   {
     question: "Can the position be liquidated?",
-    answer: "Yes. Any leveraged position carries liquidation risk. The position, leverage and liquidation level should be displayed publicly whenever integrations are available.",
+    answer: "Yes. Any leveraged position carries liquidation risk. The position, leverage, and liquidation level should be displayed publicly whenever integrations are available.",
   },
   {
-    question: "Why HOOD?",
-    answer: "Our thesis is that HOOD is the cleanest directional expression of Robinhood's own onchain expansion.",
+    question: "Why SOL?",
+    answer: "Our thesis is that SOL is the cleanest directional expression of Solana activity, liquidity, and retail attention.",
   },
   {
-    question: "Is this affiliated with Robinhood or Lighter?",
-    answer: "$HOOD3 is an independent community project and is not affiliated with or endorsed by Robinhood Markets, Lighter, or any referenced third party.",
+    question: "Is this affiliated with Solana or Hyperliquid?",
+    answer: "$LONGCAT is an independent community project and is not affiliated with or endorsed by Solana Foundation, Hyperliquid, or any referenced third party.",
   },
 ];

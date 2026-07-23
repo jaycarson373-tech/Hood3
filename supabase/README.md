@@ -1,13 +1,13 @@
-# Hood3 Supabase Wiring
+# Longcat Supabase Wiring
 
-Run `supabase/schema.sql` in your Supabase SQL editor first. It is Robinhood ETH only and does not require old-chain or Pump-style assumptions.
+Run `supabase/schema.sql` in your Supabase SQL editor first. It is Solana only and does not require old-chain or Pump-style assumptions.
 
 The browser reads from:
 
-- `longcat_public_terminal` for the Hood3 terminal transaction feed.
-- `longcat_latest_position` for the current HOOD long amount backing the native leverage loop.
+- `longcat_public_terminal` for the Longcat terminal transaction feed.
+- `longcat_latest_position` for the current SOL long amount backing the native leverage loop.
 
-The database view names currently preserve the earlier prefix for migration safety. The public site copy is Hood3.
+The database view names currently preserve the earlier prefix for migration safety. The public site copy is Longcat.
 
 Frontend env vars:
 
@@ -17,7 +17,7 @@ NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
 ```
 
-Keep writes server-side with a trusted backend using the service-role key. Never put private keys, Lighter signing keys, or the service-role key in the frontend.
+Keep writes server-side with a trusted backend using the service-role key. Never put private keys, Hyperliquid signing keys, or the service-role key in the frontend.
 
 Suggested backend env vars:
 
@@ -25,15 +25,15 @@ Suggested backend env vars:
 SITE_URL=
 SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
-ROBINHOOD_RPC_URL=
+SOLANA_RPC_URL=
 
-# Robinhood ETH fee receiver / execution wallet.
-HOOD3_ETH_WALLET_ADDRESS=
-HOOD3_ETH_WALLET_PRIVATE_KEY=
-HOOD3_ETH_GAS_BUFFER_ETH=0.005
+# Solana fee receiver / execution wallet.
+LONGCAT_SOL_WALLET_ADDRESS=
+LONGCAT_SOL_WALLET_PRIVATE_KEY=
+LONGCAT_SOL_FEE_BUFFER_SOL=0.05
 
-HOOD3_LIGHTER_ACCOUNT=
-LIGHTER_API_WALLET_PRIVATE_KEY=
+LONGCAT_HYPERLIQUID_ACCOUNT=
+HYPERLIQUID_API_WALLET_PRIVATE_KEY=
 CLAIM_INTERVAL_MINUTES=15
 DRY_RUN=true
 ```
@@ -41,11 +41,11 @@ DRY_RUN=true
 Automation loop:
 
 1. Create an automation run row every 15 minutes.
-2. Read or claim available Robinhood ETH creator fees and insert a claim row.
-3. Route available ETH above the gas buffer through the approved execution path and insert a transfer row.
-4. Swap ETH to execution collateral if Lighter requires it and insert a swap row.
-5. Transfer collateral to the Lighter account and insert another transfer row.
-6. Open or add to the HOOD long and insert a long-order row.
+2. Read or claim available Solana creator fees and insert a claim row.
+3. Route available SOL above the fee buffer through the approved execution path and insert a transfer row.
+4. Swap SOL to execution collateral if Hyperliquid requires it and insert a swap row.
+5. Transfer collateral to the Hyperliquid account and insert another transfer row.
+6. Open or add to the SOL long and insert a long-order row.
 7. Snapshot exposure into the positions table.
 8. Insert a terminal event row for every stage so the site can show receipts.
 
@@ -54,8 +54,8 @@ Leave `DRY_RUN=true` and `automation_enabled=false` until the wallet, order sizi
 Route rule:
 
 ```ts
-const gasBufferEth = 0.005;
-const routeableEth = Math.max(0, feeWalletBalanceEth - gasBufferEth);
+const gasBufferSol = 0.05;
+const routeableSol = Math.max(0, feeWalletBalanceSol - gasBufferSol);
 ```
 
-If `routeableEth` is `0`, the worker should skip movement and log an idle terminal event instead of draining the wallet.
+If `routeableSol` is `0`, the worker should skip movement and log an idle terminal event instead of draining the wallet.
