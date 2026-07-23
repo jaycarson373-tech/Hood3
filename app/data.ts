@@ -47,6 +47,9 @@ export const hood3ChartUrl = "#chart";
 export const hood3ContractUrl = "/#buy-longcat";
 export const hoodChartUrl = "https://app.hyperliquid.xyz/trade/SOL";
 export const lighterUrl = "https://app.hyperliquid.xyz/";
+export const pumpFunUrl = "https://pump.fun/";
+export const dexScreenerUrl = "https://dexscreener.com/solana";
+export const communityUrl = "https://x.com/i/communities";
 
 export const topMetrics: Metric[] = [
   {
@@ -247,12 +250,20 @@ export const risks = [
 
 export const sourceLinks = [
   {
+    label: "Pump.fun",
+    href: pumpFunUrl,
+  },
+  {
+    label: "Dexscreener",
+    href: dexScreenerUrl,
+  },
+  {
     label: "X",
     href: hood3XUrl,
   },
   {
-    label: "Chart",
-    href: hood3ChartUrl,
+    label: "Community",
+    href: communityUrl,
   },
   {
     label: "CA soon",

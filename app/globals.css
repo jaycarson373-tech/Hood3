@@ -4592,6 +4592,44 @@ body:has(.longcat-sol-site) {
   border-top: 1px solid rgba(0, 194, 255, 0.2);
 }
 
+.longcat-sol-site .footer-market-strip {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 18px 0 10px;
+  max-width: 680px;
+  width: 100%;
+}
+
+.longcat-sol-site .footer-market-strip div {
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.105), rgba(255, 255, 255, 0.035)),
+    rgba(8, 7, 28, 0.58);
+  border: 1px solid rgba(0, 194, 255, 0.22);
+  border-radius: 8px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.11),
+    0 0 28px rgba(153, 69, 255, 0.1);
+  padding: 13px 14px;
+}
+
+.longcat-sol-site .footer-market-strip span {
+  color: rgba(247, 251, 255, 0.58);
+  display: block;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.longcat-sol-site .footer-market-strip strong {
+  color: #7df9ff;
+  display: block;
+  font-family: var(--font-geist-mono), monospace;
+  font-size: clamp(14px, 1.8vw, 18px);
+  margin-top: 6px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .longcat-sol-site {
     animation: longcat-star-drift 48s linear infinite;
@@ -4689,5 +4727,9 @@ body:has(.longcat-sol-site) {
   .longcat-sol-site .hood-hero__mark {
     max-width: 320px;
     width: min(78vw, 320px);
+  }
+
+  .longcat-sol-site .footer-market-strip {
+    grid-template-columns: 1fr;
   }
 }

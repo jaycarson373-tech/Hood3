@@ -55,6 +55,16 @@ export function SiteFooter() {
         <strong>LONGCAT</strong>
         <span>The longest cat on Solana.</span>
       </div>
+      <div className="footer-market-strip" aria-label="Longcat market prices">
+        <div>
+          <span>SOL PRICE</span>
+          <strong>Awaiting live integration.</strong>
+        </div>
+        <div>
+          <span>$LONGCAT PRICE</span>
+          <strong>Awaiting launch.</strong>
+        </div>
+      </div>
       <div className="source-links">
         {sourceLinks.map((source) => (
           <a key={source.href} href={source.href} target={source.href.startsWith("http") ? "_blank" : undefined} rel="noreferrer">
