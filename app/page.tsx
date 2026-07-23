@@ -2,8 +2,8 @@ import Link from "next/link";
 import { ArrowRight, ExternalLink } from "lucide-react";
 import { CONTRACT_ADDRESS, EXTERNAL_LINKS } from "./constants";
 import { ContractAddress } from "./components/ContractAddress";
+import { HeroTerminal } from "./components/HeroTerminal";
 import { LongcatScrollBackdrop, LongcatSignalField, SignalGraphicStack } from "./components/LongcatVisuals";
-import { PrelaunchNotice } from "./components/PrelaunchNotice";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
 import { getLaunchState } from "./launch-state";
 
@@ -52,32 +52,30 @@ export default function Home() {
       <LongcatSignalField />
 
       <section className="launch-section launch-hero" id="buy-longcat">
-        <div className="launch-hero__copy">
-          <p className="eyebrow">Solana native leverage cat</p>
-          <h1>
-            THE LONGEST CAT
-            <span>ON SOLANA.</span>
-          </h1>
-          <div className="hero-copy-lines">
-            <p>Creator fees scale into a public SOL long on Hyperliquid.</p>
-            <p>Realized profits bridge back, buy back, and burn $LONGCAT.</p>
-          </div>
-          <div className="hero-actions meme-actions">
+        <div className="launch-hero__layout">
+          <div className="launch-hero__copy">
+            <p className="eyebrow">Solana native leverage cat</p>
+            <h1>
+              THE LONGEST CAT
+              <span>ON SOLANA.</span>
+            </h1>
+            <div className="hero-copy-lines">
+              <p>Creator fees scale into a public SOL long on Hyperliquid.</p>
+              <p>Realized profits bridge back, buy back, and burn $LONGCAT.</p>
+            </div>
             {EXTERNAL_LINKS.buy ? (
-              <a className="button primary long-button" href={EXTERNAL_LINKS.buy} target="_blank" rel="noreferrer">
-                Buy $LONGCAT
-                <ArrowRight size={18} aria-hidden="true" />
-              </a>
+              <div className="hero-actions meme-actions">
+               <a className="button primary long-button" href={EXTERNAL_LINKS.buy} target="_blank" rel="noreferrer">
+                 Buy $LONGCAT
+                 <ArrowRight size={18} aria-hidden="true" />
+               </a>
+              </div>
             ) : null}
-            <Link className="button ghost long-button" href="/dashboard">
-              View The Long
-            </Link>
+            {CONTRACT_ADDRESS ? <ContractAddress address={CONTRACT_ADDRESS} /> : null}
           </div>
-          {CONTRACT_ADDRESS ? <ContractAddress address={CONTRACT_ADDRESS} /> : null}
+          <HeroTerminal />
         </div>
       </section>
-
-      {!isLive ? <PrelaunchNotice /> : null}
 
       <section className="launch-section mechanic-section" id="mechanism">
         <div className="section-label">MECHANISM</div>

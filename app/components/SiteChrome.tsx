@@ -19,7 +19,7 @@ export function SiteHeader() {
       <div className="main-nav launch-nav">
         <Link className="brand" href="/" aria-label="Longcat home">
           <span className="brand-mark launch-brand-mark" aria-hidden="true">
-            <Image src="/longcat-logo.png" alt="" width={512} height={512} sizes="44px" priority />
+            <Image src="/longcat-logo.png" alt="" width={512} height={512} sizes="44px" priority unoptimized />
           </span>
           <span>
             <strong>LONGCAT</strong>

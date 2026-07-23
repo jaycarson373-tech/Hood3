@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { SITE } from "../constants";
 import { LongcatScrollBackdrop } from "../components/LongcatVisuals";
-import { PrelaunchNotice } from "../components/PrelaunchNotice";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 import { getLaunchState } from "../launch-state";
 import { DashboardClient } from "./DashboardClient";
@@ -55,7 +54,6 @@ export default function DashboardPage() {
             <h1>One position. Extending in public.</h1>
             <p>The public SOL long, buybacks, and burns will be published here.</p>
           </section>
-          <PrelaunchNotice />
         </>
       )}
       <SiteFooter />

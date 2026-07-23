@@ -9,11 +9,11 @@ const requiredHomeCopy = [
   "ON SOLANA.",
   "Creator fees scale into a public SOL long on Hyperliquid.",
   "Realized profits bridge back, buy back, and burn $LONGCAT.",
-  "THE SOL FLYWHEEL ACTIVATES AT LAUNCH.",
-  "Every long position.",
-  "Every buyback.",
-  "Every burn.",
-  "Published here.",
+  "LONGCAT TERMINAL",
+  "LONG SIZE",
+  "SOL BRIDGED",
+  "$LONGCAT BURNED",
+  "Enter Dashboard",
   "FEES LONG SOL. PROFITS BURN $LONGCAT.",
 ];
 const bannedRenderedCopy =
@@ -68,7 +68,6 @@ test("server-renders dashboard and thesis routes with route-specific metadata", 
   const [dashboardHtml, thesisHtml] = await Promise.all([dashboardResponse.text(), thesisResponse.text()]);
 
   assert.match(dashboardHtml, /Longcat terminal/);
-  assert.match(dashboardHtml, /THE SOL FLYWHEEL ACTIVATES AT LAUNCH/);
   assert.match(dashboardHtml, /https:\/\/www\.longcatsolana\.fun\/dashboard/);
   assert.doesNotMatch(dashboardHtml, /POSITION SIZE|TOTAL TOKENS BURNED|Transaction feed/);
   assert.doesNotMatch(dashboardHtml, bannedRenderedCopy);
@@ -80,7 +79,7 @@ test("server-renders dashboard and thesis routes with route-specific metadata", 
   assert.doesNotMatch(thesisHtml, bannedRenderedCopy);
 });
 
-test("server-only live state removes the prelaunch notice without inventing data", async () => {
+test("server-only live state reveals live surfaces without inventing data", async () => {
   const previousState = process.env.LAUNCH_STATE;
   process.env.LAUNCH_STATE = "live";
 
@@ -88,11 +87,9 @@ test("server-only live state removes the prelaunch notice without inventing data
     const [homeResponse, dashboardResponse] = await Promise.all([render("/?state=live"), render("/dashboard?state=live")]);
     const [homeHtml, dashboardHtml] = await Promise.all([homeResponse.text(), dashboardResponse.text()]);
 
-    assert.doesNotMatch(homeHtml, /THE SOL FLYWHEEL ACTIVATES AT LAUNCH/);
     assert.match(homeHtml, /CLAIMS, BRIDGES, LONGS, BUYBACKS, AND BURNS UPDATE IN PUBLIC/);
     assert.doesNotMatch(homeHtml, bannedRenderedCopy);
 
-    assert.doesNotMatch(dashboardHtml, /THE SOL FLYWHEEL ACTIVATES AT LAUNCH/);
     assert.match(dashboardHtml, /Claims every 15 minutes/);
     assert.doesNotMatch(dashboardHtml, /POSITION SIZE|TOTAL TOKENS BURNED|Transaction feed/);
     assert.doesNotMatch(dashboardHtml, bannedRenderedCopy);
@@ -126,7 +123,6 @@ test("production assets and server-only launch configuration are present", async
   await Promise.all([
     access(new URL("../public/og.png", import.meta.url)),
     access(new URL("../public/favicon.png", import.meta.url)),
-    access(new URL("../public/favicon.svg", import.meta.url)),
     access(new URL("../public/apple-touch-icon.png", import.meta.url)),
   ]);
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));
