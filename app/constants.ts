@@ -7,7 +7,8 @@ export const SITE = {
   ogImage: "/og.png",
 } as const;
 
-export const CONTRACT_ADDRESS: string | null = null;
+export const CONTRACT_ADDRESS: string | null =
+  "FUhEjYbmZv9k6ifagBggdrcU64ioF6FqZMvwZFtppump";
 
 export const HYPERLIQUID = {
   account: "0x68F6723727EF5306122D666F92bEDF4d8382E2Fc",
@@ -24,13 +25,13 @@ export const EXTERNAL_LINKS: {
   solMarket: string | null;
   buy: string | null;
 } = {
-  pump: null,
-  dexScreener: null,
-  x: null,
+  pump: `https://pump.fun/coin/${CONTRACT_ADDRESS}`,
+  dexScreener: `https://dexscreener.com/solana/${CONTRACT_ADDRESS}`,
+  x: "https://x.com/Longcat_Sol_",
   community: null,
   hyperliquidPosition: `https://app.hyperliquid.xyz/explorer/address/${HYPERLIQUID.account}`,
   solMarket: "https://app.hyperliquid.xyz/trade/SOL",
-  buy: null,
+  buy: `https://pump.fun/coin/${CONTRACT_ADDRESS}`,
 };
 
 export type SiteLink = {
