@@ -59,6 +59,8 @@ test("server-renders the Long Cat prelaunch homepage without fabricated activity
   assert.match(html, /rel=["']apple-touch-icon["'][^>]+apple-touch-icon\.png/i);
   assert.match(html, /https:\/\/x\.com\/Longcat_Sol_/);
   assert.match(html, /FUhEjYbmZv9k6ifagBggdrcU64ioF6FqZMvwZFtppump/);
+  assert.match(html, /Copy contract address FUhEjYbmZv9k6ifagBggdrcU64ioF6FqZMvwZFtppump/);
+  assert.doesNotMatch(html, />Buy \$LONGCAT<\/a>/);
   assert.doesNotMatch(html, /SOL LONG SIZE|TOTAL SOL BRIDGED|TOTAL FEES DEPLOYED|CA:/);
   assert.doesNotMatch(html, bannedRenderedCopy);
 });

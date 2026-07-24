@@ -5038,10 +5038,39 @@ body:has(.longcat-sol-site) {
   outline: none;
 }
 
+.header-ca-button {
+  cursor: pointer;
+  flex: none;
+  height: 34px;
+  padding: 0 10px;
+}
+
+.header-ca-button:hover,
+.header-ca-button:focus-visible {
+  background: rgba(20, 241, 149, 0.18);
+  border-color: rgba(20, 241, 149, 0.64);
+  outline: none;
+}
+
+.longcat-sol-site .header-ca-button {
+  background: rgba(9, 7, 28, 0.58);
+  border-color: rgba(0, 194, 255, 0.38);
+  color: #ffffff;
+}
+
+.longcat-sol-site .header-ca-button span {
+  color: #14f195;
+}
+
+.header-ca-button code {
+  max-width: none;
+}
+
 .button:active,
 .nav-cta:active,
 .source-links a:active,
-.contract-address button:active {
+.contract-address button:active,
+.header-ca-button:active {
   transform: translateY(0) scale(0.98);
 }
 
@@ -5073,6 +5102,10 @@ body:has(.longcat-sol-site) {
 
   .contract-address {
     grid-template-columns: 1fr auto;
+  }
+
+  .header-ca-button {
+    flex: none;
   }
 
   .contract-address > span {

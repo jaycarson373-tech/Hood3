@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
-import { EXTERNAL_LINKS, externalLinks } from "../constants";
+import { CONTRACT_ADDRESS, EXTERNAL_LINKS, externalLinks } from "../constants";
+import { HeaderContract } from "./HeaderContract";
 
 const navLinks = [
   { label: "Mechanism", href: "/#mechanism" },
@@ -12,7 +13,7 @@ const navLinks = [
 ];
 
 export function SiteHeader() {
-  const hasActions = Boolean(EXTERNAL_LINKS.x || EXTERNAL_LINKS.buy);
+  const hasActions = Boolean(EXTERNAL_LINKS.x || CONTRACT_ADDRESS);
 
   return (
     <header className="site-header">
@@ -43,11 +44,7 @@ export function SiteHeader() {
                 <ExternalLink size={13} aria-hidden="true" />
               </a>
             ) : null}
-            {EXTERNAL_LINKS.buy ? (
-              <a className="nav-cta" href={EXTERNAL_LINKS.buy} target="_blank" rel="noreferrer">
-                Buy $LONGCAT
-              </a>
-            ) : null}
+            {CONTRACT_ADDRESS ? <HeaderContract address={CONTRACT_ADDRESS} /> : null}
           </div>
         ) : null}
       </div>
