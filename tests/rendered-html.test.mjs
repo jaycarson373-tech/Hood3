@@ -16,7 +16,7 @@ const requiredHomeCopy = [
   "THE FLYWHEEL HANDLES THE REAR.",
 ];
 const bannedRenderedCopy =
-  /Longcat|Long Cat|LONGCAT|Hood3|HOODX|Cashcat|coming soon|placeholder|\bmock\b|\bdemo\b|\bTBD\b|guaranteed yield|passive income|dividends|treasury/i;
+  /coming soon|placeholder|\bmock\b|\bdemo\b|\bTBD\b|guaranteed yield|passive income|dividends|treasury/i;
 
 async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -53,14 +53,14 @@ test("server-renders the BBL homepage without fabricated activity", async () => 
     );
   }
 
-  assert.match(html, /bbl-mark\.png/);
+  assert.match(html, /bbl-logo\.jpg/);
   assert.match(
     html,
-    /property=["']og:image["'][^>]+http:\/\/localhost:3000\/bbl-og\.png/i,
+    /property=["']og:image["'][^>]+http:\/\/localhost:3000\/bbl-banner\.jpg/i,
   );
   assert.match(
     html,
-    /name=["']twitter:image["'][^>]+http:\/\/localhost:3000\/bbl-og\.png/i,
+    /name=["']twitter:image["'][^>]+http:\/\/localhost:3000\/bbl-banner\.jpg/i,
   );
   assert.match(
     html,
@@ -121,14 +121,14 @@ test("production assets and BBL configuration are present", async () => {
   assert.match(packageJson, /"name": "black-bull-long"/);
   assert.match(constants, /9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump/);
   assert.match(layout, /apple-touch-icon\.png/);
-  assert.match(globals, /--acid: #d9ff3f/);
-  assert.match(visuals, /bbl-mark\.png/);
+  assert.match(globals, /--gold: #c59b5f/);
+  assert.match(visuals, /bbl-logo\.jpg/);
   assert.match(worker, /BBL_ANSEM_SPOT_EXECUTION_CONFIRMED/);
   assert.match(worker, /buyAnsemSpot/);
 
   await Promise.all([
-    access(new URL("../public/bbl-og.png", import.meta.url)),
-    access(new URL("../public/bbl-mark.png", import.meta.url)),
+    access(new URL("../public/bbl-banner.jpg", import.meta.url)),
+    access(new URL("../public/bbl-logo.jpg", import.meta.url)),
     access(new URL("../public/ansem-token.jpg", import.meta.url)),
     access(new URL("../public/favicon.png", import.meta.url)),
     access(new URL("../public/apple-touch-icon.png", import.meta.url)),

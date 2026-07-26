@@ -24,17 +24,7 @@ liquidation price, but it can still lose substantial or total value.
 
 ## Frontend Environment
 
-```bash
-SITE_URL=
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-BBL_TOKEN_ADDRESS=
-NEXT_PUBLIC_BBL_HYPERLIQUID_ACCOUNT=
-NEXT_PUBLIC_BBL_BUY_URL=
-NEXT_PUBLIC_BBL_DEXSCREENER_URL=
-NEXT_PUBLIC_BBL_X_URL=
-NEXT_PUBLIC_BBL_COMMUNITY_URL=
-```
+Use `vercel.env.example` as the Vercel environment checklist.
 
 Unknown links and the BBL contract are hidden. The site never invents a price,
 position, transaction, buyback, or burn.
@@ -42,7 +32,8 @@ position, transaction, buyback, or burn.
 ## Worker
 
 Run `supabase/schema.sql` before connecting the worker. Use
-`railway.env.example` as the deployment checklist.
+`railway.env.example` as the Railway environment checklist. The included
+`railway.json` starts the worker process automatically.
 
 Keep `DRY_RUN=true`, `HYPERLIQUID_MANAGED_SPOT_USDC=false`, and
 `BBL_ANSEM_SPOT_EXECUTION_CONFIRMED=false` until the dedicated account,

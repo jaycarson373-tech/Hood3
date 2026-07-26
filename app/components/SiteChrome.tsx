@@ -24,10 +24,10 @@ export function SiteHeader() {
         <Link className="brand" href="/" aria-label="BBL home">
           <span className="brand-mark" aria-hidden="true">
             <Image
-              src="/bbl-mark.png"
+              src="/bbl-logo.jpg"
               alt=""
-              width={820}
-              height={820}
+              width={1280}
+              height={1280}
               sizes="42px"
               priority
             />
@@ -105,7 +105,7 @@ export function SiteFooter() {
         lose substantial or total value. Buybacks and burns require qualifying
         realized profits and are not guaranteed. Nothing here is financial
         advice. BBL is independent and is not affiliated with or endorsed by
-        Ansem, The Black Bull, Hyperliquid, Unit, or Pump.fun.
+        Ansem, The Black Bull, Hyperliquid, Unit, or any launchpad.
       </p>
     </footer>
   );

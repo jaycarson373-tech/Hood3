@@ -353,7 +353,7 @@ export function DashboardClient() {
               <p className="eyebrow">VERIFIED TELEMETRY</p>
               <h2>THE BULL, BY THE NUMBERS.</h2>
             </div>
-            <p>No mock balances. No invented position.</p>
+            <p>Verified receipts only. No invented position.</p>
           </div>
           <MetricGrid metrics={dashboardStats} />
         </section>

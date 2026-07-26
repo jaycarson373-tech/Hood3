@@ -27,11 +27,6 @@ const liveRequired = [
   "HYPERLIQUID_MAX_SLIPPAGE_BPS",
 ];
 const legacyVariables = [
-  "ROBINHOOD_RPC_URL",
-  "BBL_ETH_GAS_BUFFER_ETH",
-  "BBL_ETH_WALLET_ADDRESS",
-  "BBL_ETH_WALLET_PRIVATE_KEY",
-  "BBL_HYPERLIQUID_PERP_ACCOUNT",
   "HYPERLIQUID_MASTER_WALLET_PRIVATE_KEY",
   "HYPERLIQUID_LONG_LEVERAGE",
   "HYPERLIQUID_MAX_COLLATERAL_USDC_PER_RUN",
@@ -381,17 +376,17 @@ async function executeOnce() {
     });
 
     const balanceBeforeClaim = await getSolBalance(solWallet);
-    const pumpFunClaim = dryRun
+    const claimResponse = dryRun
       ? null
-      : await optionalPost(env("PUMP_FUN_CLAIM_ENDPOINT"), {
+      : await optionalPost(env("CREATOR_FEE_CLAIM_ENDPOINT"), {
         wallet: solWallet,
         token: env("BBL_TOKEN_ADDRESS", ""),
         run_id: runId,
-      }, env("PUMP_FUN_API_KEY") ? { Authorization: `Bearer ${env("PUMP_FUN_API_KEY")}` } : {});
-    const claimTx = pumpFunClaim?.tx_hash ?? pumpFunClaim?.signature ?? null;
+      }, env("CREATOR_FEE_CLAIM_API_KEY") ? { Authorization: `Bearer ${env("CREATOR_FEE_CLAIM_API_KEY")}` } : {});
+    const claimTx = claimResponse?.tx_hash ?? claimResponse?.signature ?? null;
     const balanceAfterClaim = await getSolBalance(solWallet);
     const claimedSol = Math.max(0, balanceAfterClaim - balanceBeforeClaim);
-    const claimStatus = dryRun || !pumpFunClaim
+    const claimStatus = dryRun || !claimResponse
       ? "skipped"
       : claimTx
         ? "succeeded"
@@ -401,12 +396,12 @@ async function executeOnce() {
       balance_before_sol: balanceBeforeClaim,
       balance_after_sol: balanceAfterClaim,
       buffer_sol: bufferSol,
-      pump_fun_response: pumpFunClaim,
-      note: pumpFunClaim
-        ? "Pump.fun claim adapter returned a response."
+      claim_response: claimResponse,
+      note: claimResponse
+        ? "Creator-fee claim adapter returned a response."
         : "No claim adapter configured; monitoring SOL already routed to the creator wallet.",
     });
-    await logEvent(runId, "CLAIM", claimStatus, "Creator fees checked", pumpFunClaim
+    await logEvent(runId, "CLAIM", claimStatus, "Creator fees checked", claimResponse
       ? `${claimedSol.toFixed(6)} SOL received during this claim check.`
       : "Creator wallet checked; no external claim adapter configured.", {
       wallet_address: solWallet || null,
@@ -414,7 +409,7 @@ async function executeOnce() {
       amount: claimedSol,
       tx_hash: claimTx,
       scan_url: solScanUrl(claimTx),
-      metadata: { dry_run: dryRun, pump_fun_response: pumpFunClaim },
+      metadata: { dry_run: dryRun, claim_response: claimResponse },
     });
 
     const routeableSol = Math.max(0, balanceAfterClaim - bufferSol);
@@ -672,7 +667,7 @@ async function executeOnce() {
       routeable_sol: routeableSol,
       dry_run: dryRun,
       live_integrations: {
-        pump_fun_claim: Boolean(env("PUMP_FUN_CLAIM_ENDPOINT")),
+        creator_fee_claim: Boolean(env("CREATOR_FEE_CLAIM_ENDPOINT")),
         solana_unit_deposit: Boolean(solDeposit),
         hyperliquid_spot_sale: Boolean(swap),
         hyperliquid_ansem_spot_buy: Boolean(ansemOrder),

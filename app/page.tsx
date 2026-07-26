@@ -90,10 +90,10 @@ export default function Home() {
         <div className="hero-visual">
           <div className="hero-bull">
             <Image
-              src="/bbl-mark.png"
+              src="/bbl-logo.jpg"
               alt="A rear-facing Black Bull looking over its shoulder"
-              width={820}
-              height={820}
+              width={1280}
+              height={1280}
               priority
               sizes="(max-width: 760px) 94vw, 52vw"
             />
@@ -101,6 +101,16 @@ export default function Home() {
           </div>
           <HeroTerminal />
         </div>
+      </section>
+
+      <section className="brand-banner-section" aria-label="Black Bull Long">
+        <Image
+          src="/bbl-banner.jpg"
+          alt="Black Bull Long, powered by the ANSEM long flywheel"
+          width={1280}
+          height={426}
+          sizes="100vw"
+        />
       </section>
 
       <section className="mechanism-section section-band" id="mechanism">

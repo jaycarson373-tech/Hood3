@@ -6,7 +6,7 @@ export const SITE = {
   description:
     "Black Bull Long turns creator fees into a public ANSEM position. Qualifying realized profits buy back and burn $BBL.",
   configuredUrl: configuredSiteUrl || null,
-  ogImage: "/bbl-og.png",
+  ogImage: "/bbl-banner.jpg",
 } as const;
 
 export const ANSEM = {

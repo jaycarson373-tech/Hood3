@@ -23,11 +23,19 @@ export function BullBackdrop({ variant = "landing" }: BullBackdropProps) {
         <span />
       </div>
       <Image
-        className="bull-backdrop__mark"
-        src="/bbl-mark.png"
+        className="bull-backdrop__banner"
+        src="/bbl-banner.jpg"
         alt=""
-        width={820}
-        height={820}
+        width={1280}
+        height={426}
+        sizes="100vw"
+      />
+      <Image
+        className="bull-backdrop__mark"
+        src="/bbl-logo.jpg"
+        alt=""
+        width={1280}
+        height={1280}
         sizes="(max-width: 768px) 90vw, 680px"
       />
     </div>
