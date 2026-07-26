@@ -1,10 +1,9 @@
 import {
+  buyAnsemSpot,
   createHyperliquidExecutionClients,
   createHyperliquidPublicClient,
   inspectHyperliquid,
-  openSolLong,
   sellUnitSolForUsdc,
-  transferSpotUsdcToPerps,
   waitForUnitSolCredit,
 } from "./railway/hyperliquid.mjs";
 import { transferSolToHyperliquid } from "./railway/solana.mjs";
@@ -16,25 +15,26 @@ const required = [
   "SUPABASE_URL",
   "SUPABASE_SERVICE_ROLE_KEY",
   "SOLANA_RPC_URL",
-  "LONGCAT_SOL_WALLET_ADDRESS",
-  "LONGCAT_TOKEN_ADDRESS",
-  "LONGCAT_HYPERLIQUID_SOL_DEPOSIT_ADDRESS",
-  "LONGCAT_HYPERLIQUID_ACCOUNT",
+  "BBL_SOL_WALLET_ADDRESS",
+  "BBL_TOKEN_ADDRESS",
+  "BBL_HYPERLIQUID_SOL_DEPOSIT_ADDRESS",
+  "BBL_HYPERLIQUID_ACCOUNT",
 ];
 const liveRequired = [
-  "LONGCAT_SOL_WALLET_PRIVATE_KEY",
+  "BBL_SOL_WALLET_PRIVATE_KEY",
   "HYPERLIQUID_API_WALLET_PRIVATE_KEY",
-  "HYPERLIQUID_MASTER_WALLET_PRIVATE_KEY",
-  "HYPERLIQUID_LONG_LEVERAGE",
-  "HYPERLIQUID_MAX_COLLATERAL_USDC_PER_RUN",
+  "BBL_MAX_SPOT_USDC_PER_RUN",
   "HYPERLIQUID_MAX_SLIPPAGE_BPS",
 ];
 const legacyVariables = [
   "ROBINHOOD_RPC_URL",
-  "LONGCAT_ETH_GAS_BUFFER_ETH",
-  "LONGCAT_ETH_WALLET_ADDRESS",
-  "LONGCAT_ETH_WALLET_PRIVATE_KEY",
-  "LONGCAT_HYPERLIQUID_PERP_ACCOUNT",
+  "BBL_ETH_GAS_BUFFER_ETH",
+  "BBL_ETH_WALLET_ADDRESS",
+  "BBL_ETH_WALLET_PRIVATE_KEY",
+  "BBL_HYPERLIQUID_PERP_ACCOUNT",
+  "HYPERLIQUID_MASTER_WALLET_PRIVATE_KEY",
+  "HYPERLIQUID_LONG_LEVERAGE",
+  "HYPERLIQUID_MAX_COLLATERAL_USDC_PER_RUN",
 ];
 
 function env(name, fallback = "") {
@@ -47,15 +47,15 @@ function requireEnv() {
     throw new Error(`Missing required env: ${missing.join(", ")}`);
   }
 
-  if (env("LONGCAT_SOL_WALLET_ADDRESS") === env("LONGCAT_TOKEN_ADDRESS")) {
+  if (env("BBL_SOL_WALLET_ADDRESS") === env("BBL_TOKEN_ADDRESS")) {
     throw new Error(
-      "LONGCAT_SOL_WALLET_ADDRESS is set to the token mint. Use the fee wallet public key instead.",
+      "BBL_SOL_WALLET_ADDRESS is set to the token mint. Use the fee wallet public key instead.",
     );
   }
 
-  if (env("LONGCAT_HYPERLIQUID_SOL_DEPOSIT_ADDRESS").startsWith("0x")) {
+  if (env("BBL_HYPERLIQUID_SOL_DEPOSIT_ADDRESS").startsWith("0x")) {
     throw new Error(
-      "LONGCAT_HYPERLIQUID_SOL_DEPOSIT_ADDRESS must be the unique Solana deposit address from Hyperliquid, not the 0x account.",
+      "BBL_HYPERLIQUID_SOL_DEPOSIT_ADDRESS must be the unique Solana deposit address from Hyperliquid, not the 0x account.",
     );
   }
 
@@ -69,30 +69,27 @@ function requireEnv() {
         "Set HYPERLIQUID_MANAGED_SPOT_USDC=true only after confirming this dedicated account may route available spot USDC.",
       );
     }
+    if (!asBool(env("BBL_ANSEM_SPOT_EXECUTION_CONFIRMED", "false"))) {
+      throw new Error(
+        "Set BBL_ANSEM_SPOT_EXECUTION_CONFIRMED=true only after approving the dedicated ANSEM spot account and limits.",
+      );
+    }
     const presentLegacy = legacyVariables.filter((name) => env(name));
     if (presentLegacy.length) {
       throw new Error(`Remove legacy non-Solana envs before live mode: ${presentLegacy.join(", ")}`);
     }
 
-    const leverage = asNumber(env("HYPERLIQUID_LONG_LEVERAGE"), 0);
-    const maxCollateral = asNumber(env("HYPERLIQUID_MAX_COLLATERAL_USDC_PER_RUN"), 0);
+    const maxSpotUsdc = asNumber(env("BBL_MAX_SPOT_USDC_PER_RUN"), 0);
     const slippageBps = asNumber(env("HYPERLIQUID_MAX_SLIPPAGE_BPS"), 0);
-    const utilization = asNumber(env("HYPERLIQUID_COLLATERAL_UTILIZATION"), 0.95);
-    const feeBuffer = asNumber(env("LONGCAT_SOL_FEE_BUFFER_SOL"), 0);
-    if (leverage < 1 || leverage > 20) {
-      throw new Error("HYPERLIQUID_LONG_LEVERAGE must be between 1 and 20.");
-    }
-    if (maxCollateral <= 0) {
-      throw new Error("HYPERLIQUID_MAX_COLLATERAL_USDC_PER_RUN must be greater than zero.");
+    const feeBuffer = asNumber(env("BBL_SOL_FEE_BUFFER_SOL"), 0);
+    if (maxSpotUsdc <= 0) {
+      throw new Error("BBL_MAX_SPOT_USDC_PER_RUN must be greater than zero.");
     }
     if (slippageBps < 1 || slippageBps > 300) {
       throw new Error("HYPERLIQUID_MAX_SLIPPAGE_BPS must be between 1 and 300.");
     }
-    if (utilization <= 0 || utilization > 0.98) {
-      throw new Error("HYPERLIQUID_COLLATERAL_UTILIZATION must be above 0 and no more than 0.98.");
-    }
     if (feeBuffer < 0.05) {
-      throw new Error("LONGCAT_SOL_FEE_BUFFER_SOL must keep at least 0.05 SOL.");
+      throw new Error("BBL_SOL_FEE_BUFFER_SOL must keep at least 0.05 SOL.");
     }
   }
 }
@@ -134,7 +131,7 @@ async function supabase(path, init = {}) {
 }
 
 async function createRun() {
-  const rows = await supabase("longcat_automation_runs", {
+  const rows = await supabase("bbl_automation_runs", {
     method: "POST",
     body: JSON.stringify({
       run_type: "claim_bridge_long_buyback_burn",
@@ -150,7 +147,7 @@ async function createRun() {
 }
 
 async function finishRun(runId, status, errorMessage = null, metadata = {}) {
-  await supabase(`longcat_automation_runs?id=eq.${runId}`, {
+  await supabase(`bbl_automation_runs?id=eq.${runId}`, {
     method: "PATCH",
     body: JSON.stringify({
       status,
@@ -162,7 +159,7 @@ async function finishRun(runId, status, errorMessage = null, metadata = {}) {
 }
 
 async function logEvent(runId, stage, status, action, message, extra = {}) {
-  await supabase("longcat_terminal_events", {
+  await supabase("bbl_terminal_events", {
     method: "POST",
     body: JSON.stringify({
       run_id: runId,
@@ -227,15 +224,15 @@ async function optionalPost(url, body, headers = {}) {
 }
 
 async function recordClaim(runId, amount, status, txHash = null, metadata = {}) {
-  await supabase("longcat_claims", {
+  await supabase("bbl_claims", {
     method: "POST",
     body: JSON.stringify({
       run_id: runId,
       source: "creator_fees",
       token_symbol: "SOL",
       amount,
-      from_wallet: env("LONGCAT_SOL_WALLET_ADDRESS") || null,
-      to_wallet: env("LONGCAT_SOL_WALLET_ADDRESS") || null,
+      from_wallet: env("BBL_SOL_WALLET_ADDRESS") || null,
+      to_wallet: env("BBL_SOL_WALLET_ADDRESS") || null,
       tx_hash: txHash,
       scan_url: solScanUrl(txHash),
       status,
@@ -246,13 +243,13 @@ async function recordClaim(runId, amount, status, txHash = null, metadata = {}) 
 }
 
 async function recordTransfer(runId, type, asset, amount, status, txHash = null, metadata = {}) {
-  await supabase("longcat_transfers", {
+  await supabase("bbl_transfers", {
     method: "POST",
     body: JSON.stringify({
       run_id: runId,
       transfer_type: type,
-      from_wallet: metadata.from_wallet ?? env("LONGCAT_SOL_WALLET_ADDRESS") ?? null,
-      to_wallet: metadata.to_wallet ?? env("LONGCAT_HYPERLIQUID_SOL_DEPOSIT_ADDRESS") ?? null,
+      from_wallet: metadata.from_wallet ?? env("BBL_SOL_WALLET_ADDRESS") ?? null,
+      to_wallet: metadata.to_wallet ?? env("BBL_HYPERLIQUID_SOL_DEPOSIT_ADDRESS") ?? null,
       asset,
       amount,
       tx_hash: txHash,
@@ -265,7 +262,7 @@ async function recordTransfer(runId, type, asset, amount, status, txHash = null,
 }
 
 async function recordSwap(runId, status, metadata = {}) {
-  await supabase("longcat_swaps", {
+  await supabase("bbl_swaps", {
     method: "POST",
     body: JSON.stringify({
       run_id: runId,
@@ -286,17 +283,17 @@ async function recordSwap(runId, status, metadata = {}) {
 }
 
 async function recordOrder(runId, status, metadata = {}) {
-  await supabase("longcat_long_orders", {
+  await supabase("bbl_long_orders", {
     method: "POST",
     body: JSON.stringify({
       run_id: runId,
-      hyperliquid_account: env("LONGCAT_HYPERLIQUID_ACCOUNT") || null,
-      market: "SOL",
+      hyperliquid_account: env("BBL_HYPERLIQUID_ACCOUNT") || null,
+      market: "ANSEM",
       side: "long",
-      order_type: "market",
-      collateral_usdc: metadata.collateral_usdc ?? 0,
+      order_type: "spot_ioc",
+      collateral_usdc: metadata.amount_usdc ?? 0,
       notional_usdc: metadata.notional_usdc ?? 0,
-      leverage: metadata.leverage ?? 0,
+      leverage: 1,
       limit_price: metadata.limit_price ?? null,
       exchange_order_id: metadata.exchange_order_id ?? null,
       tx_hash: metadata.tx_hash ?? null,
@@ -309,30 +306,27 @@ async function recordOrder(runId, status, metadata = {}) {
 }
 
 async function recordPosition(runId, inspection) {
-  const row = inspection.perpState.assetPositions.find(
-    (assetPosition) => assetPosition.position.coin === "SOL",
-  );
-  const position = row?.position;
-  const signedSize = Number(position?.szi ?? 0);
-  const side = signedSize > 0 ? "long" : signedSize < 0 ? "short" : "flat";
+  const size = Number(inspection.availableUnitAnsem ?? 0);
+  const markPrice = Number(inspection.ansemSpotMarket.mid ?? 0);
 
-  await supabase("longcat_positions", {
+  await supabase("bbl_positions", {
     method: "POST",
     body: JSON.stringify({
       run_id: runId,
-      hyperliquid_account: env("LONGCAT_HYPERLIQUID_ACCOUNT"),
-      market: "SOL",
-      side,
-      size: Math.abs(signedSize),
-      notional_usdc: Number(position?.positionValue ?? 0),
-      entry_price: position?.entryPx ? Number(position.entryPx) : null,
-      mark_price: inspection.perpMarket.mid,
-      leverage: Number(position?.leverage?.value ?? 0),
-      unrealized_pnl_usdc: Number(position?.unrealizedPnl ?? 0),
-      margin_used_usdc: Number(position?.marginUsed ?? 0),
+      hyperliquid_account: env("BBL_HYPERLIQUID_ACCOUNT"),
+      market: "ANSEM",
+      side: size > 0 ? "long" : "flat",
+      size,
+      notional_usdc: size * markPrice,
+      entry_price: null,
+      mark_price: markPrice,
+      leverage: 1,
+      unrealized_pnl_usdc: 0,
+      margin_used_usdc: 0,
       metadata: {
-        source: "hyperliquid_public_api",
-        liquidation_price: position?.liquidationPx ? Number(position.liquidationPx) : null,
+        source: "hyperliquid_spot_public_api",
+        asset: "UANSEM",
+        note: "Spot balance has no liquidation price. Cost basis is only published when execution receipts provide it.",
       },
       recorded_at: new Date().toISOString(),
     }),
@@ -343,23 +337,15 @@ async function executeOnce() {
   requireEnv();
 
   const dryRun = asBool(env("DRY_RUN", "true"));
-  const solWallet = env("LONGCAT_SOL_WALLET_ADDRESS");
-  const hyperliquidAccount = env("LONGCAT_HYPERLIQUID_ACCOUNT");
-  const hyperliquidDepositAddress = env("LONGCAT_HYPERLIQUID_SOL_DEPOSIT_ADDRESS");
-  const bufferSol = asNumber(env("LONGCAT_SOL_FEE_BUFFER_SOL"), 0.05);
-  const minimumUnitDepositSol = asNumber(env("LONGCAT_MIN_ROUTE_SOL"), 0.12);
+  const solWallet = env("BBL_SOL_WALLET_ADDRESS");
+  const hyperliquidAccount = env("BBL_HYPERLIQUID_ACCOUNT");
+  const hyperliquidDepositAddress = env("BBL_HYPERLIQUID_SOL_DEPOSIT_ADDRESS");
+  const bufferSol = asNumber(env("BBL_SOL_FEE_BUFFER_SOL"), 0.05);
+  const minimumUnitDepositSol = asNumber(env("BBL_MIN_ROUTE_SOL"), 0.12);
   const minimumTradeUsdc = asNumber(env("HYPERLIQUID_MIN_TRADE_USDC"), 10);
-  const maxCollateralUsdc = asNumber(
-    env("HYPERLIQUID_MAX_COLLATERAL_USDC_PER_RUN"),
-    0,
-  );
+  const maxSpotUsdc = asNumber(env("BBL_MAX_SPOT_USDC_PER_RUN"), 0);
   const spotUsdcBuffer = asNumber(env("HYPERLIQUID_SPOT_USDC_BUFFER"), 1);
   const slippageBps = asNumber(env("HYPERLIQUID_MAX_SLIPPAGE_BPS"), 100);
-  const leverage = asNumber(env("HYPERLIQUID_LONG_LEVERAGE"), 0);
-  const collateralUtilization = asNumber(
-    env("HYPERLIQUID_COLLATERAL_UTILIZATION"),
-    0.95,
-  );
   const depositPollSeconds = asNumber(
     env("HYPERLIQUID_DEPOSIT_POLL_SECONDS"),
     90,
@@ -376,14 +362,14 @@ async function executeOnce() {
       runId,
       "START",
       "running",
-      "15-minute Longcat worker started",
+      "15-minute BBL worker started",
       dryRun ? "Dry-run mode. No funds will move." : "Live Solana execution mode.",
     );
 
     const info = createHyperliquidPublicClient(hyperliquidApiUrl);
     let inspection = await inspectHyperliquid(info, hyperliquidAccount);
     const minimumRouteByNotional =
-      (minimumTradeUsdc / inspection.spotMarket.mid) * 1.02;
+      (minimumTradeUsdc / inspection.solSpotMarket.mid) * 1.02;
     const minimumRouteSol = Math.max(
       minimumUnitDepositSol,
       minimumRouteByNotional,
@@ -399,7 +385,7 @@ async function executeOnce() {
       ? null
       : await optionalPost(env("PUMP_FUN_CLAIM_ENDPOINT"), {
         wallet: solWallet,
-        token: env("LONGCAT_TOKEN_ADDRESS", ""),
+        token: env("BBL_TOKEN_ADDRESS", ""),
         run_id: runId,
       }, env("PUMP_FUN_API_KEY") ? { Authorization: `Bearer ${env("PUMP_FUN_API_KEY")}` } : {});
     const claimTx = pumpFunClaim?.tx_hash ?? pumpFunClaim?.signature ?? null;
@@ -511,21 +497,19 @@ async function executeOnce() {
     const clients = () => {
       executionClients ??= createHyperliquidExecutionClients({
         apiUrl: hyperliquidApiUrl,
-        account: hyperliquidAccount,
         apiWalletPrivateKey: env("HYPERLIQUID_API_WALLET_PRIVATE_KEY"),
-        masterWalletPrivateKey: env("HYPERLIQUID_MASTER_WALLET_PRIVATE_KEY"),
       });
       return executionClients;
     };
 
-    const unitSolNotional = inspection.availableUnitSol * inspection.spotMarket.mid;
+    const unitSolNotional = inspection.availableUnitSol * inspection.solSpotMarket.mid;
     let swap = null;
     if (inspection.availableUnitSol > 0 && unitSolNotional >= minimumTradeUsdc) {
       if (dryRun) {
         await recordSwap(runId, "skipped", {
           from_amount: inspection.availableUnitSol,
           to_amount: unitSolNotional,
-          price: inspection.spotMarket.mid,
+          price: inspection.solSpotMarket.mid,
           slippage_bps: slippageBps,
           dry_run: true,
         });
@@ -540,7 +524,7 @@ async function executeOnce() {
       } else {
         swap = await sellUnitSolForUsdc({
           exchange: clients().agent,
-          market: inspection.spotMarket,
+          market: inspection.solSpotMarket,
           amountSol: inspection.availableUnitSol,
           slippageBps,
         });
@@ -585,85 +569,52 @@ async function executeOnce() {
       0,
       inspection.availableSpotUsdc - spotUsdcBuffer,
     );
-    const collateralUsdc = Math.min(availableManagedUsdc, maxCollateralUsdc);
-    let collateralTransfer = null;
-    let longOrder = null;
+    const spotBudgetUsdc = Math.min(availableManagedUsdc, maxSpotUsdc);
+    let ansemOrder = null;
 
-    if (collateralUsdc >= minimumTradeUsdc && maxCollateralUsdc > 0) {
+    if (spotBudgetUsdc >= minimumTradeUsdc && maxSpotUsdc > 0) {
       if (dryRun) {
         await logEvent(
           runId,
-          "PERPS",
+          "LONG",
           "skipped",
-          "Move USDC to perps",
-          `Dry run: $${collateralUsdc.toFixed(2)} would move from managed spot USDC to perps.`,
-          { asset: "USDC", amount: collateralUsdc },
+          "Buy ANSEM spot",
+          `Dry run: $${spotBudgetUsdc.toFixed(2)} of managed USDC would buy ANSEM spot.`,
+          { asset: "USDC", amount: spotBudgetUsdc },
         );
         await recordOrder(runId, "skipped", {
-          collateral_usdc: collateralUsdc,
-          notional_usdc: collateralUsdc * leverage * collateralUtilization,
-          leverage,
+          amount_usdc: spotBudgetUsdc,
+          notional_usdc: spotBudgetUsdc,
           dry_run: true,
         });
       } else {
-        collateralTransfer = await transferSpotUsdcToPerps({
-          exchange: clients().master,
-          amountUsdc: collateralUsdc,
-        });
-        await recordTransfer(
-          runId,
-          "hyperliquid_spot_to_perps",
-          "USDC",
-          collateralTransfer.amountUsdc,
-          "succeeded",
-          null,
-          {
-            from_wallet: hyperliquidAccount,
-            to_wallet: hyperliquidAccount,
-            hyperliquid_response: collateralTransfer.raw,
-          },
-        );
-        await logEvent(
-          runId,
-          "PERPS",
-          "succeeded",
-          "Move USDC to perps",
-          `$${collateralTransfer.amountUsdc.toFixed(2)} moved from spot to perps collateral.`,
-          { asset: "USDC", amount: collateralTransfer.amountUsdc },
-        );
-
-        longOrder = await openSolLong({
+        ansemOrder = await buyAnsemSpot({
           exchange: clients().agent,
-          market: inspection.perpMarket,
-          collateralUsdc: collateralTransfer.amountUsdc,
-          leverage,
+          market: inspection.ansemSpotMarket,
+          amountUsdc: spotBudgetUsdc,
           slippageBps,
-          collateralUtilization,
         });
         await recordOrder(runId, "succeeded", {
-          collateral_usdc: longOrder.collateralUsdc,
-          notional_usdc: longOrder.notionalUsdc,
-          leverage: longOrder.leverage,
-          limit_price: longOrder.limitPrice,
-          exchange_order_id: longOrder.orderId,
-          amount_sol: longOrder.amountSol,
-          average_price: longOrder.averagePrice,
-          hyperliquid_response: longOrder.raw,
+          amount_usdc: ansemOrder.amountUsdc,
+          notional_usdc: ansemOrder.amountUsdc,
+          limit_price: ansemOrder.limitPrice,
+          exchange_order_id: ansemOrder.orderId,
+          amount_ansem: ansemOrder.amountAnsem,
+          average_price: ansemOrder.averagePrice,
+          hyperliquid_response: ansemOrder.raw,
         });
         await logEvent(
           runId,
           "LONG",
           "succeeded",
-          "Add to public SOL long",
-          `${longOrder.amountSol.toFixed(2)} SOL added at an average $${longOrder.averagePrice.toFixed(4)}.`,
+          "Add to public ANSEM spot position",
+          `${ansemOrder.amountAnsem.toFixed(0)} ANSEM bought at an average $${ansemOrder.averagePrice.toFixed(6)}.`,
           {
-            asset: "SOL",
-            amount: longOrder.amountSol,
+            asset: "ANSEM",
+            amount: ansemOrder.amountAnsem,
             metadata: {
-              collateral_usdc: longOrder.collateralUsdc,
-              notional_usdc: longOrder.notionalUsdc,
-              leverage: longOrder.leverage,
-              exchange_order_id: longOrder.orderId,
+              amount_usdc: ansemOrder.amountUsdc,
+              exchange_order_id: ansemOrder.orderId,
             },
           },
         );
@@ -674,24 +625,24 @@ async function executeOnce() {
         "LONG",
         "skipped",
         "No new managed collateral",
-        maxCollateralUsdc <= 0
-          ? "Set a positive HYPERLIQUID_MAX_COLLATERAL_USDC_PER_RUN before enabling orders."
+        maxSpotUsdc <= 0
+          ? "Set a positive BBL_MAX_SPOT_USDC_PER_RUN before enabling ANSEM spot orders."
           : "Available managed spot USDC is below the minimum order threshold.",
         {
           asset: "USDC",
           amount: availableManagedUsdc,
-          metadata: { max_collateral_usdc: maxCollateralUsdc },
+          metadata: { max_spot_usdc_per_run: maxSpotUsdc },
         },
       );
     }
 
     const profit = dryRun
       ? null
-      : await optionalPost(env("LONGCAT_PROFIT_ENDPOINT"), {
+      : await optionalPost(env("BBL_PROFIT_ENDPOINT"), {
         account: hyperliquidAccount,
-        market: "SOL",
+        market: "ANSEM",
         run_id: runId,
-      }, env("LONGCAT_PROFIT_API_KEY") ? { Authorization: `Bearer ${env("LONGCAT_PROFIT_API_KEY")}` } : {});
+      }, env("BBL_PROFIT_API_KEY") ? { Authorization: `Bearer ${env("BBL_PROFIT_API_KEY")}` } : {});
     await logEvent(runId, "PROFIT", dryRun ? "skipped" : profit ? "succeeded" : "pending", "Check realized profit", profit ? "Profit route recorded." : "Profit-taking endpoint not configured.", {
       asset: "USDC",
       amount: profit?.realized_profit_usdc ?? null,
@@ -700,13 +651,13 @@ async function executeOnce() {
 
     const burn = dryRun
       ? null
-      : await optionalPost(env("LONGCAT_BUYBACK_BURN_ENDPOINT"), {
-        token: env("LONGCAT_TOKEN_ADDRESS", ""),
+      : await optionalPost(env("BBL_BUYBACK_BURN_ENDPOINT"), {
+        token: env("BBL_TOKEN_ADDRESS", ""),
         run_id: runId,
         profit,
-      }, env("LONGCAT_BUYBACK_BURN_API_KEY") ? { Authorization: `Bearer ${env("LONGCAT_BUYBACK_BURN_API_KEY")}` } : {});
-    await logEvent(runId, "BURN", dryRun ? "skipped" : burn ? "succeeded" : "pending", "Buy back and burn $LONGCAT", burn ? "Buyback/burn route recorded." : "Buyback/burn endpoint not configured.", {
-      asset: "LONGCAT",
+      }, env("BBL_BUYBACK_BURN_API_KEY") ? { Authorization: `Bearer ${env("BBL_BUYBACK_BURN_API_KEY")}` } : {});
+    await logEvent(runId, "BURN", dryRun ? "skipped" : burn ? "succeeded" : "pending", "Buy back and burn $BBL", burn ? "Buyback/burn route recorded." : "Buyback/burn endpoint not configured.", {
+      asset: "BBL",
       amount: burn?.tokens_burned ?? null,
       tx_hash: burn?.tx_hash ?? burn?.signature ?? null,
       scan_url: solScanUrl(burn?.tx_hash ?? burn?.signature ?? null),
@@ -724,10 +675,9 @@ async function executeOnce() {
         pump_fun_claim: Boolean(env("PUMP_FUN_CLAIM_ENDPOINT")),
         solana_unit_deposit: Boolean(solDeposit),
         hyperliquid_spot_sale: Boolean(swap),
-        hyperliquid_perps_transfer: Boolean(collateralTransfer),
-        hyperliquid_sol_long: Boolean(longOrder),
-        profit: Boolean(env("LONGCAT_PROFIT_ENDPOINT")),
-        buyback_burn: Boolean(env("LONGCAT_BUYBACK_BURN_ENDPOINT")),
+        hyperliquid_ansem_spot_buy: Boolean(ansemOrder),
+        profit: Boolean(env("BBL_PROFIT_ENDPOINT")),
+        buyback_burn: Boolean(env("BBL_BUYBACK_BURN_ENDPOINT")),
       },
     });
   } catch (error) {
@@ -754,11 +704,11 @@ async function main() {
     return;
   }
 
-  console.log(`Longcat Railway worker running every ${intervalMs / 60_000} minutes.`);
+  console.log(`BBL Railway worker running every ${intervalMs / 60_000} minutes.`);
   let running = false;
   const scheduledRun = async () => {
     if (running) {
-      console.warn("Skipping overlapping Longcat worker cycle.");
+      console.warn("Skipping overlapping BBL worker cycle.");
       return;
     }
     running = true;

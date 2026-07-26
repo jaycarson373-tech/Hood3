@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
-import { HYPERLIQUID } from "../constants";
 
 type TerminalRow = {
   stage: string;
@@ -14,27 +13,9 @@ type TerminalRow = {
 
 type PositionRow = {
   side: string;
-  size?: string | number;
+  size: string | number;
   notional_usdc: string | number;
   entry_price: string | number | null;
-  leverage?: string | number;
-};
-
-type HyperliquidPosition = {
-  coin: string;
-  szi: string;
-  entryPx: string | null;
-  positionValue: string;
-  leverage: {
-    type: string;
-    value: number;
-  };
-};
-
-type HyperliquidState = {
-  assetPositions?: Array<{
-    position: HyperliquidPosition;
-  }>;
 };
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
@@ -53,51 +34,22 @@ function money(value: number) {
   }).format(value);
 }
 
-function tokenAmount(value: number) {
+function tokenAmount(value: number, maximumFractionDigits = 2) {
   return new Intl.NumberFormat("en-US", {
-    maximumFractionDigits: 2,
+    maximumFractionDigits,
   }).format(value);
 }
 
 export function HeroTerminal() {
   const [terminalRows, setTerminalRows] = useState<TerminalRow[]>([]);
   const [position, setPosition] = useState<PositionRow | null>(null);
-  const [hyperliquidPosition, setHyperliquidPosition] = useState<HyperliquidPosition | null>(null);
-  const [hyperliquidLoaded, setHyperliquidLoaded] = useState(false);
 
   useEffect(() => {
+    if (!supabaseUrl || !supabaseAnonKey) return;
+
     let active = true;
 
-    async function refreshHyperliquid() {
-      try {
-        const response = await fetch(HYPERLIQUID.apiUrl, {
-          method: "POST",
-          cache: "no-store",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            type: "clearinghouseState",
-            user: HYPERLIQUID.account,
-          }),
-        });
-
-        if (!response.ok) return;
-
-        const state = (await response.json()) as HyperliquidState;
-        const solPosition = state.assetPositions?.find(({ position: assetPosition }) => assetPosition.coin === "SOL")?.position ?? null;
-
-        if (!active) return;
-        setHyperliquidPosition(solPosition);
-        setHyperliquidLoaded(true);
-      } catch {
-        // Keep the last verified Hyperliquid state during a transient network failure.
-      }
-    }
-
-    async function refreshSupabase() {
-      if (!supabaseUrl || !supabaseAnonKey) return;
-
+    async function refresh() {
       try {
         const headers = {
           apikey: supabaseAnonKey ?? "",
@@ -105,33 +57,31 @@ export function HeroTerminal() {
         };
         const [terminalResponse, positionResponse] = await Promise.all([
           fetch(
-            `${supabaseUrl}/rest/v1/longcat_public_terminal?select=stage,status,asset,amount&status=eq.succeeded&order=created_at.desc&limit=1000`,
+            `${supabaseUrl}/rest/v1/bbl_public_terminal?select=stage,status,asset,amount&status=eq.succeeded&order=created_at.desc&limit=1000`,
             { cache: "no-store", headers },
           ),
-          fetch(`${supabaseUrl}/rest/v1/longcat_latest_position?select=side,notional_usdc,entry_price&market=eq.SOL&limit=1`, {
-            cache: "no-store",
-            headers,
-          }),
+          fetch(
+            `${supabaseUrl}/rest/v1/bbl_latest_position?select=side,size,notional_usdc,entry_price&market=eq.ANSEM&limit=1`,
+            { cache: "no-store", headers },
+          ),
         ]);
 
         if (!terminalResponse.ok || !positionResponse.ok) return;
 
-        const nextTerminalRows = (await terminalResponse.json()) as TerminalRow[];
-        const nextPositionRows = (await positionResponse.json()) as PositionRow[];
+        const nextTerminalRows =
+          (await terminalResponse.json()) as TerminalRow[];
+        const nextPositionRows =
+          (await positionResponse.json()) as PositionRow[];
 
         if (!active) return;
         setTerminalRows(nextTerminalRows);
         setPosition(nextPositionRows[0] ?? null);
       } catch {
-        // Keep the last verified public state during a transient network failure.
+        // Keep the last verified public state during a transient failure.
       }
     }
 
-    function refresh() {
-      void Promise.all([refreshHyperliquid(), refreshSupabase()]);
-    }
-
-    refresh();
+    void refresh();
     const timer = window.setInterval(refresh, 15_000);
 
     return () => {
@@ -141,38 +91,63 @@ export function HeroTerminal() {
   }, []);
 
   const metrics = useMemo(() => {
-    const solSize = Math.abs(safeNumber(hyperliquidPosition?.szi || position?.size));
-    const longSize = Math.abs(safeNumber(hyperliquidPosition?.positionValue || position?.notional_usdc));
-    const entryPrice = safeNumber(hyperliquidPosition?.entryPx || position?.entry_price);
-    const leverage = safeNumber(hyperliquidPosition?.leverage.value || position?.leverage);
-    const tokensBurned = terminalRows
-      .filter((row) => row.stage.toUpperCase() === "BURN" && ["LONGCAT", "$LONGCAT"].includes(row.asset?.toUpperCase() ?? ""))
+    const positionSize = Math.abs(safeNumber(position?.size));
+    const positionValue = Math.abs(safeNumber(position?.notional_usdc));
+    const entryPrice = safeNumber(position?.entry_price);
+    const feesDeployed = terminalRows
+      .filter(
+        (row) =>
+          row.stage.toUpperCase() === "CLAIM" &&
+          row.status.toLowerCase() === "succeeded",
+      )
       .reduce((total, row) => total + safeNumber(row.amount), 0);
-    const hasLong = solSize > 0 || longSize > 0;
-    const status = hasLong
-      ? leverage > 0
-        ? `LONG · ${leverage.toFixed(0)}X`
-        : "LONG OPEN"
-      : hyperliquidLoaded || position
-        ? "FLAT"
-        : "NOT PUBLISHED";
+    const tokensBurned = terminalRows
+      .filter(
+        (row) =>
+          row.stage.toUpperCase() === "BURN" &&
+          ["BBL", "$BBL"].includes(row.asset?.toUpperCase() ?? ""),
+      )
+      .reduce((total, row) => total + safeNumber(row.amount), 0);
+    const hasPosition = positionSize > 0 || positionValue > 0;
 
     return [
-      { label: "STATUS", value: status },
-      { label: "SOL LONG", value: solSize > 0 ? `${solSize.toFixed(2)} SOL` : "NOT PUBLISHED" },
-      { label: "POSITION VALUE", value: longSize > 0 ? money(longSize) : "NOT PUBLISHED" },
-      { label: "ENTRY PRICE", value: entryPrice > 0 ? money(entryPrice) : "NOT PUBLISHED" },
-      { label: "FIRST HL DEPOSIT", value: money(HYPERLIQUID.initialDepositUsd) },
-      { label: "$LONGCAT BURNED", value: tokensBurned > 0 ? tokenAmount(tokensBurned) : "0" },
+      {
+        label: "ENGINE STATUS",
+        value: hasPosition ? "BULL BUILDING" : "NO POSITION PUBLISHED",
+      },
+      {
+        label: "ANSEM POSITION",
+        value:
+          positionSize > 0
+            ? `${tokenAmount(positionSize, 0)} ANSEM`
+            : "NO PUBLIC RECEIPT",
+      },
+      {
+        label: "POSITION VALUE",
+        value:
+          positionValue > 0 ? money(positionValue) : "NO PUBLIC RECEIPT",
+      },
+      {
+        label: "AVERAGE ENTRY",
+        value: entryPrice > 0 ? money(entryPrice) : "NO PUBLIC RECEIPT",
+      },
+      {
+        label: "FEES DEPLOYED",
+        value: feesDeployed > 0 ? `${feesDeployed.toFixed(4)} SOL` : "NO PUBLIC RECEIPT",
+      },
+      {
+        label: "$BBL BURNED",
+        value: tokensBurned > 0 ? tokenAmount(tokensBurned) : "NO PUBLIC RECEIPT",
+      },
     ];
-  }, [hyperliquidLoaded, hyperliquidPosition, position, terminalRows]);
+  }, [position, terminalRows]);
 
   return (
-    <aside className="hero-terminal" aria-label="Live Longcat terminal">
+    <aside className="hero-terminal" aria-label="Live BBL terminal">
       <div className="hero-terminal__head">
         <div>
-          <span>LIVE</span>
-          <strong>LONGCAT TERMINAL</strong>
+          <span>PUBLIC FEED</span>
+          <strong>BLACK BULL TERMINAL</strong>
         </div>
         <i aria-hidden="true" />
       </div>
@@ -184,7 +159,7 @@ export function HeroTerminal() {
           </div>
         ))}
       </div>
-      <Link className="button ghost hero-terminal__button" href="/dashboard">
+      <Link className="button terminal-button" href="/dashboard">
         Enter Dashboard
         <ArrowRight size={16} aria-hidden="true" />
       </Link>

@@ -19,14 +19,14 @@ export function solToLamports(amountSol) {
 }
 
 async function loadSolanaSigner() {
-  const secret = process.env.LONGCAT_SOL_WALLET_PRIVATE_KEY?.trim();
+  const secret = process.env.BBL_SOL_WALLET_PRIVATE_KEY?.trim();
   if (!secret) {
-    throw new Error("Missing required env: LONGCAT_SOL_WALLET_PRIVATE_KEY");
+    throw new Error("Missing required env: BBL_SOL_WALLET_PRIVATE_KEY");
   }
 
   return secret.startsWith("[")
-    ? loadKeypairSignerFromEnvironment("LONGCAT_SOL_WALLET_PRIVATE_KEY")
-    : loadKeypairSignerFromEnvironmentBase58("LONGCAT_SOL_WALLET_PRIVATE_KEY");
+    ? loadKeypairSignerFromEnvironment("BBL_SOL_WALLET_PRIVATE_KEY")
+    : loadKeypairSignerFromEnvironmentBase58("BBL_SOL_WALLET_PRIVATE_KEY");
 }
 
 export async function transferSolToHyperliquid({
@@ -52,7 +52,7 @@ export async function transferSolToHyperliquid({
   const signer = await loadSolanaSigner();
   if (signer.address !== expectedSource) {
     throw new Error(
-      `LONGCAT_SOL_WALLET_ADDRESS does not match the configured Solana private key (derived ${signer.address}).`,
+      `BBL_SOL_WALLET_ADDRESS does not match the configured Solana private key (derived ${signer.address}).`,
     );
   }
 

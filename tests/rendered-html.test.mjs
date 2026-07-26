@@ -4,21 +4,19 @@ import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
 const requiredHomeCopy = [
-  "Long Cat | The Longest Cat on Solana",
-  "THE LONGEST CAT",
-  "ON SOLANA.",
-  "Creator fees scale into a public SOL long on Hyperliquid.",
-  "Realized profits bridge back, buy back, and burn $LONGCAT.",
-  "LONGCAT TERMINAL",
-  "SOL LONG",
-  "POSITION VALUE",
-  "FIRST HL DEPOSIT",
-  "$LONGCAT BURNED",
+  "BBL | Black Bull Long",
+  "BLACK BULL",
+  "LONG.",
+  "Creator fees build one public",
+  "Qualifying realized profits buy back and burn",
+  "BLACK BULL TERMINAL",
+  "ANSEM POSITION",
   "Enter Dashboard",
-  "FEES LONG SOL. PROFITS BURN $LONGCAT.",
+  "FEES BACK THE BULL.",
+  "THE FLYWHEEL HANDLES THE REAR.",
 ];
 const bannedRenderedCopy =
-  /codex-preview|react-loading-skeleton|Your site is taking shape|Codex is working|Cash.?cat|guaranteed yield|passive income|dividends|treasury|awaiting|coming soon|placeholder|\bmock\b|\bdemo\b|\bTBD\b/i;
+  /Longcat|Long Cat|LONGCAT|Hood3|HOODX|Cashcat|coming soon|placeholder|\bmock\b|\bdemo\b|\bTBD\b|guaranteed yield|passive income|dividends|treasury/i;
 
 async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -26,7 +24,7 @@ async function render(path = "/") {
   const { default: worker } = await import(workerUrl.href);
 
   return worker.fetch(
-    new Request(`https://www.longcatsolana.fun${path}`, {
+    new Request(`https://blackbulllong.test${path}`, {
       headers: { accept: "text/html" },
     }),
     {
@@ -41,7 +39,7 @@ async function render(path = "/") {
   );
 }
 
-test("server-renders the Long Cat prelaunch homepage without fabricated activity", async () => {
+test("server-renders the BBL homepage without fabricated activity", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
@@ -49,85 +47,89 @@ test("server-renders the Long Cat prelaunch homepage without fabricated activity
   const html = await response.text();
 
   for (const copy of requiredHomeCopy) {
-    assert.match(html, new RegExp(copy.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
+    assert.match(
+      html,
+      new RegExp(copy.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+    );
   }
 
-  assert.match(html, /longcat-logo\.png/);
-  assert.match(html, /property=["']og:image["'][^>]+https:\/\/www\.longcatsolana\.fun\/og\.png/i);
-  assert.match(html, /name=["']twitter:image["'][^>]+https:\/\/www\.longcatsolana\.fun\/og\.png/i);
-  assert.match(html, /rel=["']canonical["'][^>]+https:\/\/www\.longcatsolana\.fun\//i);
+  assert.match(html, /bbl-mark\.png/);
+  assert.match(
+    html,
+    /property=["']og:image["'][^>]+http:\/\/localhost:3000\/bbl-og\.png/i,
+  );
+  assert.match(
+    html,
+    /name=["']twitter:image["'][^>]+http:\/\/localhost:3000\/bbl-og\.png/i,
+  );
+  assert.match(
+    html,
+    /rel=["']canonical["'][^>]+http:\/\/localhost:3000\//i,
+  );
   assert.match(html, /rel=["']apple-touch-icon["'][^>]+apple-touch-icon\.png/i);
-  assert.match(html, /https:\/\/x\.com\/Longcat_Sol_/);
-  assert.match(html, /FUhEjYbmZv9k6ifagBggdrcU64ioF6FqZMvwZFtppump/);
-  assert.match(html, /Copy contract address FUhEjYbmZv9k6ifagBggdrcU64ioF6FqZMvwZFtppump/);
-  assert.doesNotMatch(html, />Buy \$LONGCAT<\/a>/);
-  assert.doesNotMatch(html, /SOL LONG SIZE|TOTAL SOL BRIDGED|TOTAL FEES DEPLOYED|CA:/);
+  assert.match(
+    html,
+    /dexscreener\.com\/solana\/fnzky6x7entq1er3d225dqyt7ybfka4pskbmqhb8l3cc/i,
+  );
+  assert.doesNotMatch(html, />Buy \$BBL<\/a>/);
   assert.doesNotMatch(html, bannedRenderedCopy);
 });
 
-test("server-renders dashboard and thesis routes with route-specific metadata", async () => {
-  const [dashboardResponse, thesisResponse] = await Promise.all([render("/dashboard"), render("/thesis")]);
+test("server-renders dashboard and lore routes with route-specific metadata", async () => {
+  const [dashboardResponse, thesisResponse] = await Promise.all([
+    render("/dashboard"),
+    render("/thesis"),
+  ]);
   assert.equal(dashboardResponse.status, 200);
   assert.equal(thesisResponse.status, 200);
 
-  const [dashboardHtml, thesisHtml] = await Promise.all([dashboardResponse.text(), thesisResponse.text()]);
+  const [dashboardHtml, thesisHtml] = await Promise.all([
+    dashboardResponse.text(),
+    thesisResponse.text(),
+  ]);
 
-  assert.match(dashboardHtml, /Longcat terminal/);
-  assert.match(dashboardHtml, /https:\/\/www\.longcatsolana\.fun\/dashboard/);
-  assert.doesNotMatch(dashboardHtml, /POSITION SIZE|TOTAL TOKENS BURNED|Transaction feed/);
+  assert.match(dashboardHtml, /BLACK BULL TERMINAL/);
+  assert.match(dashboardHtml, /NO POSITION PUBLISHED/);
+  assert.match(
+    dashboardHtml,
+    /http:\/\/localhost:3000\/dashboard/,
+  );
+  assert.doesNotMatch(dashboardHtml, /TOTAL \$BBL BURNED|TRANSACTION FEED/);
   assert.doesNotMatch(dashboardHtml, bannedRenderedCopy);
 
-  assert.match(thesisHtml, /SOL Thesis/);
-  assert.match(thesisHtml, /SOL is the directional bet/);
-  assert.match(thesisHtml, /https:\/\/www\.longcatsolana\.fun\/thesis/);
-  assert.match(thesisHtml, /Buybacks and burns only occur when qualifying realized profits exist/);
+  assert.match(thesisHtml, /BLACK BULL LORE/);
+  assert.match(thesisHtml, /THE BULL BEHIND THE BULL/);
+  assert.match(thesisHtml, /http:\/\/localhost:3000\/thesis/);
+  assert.match(
+    thesisHtml,
+    /Buybacks and burns only occur when qualifying realized profits exist/,
+  );
   assert.doesNotMatch(thesisHtml, bannedRenderedCopy);
 });
 
-test("server-only live state reveals live surfaces without inventing data", async () => {
-  const previousState = process.env.LAUNCH_STATE;
-  process.env.LAUNCH_STATE = "live";
-
-  try {
-    const [homeResponse, dashboardResponse] = await Promise.all([render("/?state=live"), render("/dashboard?state=live")]);
-    const [homeHtml, dashboardHtml] = await Promise.all([homeResponse.text(), dashboardResponse.text()]);
-
-    assert.match(homeHtml, /CLAIMS, BRIDGES, LONGS, BUYBACKS, AND BURNS UPDATE IN PUBLIC/);
-    assert.doesNotMatch(homeHtml, bannedRenderedCopy);
-
-    assert.match(dashboardHtml, /Claims every 15 minutes/);
-    assert.doesNotMatch(dashboardHtml, /POSITION SIZE|TOTAL TOKENS BURNED|Transaction feed/);
-    assert.doesNotMatch(dashboardHtml, bannedRenderedCopy);
-  } finally {
-    if (previousState === undefined) {
-      delete process.env.LAUNCH_STATE;
-    } else {
-      process.env.LAUNCH_STATE = previousState;
-    }
-  }
-});
-
-test("production assets and server-only launch configuration are present", async () => {
-  const [layout, constants, launchState, packageJson, globals] = await Promise.all([
+test("production assets and BBL configuration are present", async () => {
+  const [layout, constants, packageJson, globals, visuals, worker] =
+    await Promise.all([
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/constants.ts", import.meta.url), "utf8"),
-    readFile(new URL("../app/launch-state.ts", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
-  ]);
+    readFile(new URL("../app/components/BullVisuals.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../railway-worker.mjs", import.meta.url), "utf8"),
+    ]);
 
-  assert.match(packageJson, /"name": "longcat"/);
-  assert.match(constants, /https:\/\/www\.longcatsolana\.fun/);
-  assert.match(constants, /0x68F6723727EF5306122D666F92bEDF4d8382E2Fc/);
-  assert.match(constants, /initialDepositUsd: 96/);
+  assert.match(packageJson, /"name": "black-bull-long"/);
+  assert.match(constants, /9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump/);
   assert.match(layout, /apple-touch-icon\.png/);
-  assert.match(launchState, /process\.env\.LAUNCH_STATE/);
-  assert.doesNotMatch(launchState, /NEXT_PUBLIC/);
-  assert.match(globals, /longcat-scroll-bg\.jpg/);
-  assert.match(globals, /longcat-dashboard-bg\.jpg/);
+  assert.match(globals, /--acid: #d9ff3f/);
+  assert.match(visuals, /bbl-mark\.png/);
+  assert.match(worker, /BBL_ANSEM_SPOT_EXECUTION_CONFIRMED/);
+  assert.match(worker, /buyAnsemSpot/);
 
   await Promise.all([
-    access(new URL("../public/og.png", import.meta.url)),
+    access(new URL("../public/bbl-og.png", import.meta.url)),
+    access(new URL("../public/bbl-mark.png", import.meta.url)),
+    access(new URL("../public/ansem-token.jpg", import.meta.url)),
     access(new URL("../public/favicon.png", import.meta.url)),
     access(new URL("../public/apple-touch-icon.png", import.meta.url)),
   ]);

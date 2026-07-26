@@ -57,83 +57,68 @@ export function createHyperliquidPublicClient(apiUrl) {
 
 export function createHyperliquidExecutionClients({
   apiUrl,
-  account,
   apiWalletPrivateKey,
-  masterWalletPrivateKey,
 }) {
   const transport = new HttpTransport({ apiUrl, timeout: 15_000 });
   const agentWallet = privateKeyToAccount(
     normalizePrivateKey(apiWalletPrivateKey, "HYPERLIQUID_API_WALLET_PRIVATE_KEY"),
   );
-  const masterWallet = privateKeyToAccount(
-    normalizePrivateKey(masterWalletPrivateKey, "HYPERLIQUID_MASTER_WALLET_PRIVATE_KEY"),
-  );
-
-  if (masterWallet.address.toLowerCase() !== account.toLowerCase()) {
-    throw new Error(
-      `HYPERLIQUID_MASTER_WALLET_PRIVATE_KEY derives ${masterWallet.address}, not LONGCAT_HYPERLIQUID_ACCOUNT.`,
-    );
-  }
 
   return {
     agent: new ExchangeClient({ transport, wallet: agentWallet }),
-    master: new ExchangeClient({ transport, wallet: masterWallet }),
   };
 }
 
 export async function inspectHyperliquid(info, account) {
-  const [spotMeta, perpMeta, mids, spotState, perpState] = await Promise.all([
+  const [spotMeta, mids, spotState] = await Promise.all([
     info.spotMeta(),
-    info.meta(),
     info.allMids(),
     info.spotClearinghouseState({ user: account }),
-    info.clearinghouseState({ user: account }),
   ]);
 
   const unitSol = spotMeta.tokens.find(
     (token) => token.name === "USOL" || token.fullName === "Unit Solana",
   );
+  const unitAnsem = spotMeta.tokens.find(
+    (token) => token.name === "UANSEM" || token.fullName === "Unit Ansem",
+  );
   const usdc = spotMeta.tokens.find((token) => token.name === "USDC");
-  if (!unitSol || !usdc) {
-    throw new Error("Hyperliquid Unit SOL/USDC metadata is unavailable.");
+  if (!unitSol || !unitAnsem || !usdc) {
+    throw new Error("Hyperliquid Unit SOL, Unit ANSEM, or USDC metadata is unavailable.");
   }
 
-  const spotUniverse = spotMeta.universe.find(
+  const solSpotUniverse = spotMeta.universe.find(
     (market) => market.tokens[0] === unitSol.index && market.tokens[1] === usdc.index,
   );
-  if (!spotUniverse) {
+  const ansemSpotUniverse = spotMeta.universe.find(
+    (market) => market.tokens[0] === unitAnsem.index && market.tokens[1] === usdc.index,
+  );
+  if (!solSpotUniverse || !ansemSpotUniverse) {
     throw new Error("Hyperliquid Unit SOL/USDC spot market is unavailable.");
   }
 
-  const perpIndex = perpMeta.universe.findIndex((market) => market.name === "SOL");
-  if (perpIndex < 0) {
-    throw new Error("Hyperliquid SOL perpetual market is unavailable.");
-  }
-
-  const perpMarket = perpMeta.universe[perpIndex];
-  const spotMid = Number(mids[`@${spotUniverse.index}`]);
-  const perpMid = Number(mids.SOL);
-  if (!Number.isFinite(spotMid) || !Number.isFinite(perpMid)) {
-    throw new Error("Hyperliquid SOL market prices are unavailable.");
+  const solSpotMid = Number(mids[`@${solSpotUniverse.index}`]);
+  const ansemSpotMid = Number(mids[`@${ansemSpotUniverse.index}`]);
+  if (!Number.isFinite(solSpotMid) || !Number.isFinite(ansemSpotMid)) {
+    throw new Error("Hyperliquid SOL or ANSEM spot price is unavailable.");
   }
 
   return {
     spotState,
-    perpState,
     availableUnitSol: availableBalance(spotState, unitSol.name),
+    availableUnitAnsem: availableBalance(spotState, unitAnsem.name),
     availableSpotUsdc: availableBalance(spotState, "USDC"),
-    spotMarket: {
-      assetId: 10_000 + spotUniverse.index,
-      coin: `@${spotUniverse.index}`,
+    solSpotMarket: {
+      assetId: 10_000 + solSpotUniverse.index,
+      coin: `@${solSpotUniverse.index}`,
       szDecimals: unitSol.szDecimals,
-      mid: spotMid,
+      mid: solSpotMid,
     },
-    perpMarket: {
-      assetId: perpIndex,
-      coin: "SOL",
-      szDecimals: perpMarket.szDecimals,
-      maxLeverage: perpMarket.maxLeverage,
-      mid: perpMid,
+    ansemSpotMarket: {
+      assetId: 10_000 + ansemSpotUniverse.index,
+      coin: `@${ansemSpotUniverse.index}`,
+      szDecimals: unitAnsem.szDecimals,
+      mid: ansemSpotMid,
     },
   };
 }
@@ -172,40 +157,16 @@ export async function sellUnitSolForUsdc({
   };
 }
 
-export async function transferSpotUsdcToPerps({ exchange, amountUsdc }) {
-  const amount = formatSize(amountUsdc, 6);
-  const result = await exchange.usdClassTransfer({
-    amount,
-    toPerp: true,
-  });
-  return { amountUsdc: Number(amount), raw: result };
-}
-
-export async function openSolLong({
+export async function buyAnsemSpot({
   exchange,
   market,
-  collateralUsdc,
-  leverage,
+  amountUsdc,
   slippageBps,
-  collateralUtilization,
 }) {
-  if (leverage > market.maxLeverage) {
-    throw new Error(
-      `Configured leverage ${leverage}x exceeds Hyperliquid SOL maximum ${market.maxLeverage}x.`,
-    );
-  }
-
-  await exchange.updateLeverage({
-    asset: market.assetId,
-    isCross: true,
-    leverage,
-  });
-
-  const notionalUsdc = collateralUsdc * leverage * collateralUtilization;
-  const size = formatSize(notionalUsdc / market.mid, market.szDecimals);
+  const size = formatSize(amountUsdc / market.mid, market.szDecimals);
   const limitPrice = formatPrice(
     market.mid * (1 + slippageBps / 10_000),
-    6 - market.szDecimals,
+    8 - market.szDecimals,
   );
   const result = await exchange.order({
     orders: [{
@@ -221,10 +182,8 @@ export async function openSolLong({
   const fill = filledOrder(result);
 
   return {
-    collateralUsdc,
-    notionalUsdc,
-    leverage,
-    amountSol: Number(fill.totalSz),
+    amountUsdc,
+    amountAnsem: Number(fill.totalSz),
     averagePrice: Number(fill.avgPx),
     orderId: String(fill.oid),
     limitPrice: Number(limitPrice),

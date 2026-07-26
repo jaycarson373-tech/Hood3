@@ -1,6 +1,5 @@
 "use client";
 
-import type { CSSProperties } from "react";
 import { useEffect, useMemo, useState } from "react";
 import {
   CircleDollarSign,
@@ -10,10 +9,13 @@ import {
   Terminal,
   TrendingUp,
 } from "lucide-react";
-import { EXTERNAL_LINKS } from "../constants";
+import { ANSEM, EXTERNAL_LINKS } from "../constants";
 import { automationSteps, howItWorks } from "../data";
 import type { Metric } from "../data";
-import { LongcatScrollBackdrop, MetricGrid } from "../components/LongcatVisuals";
+import {
+  BullBackdrop,
+  MetricGrid,
+} from "../components/BullVisuals";
 
 type SupabaseTerminalRow = {
   id: number;
@@ -50,7 +52,7 @@ function safeNumber(value: unknown, fallback = 0) {
   return Number.isFinite(parsed) ? parsed : fallback;
 }
 
-function money(value: number, maximumFractionDigits = 0) {
+function money(value: number, maximumFractionDigits = 2) {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -70,9 +72,7 @@ function shortHash(hash: string) {
 function terminalTime(value: string) {
   const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
+  if (Number.isNaN(date.getTime())) return value;
 
   return new Intl.DateTimeFormat("en-US", {
     month: "short",
@@ -85,19 +85,22 @@ function terminalTime(value: string) {
 function formatAssetAmount(value: number, asset: string | null) {
   const symbol = asset?.toUpperCase() ?? "";
 
-  if (symbol === "USDC" || symbol === "USD") {
-    return money(value, 2);
+  if (symbol === "USDC" || symbol === "USD") return money(value, 2);
+  if (symbol === "SOL") return `${value.toFixed(4)} SOL`;
+  if (symbol === "ANSEM" || symbol === "UANSEM") {
+    return `${new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: 0,
+    }).format(value)} ANSEM`;
+  }
+  if (symbol === "BBL" || symbol === "$BBL") {
+    return `${new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: 2,
+    }).format(value)} $BBL`;
   }
 
-  if (symbol === "SOL") {
-    return `${value.toFixed(4)} SOL`;
-  }
-
-  if (symbol === "LONGCAT" || symbol === "$LONGCAT") {
-    return `${new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 }).format(value)} $LONGCAT`;
-  }
-
-  return new Intl.NumberFormat("en-US", { maximumFractionDigits: 4 }).format(value);
+  return new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 4,
+  }).format(value);
 }
 
 function safeExternalUrl(value: string | null) {
@@ -113,12 +116,11 @@ function safeExternalUrl(value: string | null) {
 
 export function DashboardClient() {
   const [terminalRows, setTerminalRows] = useState<SupabaseTerminalRow[]>([]);
-  const [latestPosition, setLatestPosition] = useState<SupabasePositionRow | null>(null);
+  const [latestPosition, setLatestPosition] =
+    useState<SupabasePositionRow | null>(null);
 
   useEffect(() => {
-    if (!supabaseUrl || !supabaseAnonKey) {
-      return;
-    }
+    if (!supabaseUrl || !supabaseAnonKey) return;
 
     let active = true;
 
@@ -129,29 +131,28 @@ export function DashboardClient() {
           Authorization: `Bearer ${supabaseAnonKey}`,
         };
         const [terminalResponse, positionResponse] = await Promise.all([
-          fetch(`${supabaseUrl}/rest/v1/longcat_public_terminal?select=*&order=created_at.desc&limit=24`, {
-            cache: "no-store",
-            headers,
-          }),
-          fetch(`${supabaseUrl}/rest/v1/longcat_latest_position?select=*&market=eq.SOL&limit=1`, {
-            cache: "no-store",
-            headers,
-          }),
+          fetch(
+            `${supabaseUrl}/rest/v1/bbl_public_terminal?select=*&order=created_at.desc&limit=30`,
+            { cache: "no-store", headers },
+          ),
+          fetch(
+            `${supabaseUrl}/rest/v1/bbl_latest_position?select=*&market=eq.ANSEM&limit=1`,
+            { cache: "no-store", headers },
+          ),
         ]);
 
-        if (!terminalResponse.ok || !positionResponse.ok) {
-          return;
-        }
+        if (!terminalResponse.ok || !positionResponse.ok) return;
 
-        const nextTerminalRows = (await terminalResponse.json()) as SupabaseTerminalRow[];
-        const nextPositionRows = (await positionResponse.json()) as SupabasePositionRow[];
+        const nextTerminalRows =
+          (await terminalResponse.json()) as SupabaseTerminalRow[];
+        const nextPositionRows =
+          (await positionResponse.json()) as SupabasePositionRow[];
 
         if (!active) return;
-
         setTerminalRows(nextTerminalRows);
         setLatestPosition(nextPositionRows[0] ?? null);
       } catch {
-        // Keep the last verified public state during a transient network failure.
+        // Keep the last verified public state during a transient failure.
       }
     }
 
@@ -164,194 +165,271 @@ export function DashboardClient() {
     };
   }, []);
 
-  const positionNotional = Math.abs(safeNumber(latestPosition?.notional_usdc));
-  const hasPosition = Boolean(latestPosition && positionNotional > 0);
+  const positionNotional = Math.abs(
+    safeNumber(latestPosition?.notional_usdc),
+  );
+  const positionSize = Math.abs(safeNumber(latestPosition?.size));
+  const hasPosition = Boolean(
+    latestPosition && (positionNotional > 0 || positionSize > 0),
+  );
   const positionPnl = safeNumber(latestPosition?.unrealized_pnl_usdc);
-  const extensionEvents = terminalRows.filter((row) =>
-    ["BURN", "LONG", "BRIDGE", "PROFIT", "BUYBACK"].includes(row.stage.toUpperCase()),
-  ).length;
-  const pageExtension = Math.min(1, (terminalRows.length + extensionEvents * 2) / 48);
 
   const dashboardStats = useMemo(() => {
     const metrics: Metric[] = [];
-    const totalSolBridged = terminalRows
-      .filter((row) => row.stage.toUpperCase() === "BRIDGE" && row.asset?.toUpperCase() === "SOL")
+    const totalSolRouted = terminalRows
+      .filter(
+        (row) =>
+          row.stage.toUpperCase() === "BRIDGE" &&
+          row.asset?.toUpperCase() === "SOL",
+      )
       .reduce((sum, row) => sum + safeNumber(row.amount), 0);
     const totalFeesClaimed = terminalRows
-      .filter((row) => row.stage.toUpperCase() === "CLAIM" && row.asset?.toUpperCase() === "SOL")
+      .filter(
+        (row) =>
+          row.stage.toUpperCase() === "CLAIM" &&
+          row.asset?.toUpperCase() === "SOL",
+      )
       .reduce((sum, row) => sum + safeNumber(row.amount), 0);
-    const profitRows = terminalRows.filter((row) => row.stage.toUpperCase() === "PROFIT" && safeNumber(row.amount) > 0);
-    const realizedProfit = profitRows.reduce((sum, row) => sum + safeNumber(row.amount), 0);
-    const buybackCount = terminalRows.filter((row) => row.stage.toUpperCase() === "BUYBACK").length;
-    const burnRows = terminalRows.filter((row) => row.stage.toUpperCase() === "BURN" && safeNumber(row.amount) > 0);
-    const tokensBurned = burnRows.reduce((sum, row) => sum + safeNumber(row.amount), 0);
-    const lastFeeClaim = terminalRows.find((row) => row.stage.toUpperCase() === "CLAIM");
+    const profitRows = terminalRows.filter(
+      (row) =>
+        row.stage.toUpperCase() === "PROFIT" &&
+        safeNumber(row.amount) > 0,
+    );
+    const realizedProfit = profitRows.reduce(
+      (sum, row) => sum + safeNumber(row.amount),
+      0,
+    );
+    const buybackCount = terminalRows.filter(
+      (row) => row.stage.toUpperCase() === "BUYBACK",
+    ).length;
+    const burnRows = terminalRows.filter(
+      (row) =>
+        row.stage.toUpperCase() === "BURN" &&
+        safeNumber(row.amount) > 0,
+    );
+    const tokensBurned = burnRows.reduce(
+      (sum, row) => sum + safeNumber(row.amount),
+      0,
+    );
+    const lastUpdate =
+      latestPosition?.recorded_at || terminalRows[0]?.created_at || null;
 
     if (hasPosition && latestPosition) {
-      metrics.push({ label: "POSITION SIZE", value: money(positionNotional, 2), detail: "public SOL long" });
-
-      if (safeNumber(latestPosition.entry_price) > 0) {
+      if (positionSize > 0) {
         metrics.push({
-          label: "ENTRY PRICE",
-          value: money(safeNumber(latestPosition.entry_price), 2),
-          detail: "verified position data",
+          label: "ANSEM POSITION",
+          value: formatAssetAmount(positionSize, "ANSEM"),
+          detail: "public spot balance",
         });
       }
-
+      if (positionNotional > 0) {
+        metrics.push({
+          label: "POSITION VALUE",
+          value: money(positionNotional),
+          detail: "latest published value",
+        });
+      }
+      if (safeNumber(latestPosition.entry_price) > 0) {
+        metrics.push({
+          label: "AVERAGE ENTRY",
+          value: money(safeNumber(latestPosition.entry_price), 6),
+          detail: "published cost basis",
+        });
+      }
       if (safeNumber(latestPosition.mark_price) > 0) {
         metrics.push({
-          label: "CURRENT PRICE",
-          value: money(safeNumber(latestPosition.mark_price), 2),
+          label: "ANSEM PRICE",
+          value: money(safeNumber(latestPosition.mark_price), 6),
           detail: "latest published mark",
         });
       }
-
-      if (safeNumber(latestPosition.leverage) > 0) {
+      if (safeNumber(latestPosition.entry_price) > 0) {
         metrics.push({
-          label: "LEVERAGE",
-          value: `${safeNumber(latestPosition.leverage).toFixed(2)}x`,
-          detail: "published risk data",
+          label: "UNREALIZED PNL",
+          value: signedMoney(positionPnl),
+          detail: "published position estimate",
         });
       }
-
-      metrics.push(
-        { label: "UNREALIZED PNL", value: signedMoney(positionPnl), detail: "published position data" },
-        {
-          label: "LAST POSITION UPDATE",
-          value: terminalTime(latestPosition.recorded_at),
-          detail: "latest published receipt",
-        },
-      );
     }
 
-    if (totalSolBridged > 0) {
-      metrics.push({ label: "TOTAL SOL BRIDGED", value: `${totalSolBridged.toFixed(4)} SOL`, detail: "published bridge receipts" });
+    if (totalSolRouted > 0) {
+      metrics.push({
+        label: "TOTAL SOL ROUTED",
+        value: `${totalSolRouted.toFixed(4)} SOL`,
+        detail: "published transfer receipts",
+      });
     }
-
     if (totalFeesClaimed > 0) {
-      metrics.push({ label: "TOTAL FEES DEPLOYED", value: `${totalFeesClaimed.toFixed(4)} SOL`, detail: "published claim receipts" });
+      metrics.push({
+        label: "TOTAL FEES DEPLOYED",
+        value: `${totalFeesClaimed.toFixed(4)} SOL`,
+        detail: "published claim receipts",
+      });
     }
-
     if (realizedProfit > 0) {
       metrics.push({
         label: "REALIZED PROFIT",
-        value: formatAssetAmount(realizedProfit, profitRows[0]?.asset ?? null),
+        value: formatAssetAmount(
+          realizedProfit,
+          profitRows[0]?.asset ?? null,
+        ),
         detail: "published profit receipts",
       });
     }
-
     if (buybackCount > 0) {
-      metrics.push({ label: "TOTAL BUYBACKS", value: String(buybackCount), detail: "published transactions" });
+      metrics.push({
+        label: "TOTAL BUYBACKS",
+        value: String(buybackCount),
+        detail: "published transactions",
+      });
     }
-
     if (tokensBurned > 0) {
       metrics.push({
-        label: "TOTAL TOKENS BURNED",
-        value: formatAssetAmount(tokensBurned, burnRows[0]?.asset ?? "LONGCAT"),
+        label: "TOTAL $BBL BURNED",
+        value: formatAssetAmount(
+          tokensBurned,
+          burnRows[0]?.asset ?? "BBL",
+        ),
         detail: "published burn receipts",
       });
     }
-
-    if (lastFeeClaim) {
-      metrics.push({ label: "LAST FEE CLAIM", value: terminalTime(lastFeeClaim.created_at), detail: "latest published claim" });
+    if (lastUpdate) {
+      metrics.push({
+        label: "LAST PUBLIC UPDATE",
+        value: terminalTime(lastUpdate),
+        detail: "latest receipt timestamp",
+      });
     }
 
     return metrics;
-  }, [hasPosition, latestPosition, positionNotional, positionPnl, terminalRows]);
-
-  const burnMetrics = dashboardStats.filter((metric) =>
-    ["REALIZED PROFIT", "TOTAL BUYBACKS", "TOTAL TOKENS BURNED"].includes(metric.label),
-  );
+  }, [
+    hasPosition,
+    latestPosition,
+    positionNotional,
+    positionPnl,
+    positionSize,
+    terminalRows,
+  ]);
 
   return (
     <>
-      <LongcatScrollBackdrop variant="dashboard" extension={pageExtension} />
-      <section className="page-hero compact-page-hero">
-        <p className="eyebrow">Longcat terminal</p>
-        <h1>One position. Extending in public.</h1>
-        <p>Verified claims, SOL bridges, position changes, buybacks, and burns are published here.</p>
-        {EXTERNAL_LINKS.hyperliquidPosition ? (
-          <a className="button ghost" href={EXTERNAL_LINKS.hyperliquidPosition} target="_blank" rel="noreferrer">
-            Verify position
+      <BullBackdrop variant="dashboard" />
+
+      <section className="page-hero dashboard-hero">
+        <p className="eyebrow">BLACK BULL TERMINAL</p>
+        <h1>ONE POSITION. BUILT IN PUBLIC.</h1>
+        <p>
+          Creator-fee claims, Unit routes, ANSEM spot orders, realized profit,
+          $BBL buybacks, and burns appear only after a public receipt exists.
+        </p>
+        <div className="button-row">
+          {EXTERNAL_LINKS.position ? (
+            <a
+              className="button primary"
+              href={EXTERNAL_LINKS.position}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Verify Account
+              <ExternalLink size={17} aria-hidden="true" />
+            </a>
+          ) : null}
+          <a
+            className="button ghost"
+            href={ANSEM.hyperliquidSpotUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            ANSEM Spot
             <ExternalLink size={17} aria-hidden="true" />
           </a>
-        ) : null}
+        </div>
       </section>
 
       {dashboardStats.length ? (
-        <section className="content-band live-long-section">
-          <div className="section-split-heading">
+        <section className="dashboard-metrics section-band">
+          <div className="section-heading split-heading">
             <div>
-              <p className="eyebrow">Live long</p>
-              <h2>SOL position telemetry.</h2>
+              <p className="eyebrow">VERIFIED TELEMETRY</p>
+              <h2>THE BULL, BY THE NUMBERS.</h2>
             </div>
-            <p>Only verified public position and receipt data is displayed.</p>
+            <p>No mock balances. No invented position.</p>
           </div>
-          <MetricGrid metrics={dashboardStats} className="terminal-metric-grid" />
+          <MetricGrid metrics={dashboardStats} />
         </section>
-      ) : null}
+      ) : (
+        <section className="dashboard-empty section-band">
+          <span aria-hidden="true">00</span>
+          <div>
+            <p className="eyebrow">PUBLIC POSITION</p>
+            <h2>NO POSITION PUBLISHED.</h2>
+            <p>
+              The dashboard remains blank until the execution account publishes
+              a verified ANSEM position or transaction receipt.
+            </p>
+          </div>
+        </section>
+      )}
 
       {hasPosition && latestPosition ? (
-        <section className="dashboard-grid content-band">
-          <div className="panel exposure-panel">
-            <div className="section-heading compact-heading">
-              <span className="icon-chip">
-                <TrendingUp size={18} aria-hidden="true" />
-              </span>
-              <div>
-                <p className="kicker">Published exposure</p>
-                <h2>Current SOL long</h2>
-              </div>
-            </div>
-
-            <div className="exposure-number">
-              <span>Verified SOL long</span>
-              <strong>{money(positionNotional)}</strong>
-              <small>{signedMoney(positionPnl)} unrealized PnL</small>
-            </div>
-
-            <div className="positions-table">
-              <div className="table-head">
-                <span>Coin</span>
-                <span>Size</span>
-                <span>Notional</span>
-                <span>PnL</span>
-              </div>
-              <div className="table-row">
-                <span>{latestPosition.market}</span>
-                <span>{new Intl.NumberFormat("en-US", { maximumFractionDigits: 4 }).format(safeNumber(latestPosition.size))}</span>
-                <span>{money(positionNotional)}</span>
-                <span className={positionPnl >= 0 ? "positive" : "negative"}>{signedMoney(positionPnl)}</span>
-              </div>
-            </div>
-
-            <div className="disclosure">
-              <ShieldCheck size={18} aria-hidden="true" />
-              Verified public data only. Execution remains server-side.
+        <section className="position-section section-band">
+          <div className="section-heading">
+            <span className="icon-chip">
+              <TrendingUp size={18} aria-hidden="true" />
+            </span>
+            <div>
+              <p className="eyebrow">PUBLISHED EXPOSURE</p>
+              <h2>CURRENT ANSEM SPOT.</h2>
             </div>
           </div>
+          <div className="position-readout">
+            <div>
+              <span>ANSEM HELD</span>
+              <strong>{formatAssetAmount(positionSize, "ANSEM")}</strong>
+            </div>
+            <div>
+              <span>POSITION VALUE</span>
+              <strong>{money(positionNotional)}</strong>
+            </div>
+            <div>
+              <span>
+                {safeNumber(latestPosition.mark_price) > 0
+                  ? "MARK PRICE"
+                  : "MARKET"}
+              </span>
+              <strong>
+                {safeNumber(latestPosition.mark_price) > 0
+                  ? money(safeNumber(latestPosition.mark_price), 6)
+                  : "ANSEM / USDC"}
+              </strong>
+            </div>
+          </div>
+          <p className="disclosure">
+            <ShieldCheck size={18} aria-hidden="true" />
+            Spot exposure has no liquidation price, but the asset can still
+            lose substantial or total value.
+          </p>
         </section>
       ) : null}
 
-      <section className="content-band automation-section">
+      <section className="automation-section section-band">
         <div className="section-heading">
           <span className="icon-chip">
             <ListChecks size={18} aria-hidden="true" />
           </span>
           <div>
-            <p className="kicker">Automation rail</p>
-            <h2>Claims every 15 minutes.</h2>
+            <p className="eyebrow">AUTOMATION RAIL</p>
+            <h2>CHECKED EVERY 15 MINUTES.</h2>
           </div>
         </div>
-
         <p className="section-copy">
-          The worker is structured to claim fees, keep the SOL buffer, route collateral to Hyperliquid, scale the SOL long,
-          take qualifying profit, bridge it back, and publish buyback plus burn receipts.
+          The worker is designed to preserve the SOL fee buffer, route managed
+          collateral through Unit, buy ANSEM spot within hard limits, and
+          publish every completed stage.
         </p>
-
         <div className="automation-grid">
           {automationSteps.map((step) => (
-            <article className="automation-card" key={step.label}>
+            <article key={step.label}>
               <span>{step.label}</span>
               <h3>{step.title}</h3>
               <p>{step.text}</p>
@@ -363,12 +441,12 @@ export function DashboardClient() {
           <div className="terminal-panel">
             <div className="terminal-head">
               <div>
-                <p className="kicker">Longcat terminal</p>
-                <h2>Transaction feed.</h2>
+                <p className="eyebrow">PUBLIC RECEIPTS</p>
+                <h2>TRANSACTION FEED.</h2>
               </div>
               <Terminal size={20} aria-hidden="true" />
             </div>
-            <div className="terminal-log" aria-label="Longcat transaction terminal">
+            <div className="terminal-log" aria-label="BBL transaction terminal">
               {terminalRows.map((event) => {
                 const receiptUrl = safeExternalUrl(event.scan_url);
 
@@ -384,7 +462,11 @@ export function DashboardClient() {
                         {event.tx_hash && receiptUrl ? (
                           <>
                             {" "}
-                            <a href={receiptUrl} target="_blank" rel="noreferrer">
+                            <a
+                              href={receiptUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
                               {shortHash(event.tx_hash)}
                             </a>
                           </>
@@ -399,50 +481,19 @@ export function DashboardClient() {
         ) : null}
       </section>
 
-      {terminalRows.length ? (
-        <section
-          className="content-band dashboard-extension-section"
-          aria-label="Longcat extension meter"
-          style={{ "--dashboard-extension": pageExtension } as CSSProperties}
-        >
-          <div>
-            <p className="eyebrow">Longcat length</p>
-            <h2>The page gets longer as the receipts stack.</h2>
-          </div>
-          <p>Burns, profit events, bridges, and SOL long increases extend the dashboard.</p>
-          <div className="extension-track" aria-hidden="true">
-            <span style={{ width: `${Math.max(8, pageExtension * 100)}%` }} />
-          </div>
-        </section>
-      ) : null}
-
-      {burnMetrics.length ? (
-        <section className="content-band burns-section">
-          <div className="section-split-heading">
-            <div>
-              <p className="eyebrow">Burn telemetry</p>
-              <h2>When the long wins, Longcat gets scarcer.</h2>
-            </div>
-            <p>Only qualifying realized profit and published buyback or burn receipts are counted.</p>
-          </div>
-          <MetricGrid metrics={burnMetrics} className="burn-metric-grid" />
-        </section>
-      ) : null}
-
-      <section className="content-band how-section">
+      <section className="how-section section-band">
         <div className="section-heading">
           <span className="icon-chip">
             <CircleDollarSign size={18} aria-hidden="true" />
           </span>
           <div>
-            <p className="kicker">How it works</p>
-            <h2>From fee to SOL long.</h2>
+            <p className="eyebrow">HOW IT WORKS</p>
+            <h2>FROM FEE TO BLACK BULL.</h2>
           </div>
         </div>
-
         <div className="how-grid">
           {howItWorks.map((step, index) => (
-            <article className="how-card" key={step.title}>
+            <article key={step.title}>
               <span>{String(index + 1).padStart(2, "0")}</span>
               <h3>{step.title}</h3>
               <p>{step.text}</p>

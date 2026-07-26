@@ -1,13 +1,19 @@
 import type { Metadata } from "next";
-import { ArrowRight, ExternalLink, TriangleAlert } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import { EXTERNAL_LINKS, SITE, externalLinks } from "../constants";
-import { risks, solThesisPoints, thesisRisks } from "../data";
+import {
+  ArrowRight,
+  ExternalLink,
+  TriangleAlert,
+} from "lucide-react";
+import { ANSEM, SITE } from "../constants";
+import { risks, bullThesisPoints, thesisRisks } from "../data";
+import { BullBackdrop } from "../components/BullVisuals";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
-const title = "SOL Thesis | Longcat";
+const title = "Black Bull Lore | BBL";
 const description =
-  "The Longcat thesis for SOL: Solana retail liquidity, Hyperliquid-based leverage, and $LONGCAT buyback burns from qualifying realized trading profits.";
+  "The lore and thesis behind BBL, Black Bull Long: public ANSEM exposure, transparent execution, and conditional $BBL buyback burns.";
 
 export const metadata: Metadata = {
   title,
@@ -22,9 +28,9 @@ export const metadata: Metadata = {
     images: [
       {
         url: SITE.ogImage,
-        width: 1200,
-        height: 630,
-        alt: "Long Cat, the longest cat on Solana",
+        width: 1729,
+        height: 910,
+        alt: "BBL, Black Bull Long",
       },
     ],
   },
@@ -38,33 +44,50 @@ export const metadata: Metadata = {
 
 export default function ThesisPage() {
   return (
-    <main className="site-shell longcat-shell launch-terminal-site longcat-sol-site">
+    <main className="site-shell bbl-site">
       <SiteHeader />
+      <BullBackdrop variant="lore" />
 
-      <section className="page-hero thesis-hero longcat-thesis-hero">
-        <p className="eyebrow">SOL Thesis</p>
-        <h1>SOL is the directional bet.</h1>
-        <p>Solana liquidity. Hyperliquid execution. Public leverage. No certainty implied.</p>
-        <div className="button-row">
-          <Link className="button primary" href="/dashboard">
-            View the long
-            <ArrowRight size={17} aria-hidden="true" />
-          </Link>
-          {EXTERNAL_LINKS.solMarket ? (
-            <a className="button ghost" href={EXTERNAL_LINKS.solMarket} target="_blank" rel="noreferrer">
-              View SOL
+      <section className="page-hero lore-hero">
+        <div>
+          <p className="eyebrow">BLACK BULL LORE</p>
+          <h1>THE BULL BEHIND THE BULL.</h1>
+          <p>
+            A directional trader became a character. The character became an
+            onchain asset. BBL turns that lore into a transparent spot flywheel.
+          </p>
+          <div className="button-row">
+            <Link className="button primary" href="/dashboard">
+              Enter Dashboard
+              <ArrowRight size={17} aria-hidden="true" />
+            </Link>
+            <a
+              className="button ghost"
+              href={ANSEM.dexScreenerUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View ANSEM
               <ExternalLink size={17} aria-hidden="true" />
             </a>
-          ) : null}
+          </div>
         </div>
+        <Image
+          src="/ansem-token.jpg"
+          alt="The Black Bull ANSEM token mark"
+          width={800}
+          height={800}
+          priority
+          sizes="(max-width: 720px) 82vw, 420px"
+        />
       </section>
 
-      <section className="thesis-grid content-band">
-        {solThesisPoints.map((point) => {
+      <section className="thesis-grid section-band">
+        {bullThesisPoints.map((point) => {
           const Icon = point.icon;
 
           return (
-            <article className="thesis-card" key={point.label}>
+            <article key={point.label}>
               <span className="icon-chip">
                 <Icon size={18} aria-hidden="true" />
               </span>
@@ -72,38 +95,78 @@ export default function ThesisPage() {
                 <p>{point.label}</p>
                 <strong>{point.value}</strong>
               </div>
-              <h3>{point.text}</h3>
+              <h2>{point.text}</h2>
             </article>
           );
         })}
       </section>
 
-      <section className="content-band thesis-memo longcat-memo">
+      <section className="lore-memo section-band">
         <div>
-          <p className="eyebrow">Core view</p>
+          <p className="eyebrow">THE STORY, WITHOUT THE FAIRY TALE</p>
           <h2>
-            IF SOL WINS,
+            HIGH CONVICTION.
             <br />
-            LONGCAT GETS SCARCER.
+            HIGH ATTENTION.
+            <br />
+            HIGH RISK.
           </h2>
         </div>
-        <p>Creator fees are designed to scale into a public SOL long on Hyperliquid. Qualifying realized profits buy back and burn $LONGCAT.</p>
+        <div className="memo-copy">
+          <p>
+            Ansem&apos;s early WIF call is widely cited as part of his trading
+            reputation. His audience later crossed one million followers, and
+            the Black Bull identity became a market-native symbol for
+            aggressive bullish conviction.
+          </p>
+          <p>
+            ANSEM was launched by the community, not by BBL. A large token
+            allocation reached Ansem&apos;s public wallet and the market grew
+            into a nine-figure asset. Those facts do not guarantee future
+            performance.
+          </p>
+          <div className="source-row">
+            <a
+              href={ANSEM.officialSiteUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Black Bull site
+              <ExternalLink size={14} aria-hidden="true" />
+            </a>
+            <a
+              href={ANSEM.officialXUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Black Bull on X
+              <ExternalLink size={14} aria-hidden="true" />
+            </a>
+            <a
+              href={ANSEM.ansemXUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Ansem on X
+              <ExternalLink size={14} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
       </section>
 
-      <section className="content-band thesis-risk-grid">
+      <section className="risk-section section-band">
         <div className="risk-intro">
           <span className="icon-chip warning">
             <TriangleAlert size={18} aria-hidden="true" />
           </span>
           <div>
-            <p className="kicker">Risk</p>
-            <h2>What can break the thesis.</h2>
+            <p className="eyebrow">RISK</p>
+            <h2>WHAT CAN BREAK THE THESIS.</h2>
           </div>
         </div>
-
-        <div className="risk-cards">
+        <div className="risk-grid">
           {thesisRisks.map((risk) => (
-            <article className="risk-card" key={risk.label}>
+            <article key={risk.label}>
               <h3>{risk.label}</h3>
               <p>{risk.text}</p>
             </article>
@@ -111,28 +174,14 @@ export default function ThesisPage() {
         </div>
       </section>
 
-      <section className="content-band legal-risk-list">
-        <h2>Longcat risks</h2>
+      <section className="legal-risk-list section-band">
+        <h2>BBL risks</h2>
         <ul>
           {risks.map((risk) => (
             <li key={risk}>{risk}</li>
           ))}
         </ul>
       </section>
-
-      {externalLinks.length ? (
-        <section className="content-band source-panel">
-          <p className="eyebrow">Links</p>
-          <div className="source-panel-links">
-            {externalLinks.map((source) => (
-              <a key={source.href} href={source.href} target="_blank" rel="noreferrer">
-                {source.label}
-                <ExternalLink size={14} aria-hidden="true" />
-              </a>
-            ))}
-          </div>
-        </section>
-      ) : null}
 
       <SiteFooter />
     </main>

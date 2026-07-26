@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import { SITE } from "../constants";
-import { LongcatScrollBackdrop } from "../components/LongcatVisuals";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
-import { getLaunchState } from "../launch-state";
 import { DashboardClient } from "./DashboardClient";
 
-const title = "Live Position | Longcat";
+const title = "Black Bull Terminal | BBL";
 const description =
-  "Track Longcat's public SOL long on Hyperliquid, creator fees deployed, realized profit, $LONGCAT buybacks, and burns.";
+  "Track BBL creator fees, the public ANSEM spot position, qualifying realized profit, $BBL buybacks, and burns.";
 
 export const dynamic = "force-dynamic";
 
@@ -24,9 +22,9 @@ export const metadata: Metadata = {
     images: [
       {
         url: SITE.ogImage,
-        width: 1200,
-        height: 630,
-        alt: "Long Cat, the longest cat on Solana",
+        width: 1729,
+        height: 910,
+        alt: "BBL, Black Bull Long",
       },
     ],
   },
@@ -39,23 +37,10 @@ export const metadata: Metadata = {
 };
 
 export default function DashboardPage() {
-  const isLive = getLaunchState() === "live";
-
   return (
-    <main className="site-shell longcat-shell launch-terminal-site longcat-sol-site longcat-dashboard-site">
+    <main className="site-shell bbl-site dashboard-site">
       <SiteHeader />
-      {isLive ? (
-        <DashboardClient />
-      ) : (
-        <>
-          <LongcatScrollBackdrop variant="dashboard" />
-          <section className="page-hero compact-page-hero">
-            <p className="eyebrow">Longcat terminal</p>
-            <h1>One position. Extending in public.</h1>
-            <p>The public SOL long, buybacks, and burns will be published here.</p>
-          </section>
-        </>
-      )}
+      <DashboardClient />
       <SiteFooter />
     </main>
   );

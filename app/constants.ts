@@ -1,37 +1,51 @@
+const configuredSiteUrl = process.env.SITE_URL?.trim();
+
 export const SITE = {
-  name: "Long Cat",
-  title: "Long Cat | The Longest Cat on Solana",
+  name: "BBL",
+  title: "BBL | Black Bull Long",
   description:
-    "Long Cat is a Solana native leverage token: creator fees build a public SOL long on Hyperliquid, and qualifying realized profits buy back and burn $LONGCAT.",
-  url: "https://www.longcatsolana.fun",
-  ogImage: "/og.png",
+    "Black Bull Long turns creator fees into a public ANSEM position. Qualifying realized profits buy back and burn $BBL.",
+  configuredUrl: configuredSiteUrl || null,
+  ogImage: "/bbl-og.png",
 } as const;
 
-export const CONTRACT_ADDRESS: string | null =
-  "FUhEjYbmZv9k6ifagBggdrcU64ioF6FqZMvwZFtppump";
+export const ANSEM = {
+  name: "The Black Bull",
+  symbol: "ANSEM",
+  address: "9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump",
+  pairAddress: "FnzKY6x7entQ1eR3D225dQyT7ybfka4PskBMQhb8L3CC",
+  dexScreenerUrl:
+    "https://dexscreener.com/solana/fnzky6x7entq1er3d225dqyt7ybfka4pskbmqhb8l3cc",
+  hyperliquidSpotUrl: "https://app.hyperliquid.xyz/trade/ANSEM/USDC",
+  officialSiteUrl: "https://www.blackbullsol.com/",
+  officialXUrl: "https://x.com/blackbullsol",
+  ansemXUrl: "https://x.com/blknoiz06",
+} as const;
 
-export const HYPERLIQUID = {
-  account: "0x68F6723727EF5306122D666F92bEDF4d8382E2Fc",
-  apiUrl: "https://api.hyperliquid.xyz/info",
-  initialDepositUsd: 96,
+export const BBL_CONTRACT_ADDRESS =
+  process.env.BBL_TOKEN_ADDRESS?.trim() || null;
+
+export const EXECUTION = {
+  hyperliquidAccount:
+    process.env.NEXT_PUBLIC_BBL_HYPERLIQUID_ACCOUNT?.trim() || null,
 } as const;
 
 export const EXTERNAL_LINKS: {
-  pump: string | null;
+  buy: string | null;
   dexScreener: string | null;
   x: string | null;
   community: string | null;
-  hyperliquidPosition: string | null;
-  solMarket: string | null;
-  buy: string | null;
+  position: string | null;
+  ansemMarket: string;
 } = {
-  pump: `https://pump.fun/coin/${CONTRACT_ADDRESS}`,
-  dexScreener: `https://dexscreener.com/solana/${CONTRACT_ADDRESS}`,
-  x: "https://x.com/Longcat_Sol_",
-  community: null,
-  hyperliquidPosition: `https://app.hyperliquid.xyz/explorer/address/${HYPERLIQUID.account}`,
-  solMarket: "https://app.hyperliquid.xyz/trade/SOL",
-  buy: `https://pump.fun/coin/${CONTRACT_ADDRESS}`,
+  buy: process.env.NEXT_PUBLIC_BBL_BUY_URL?.trim() || null,
+  dexScreener: process.env.NEXT_PUBLIC_BBL_DEXSCREENER_URL?.trim() || null,
+  x: process.env.NEXT_PUBLIC_BBL_X_URL?.trim() || null,
+  community: process.env.NEXT_PUBLIC_BBL_COMMUNITY_URL?.trim() || null,
+  position: EXECUTION.hyperliquidAccount
+    ? `https://app.hyperliquid.xyz/explorer/address/${EXECUTION.hyperliquidAccount}`
+    : null,
+  ansemMarket: ANSEM.hyperliquidSpotUrl,
 };
 
 export type SiteLink = {
@@ -40,11 +54,11 @@ export type SiteLink = {
 };
 
 const optionalLinks: Array<[string, string | null]> = [
-  ["Pump.fun", EXTERNAL_LINKS.pump],
+  ["Buy $BBL", EXTERNAL_LINKS.buy],
   ["DexScreener", EXTERNAL_LINKS.dexScreener],
   ["X", EXTERNAL_LINKS.x],
   ["Community", EXTERNAL_LINKS.community],
-  ["Hyperliquid", EXTERNAL_LINKS.hyperliquidPosition],
+  ["Position", EXTERNAL_LINKS.position],
 ];
 
 export const externalLinks: SiteLink[] = optionalLinks.flatMap(([label, href]) =>

@@ -1,152 +1,229 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ExternalLink } from "lucide-react";
-import { CONTRACT_ADDRESS, EXTERNAL_LINKS } from "./constants";
-import { ContractAddress } from "./components/ContractAddress";
+import {
+  ArrowDownRight,
+  ArrowRight,
+  ExternalLink,
+} from "lucide-react";
+import { ANSEM, EXTERNAL_LINKS } from "./constants";
 import { HeroTerminal } from "./components/HeroTerminal";
-import { LongcatScrollBackdrop, LongcatSignalField, SignalGraphicStack } from "./components/LongcatVisuals";
+import { MarketStrip } from "./components/MarketStrip";
+import {
+  BullBackdrop,
+  BullSignalStack,
+} from "./components/BullVisuals";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
-import { getLaunchState } from "./launch-state";
-
-export const dynamic = "force-dynamic";
 
 const flow = [
-  "$LONGCAT trades",
-  "fees claim every 15 minutes",
-  "bridge to Hyperliquid",
-  "auto-long SOL",
-  "profit buys + burns",
-];
-
-const thesis = [
-  "Solana remains one of crypto's fastest retail arenas.",
-  "SOL is the clean directional proxy for Solana's liquidity and attention cycle.",
-  "Hyperliquid gives the flywheel a public leverage venue.",
+  "$BBL trades",
+  "creator fees collect",
+  "ANSEM spot grows",
+  "profit is realized",
+  "$BBL gets bought",
+  "$BBL gets burned",
 ];
 
 const faq = [
   {
-    question: "What is Longcat?",
-    answer: "$LONGCAT is a Solana native leverage token designed around a public SOL long on Hyperliquid.",
+    question: "What is BBL?",
+    answer:
+      "BBL means Black Bull Long: a community token designed to turn creator fees into a public ANSEM spot position.",
   },
   {
-    question: "Where do fees go?",
-    answer: "Creator fees are designed to build the SOL position, subject to execution, risk controls, and operating conditions.",
+    question: "Where do creator fees go?",
+    answer:
+      "The system is designed to route creator fees into managed collateral that buys ANSEM spot on Hyperliquid, subject to execution limits.",
   },
   {
-    question: "What happens if the long wins?",
-    answer: "Qualifying realized profit can market-buy $LONGCAT and permanently burn it.",
+    question: "What happens when profit is realized?",
+    answer:
+      "Qualifying realized profit may market-buy $BBL and permanently burn the purchased tokens.",
   },
   {
-    question: "Guaranteed?",
-    answer: "No. Leveraged positions can lose money or get liquidated. Buybacks only happen when qualifying realized profits exist.",
+    question: "Are buybacks guaranteed?",
+    answer:
+      "No. ANSEM can lose value, execution can fail, and buybacks only occur when qualifying realized profits exist.",
   },
 ];
 
 export default function Home() {
-  const isLive = getLaunchState() === "live";
-
   return (
-    <main className="site-shell longcat-shell launch-terminal-site longcat-sol-site">
+    <main className="site-shell bbl-site">
       <SiteHeader />
-      <LongcatScrollBackdrop />
-      <LongcatSignalField />
+      <BullBackdrop />
 
-      <section className="launch-section launch-hero" id="buy-longcat">
-        <div className="launch-hero__layout">
-          <div className="launch-hero__copy">
-            <p className="eyebrow">Solana native leverage cat</p>
-            <h1>
-              THE LONGEST CAT
-              <span>ON SOLANA.</span>
-            </h1>
-            <div className="hero-copy-lines">
-              <p>Creator fees scale into a public SOL long on Hyperliquid.</p>
-              <p>Realized profits bridge back, buy back, and burn $LONGCAT.</p>
-            </div>
-            {EXTERNAL_LINKS.buy ? (
-              <div className="hero-actions meme-actions">
-               <a className="button primary long-button" href={EXTERNAL_LINKS.buy} target="_blank" rel="noreferrer">
-                 Buy $LONGCAT
-                 <ArrowRight size={18} aria-hidden="true" />
-               </a>
-              </div>
-            ) : null}
-            {CONTRACT_ADDRESS ? <ContractAddress address={CONTRACT_ADDRESS} /> : null}
+      <section className="hero-section" id="top">
+        <div className="hero-copy">
+          <p className="eyebrow">THE BLACK BULL FLYWHEEL</p>
+          <h1>
+            BLACK BULL
+            <span>LONG.</span>
+          </h1>
+          <div className="hero-lines">
+            <p>
+              Creator fees build one public <strong>ANSEM</strong> position.
+            </p>
+            <p>
+              Qualifying realized profits buy back and burn{" "}
+              <strong>$BBL</strong>.
+            </p>
+          </div>
+          <p className="hero-joke">Built from the back end.</p>
+          <div className="hero-actions">
+            <Link className="button primary" href="/dashboard">
+              Enter Dashboard
+              <ArrowRight size={17} aria-hidden="true" />
+            </Link>
+            <a
+              className="button ghost"
+              href={ANSEM.hyperliquidSpotUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View ANSEM
+              <ExternalLink size={16} aria-hidden="true" />
+            </a>
+          </div>
+          <MarketStrip />
+        </div>
+
+        <div className="hero-visual">
+          <div className="hero-bull">
+            <Image
+              src="/bbl-mark.png"
+              alt="A rear-facing Black Bull looking over its shoulder"
+              width={820}
+              height={820}
+              priority
+              sizes="(max-width: 760px) 94vw, 52vw"
+            />
+            <span className="bull-caption">FULLY REAR-ALIGNED</span>
           </div>
           <HeroTerminal />
         </div>
       </section>
 
-      <section className="launch-section mechanic-section" id="mechanism">
-        <div className="section-label">MECHANISM</div>
-        <h2>FEES LONG SOL. PROFITS BURN $LONGCAT.</h2>
-        <div className="long-flow">
-          {flow.map((step) => (
-            <span key={step}>{step}</span>
+      <section className="mechanism-section section-band" id="mechanism">
+        <div className="section-heading">
+          <p className="eyebrow">THE MECHANISM</p>
+          <h2>FEES BACK THE BULL.</h2>
+          <p>
+            One direction. Public receipts. No imaginary yield.
+          </p>
+        </div>
+        <div className="flywheel-flow">
+          {flow.map((step, index) => (
+            <div key={step}>
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{step}</strong>
+              {index < flow.length - 1 ? (
+                <ArrowRight size={17} aria-hidden="true" />
+              ) : null}
+            </div>
           ))}
         </div>
         <p className="mechanism-note">
-          The terminal is built to publish each claim, bridge, SOL order, profit take, buyback, and burn.
+          Fees create exposure. Qualifying wins create scarcity.
         </p>
       </section>
 
-      <section className="launch-section thesis-section" id="sol-thesis">
-        <div className="section-label">WHY SOL?</div>
-        <h2>THE SOLANA BET NEEDS THE LONGEST CAT.</h2>
-        <div className="thesis-tape">
-          {thesis.map((item) => (
-            <span key={item}>{item}</span>
-          ))}
+      <section className="lore-section section-band" id="lore">
+        <div className="ansem-mark">
+          <Image
+            src="/ansem-token.jpg"
+            alt="The Black Bull ANSEM token mark"
+            width={800}
+            height={800}
+            sizes="(max-width: 700px) 90vw, 420px"
+          />
+          <span>THE ASSET BEHIND THE BULL</span>
         </div>
-        <p className="thesis-closing">
-          IF SOL WINS,
-          <br />
-          LONGCAT GETS SCARCER.
-        </p>
-        {EXTERNAL_LINKS.solMarket ? (
-          <a className="button ghost long-button" href={EXTERNAL_LINKS.solMarket} target="_blank" rel="noreferrer">
-            View SOL
-            <ExternalLink size={16} aria-hidden="true" />
-          </a>
-        ) : null}
-      </section>
-
-      {isLive ? (
-        <section className="launch-section terminal-section" id="live-position">
-          <div className="section-label">LIVE LONG</div>
-          <h2>CLAIMS, BRIDGES, LONGS, BUYBACKS, AND BURNS UPDATE IN PUBLIC.</h2>
+        <div className="lore-copy">
+          <p className="eyebrow">BLACK BULL LORE</p>
+          <h2>CONVICTION BECAME A CHARACTER.</h2>
+          <p>
+            Ansem became one of Solana&apos;s loudest directional traders.
+            His early WIF call became part of Crypto Twitter lore. The market
+            turned that posture into a name: <strong>the Black Bull.</strong>
+          </p>
+          <p>
+            A community-launched ANSEM token then made the identity liquid.
+            BBL is an independent satire built around the same simple instinct:
+            when the bull charges, build the position.
+          </p>
           <div className="button-row">
-            <Link className="button primary long-button" href="/dashboard">
-              Verify Position
-              <ArrowRight size={16} aria-hidden="true" />
+            <Link className="button primary" href="/thesis">
+              Read the Lore
+              <ArrowRight size={17} aria-hidden="true" />
             </Link>
-            <Link className="button ghost long-button" href="/dashboard">
-              Longcat Terminal
-            </Link>
+            <a
+              className="text-link"
+              href={ANSEM.ansemXUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Ansem on X
+              <ExternalLink size={14} aria-hidden="true" />
+            </a>
           </div>
-        </section>
-      ) : null}
-
-      <section className="launch-section burn-section" id="burns">
-        <div>
-          <p className="section-label">BUYBACKS AND BURNS</p>
-          <h2>REALIZED PROFITS BUY BACK AND BURN $LONGCAT.</h2>
-          <p className="microcopy">Only qualifying realized trading profits can trigger buybacks and permanent burns.</p>
         </div>
-        <SignalGraphicStack />
       </section>
 
-      <section className="launch-section faq-section meme-faq" id="faq">
-        <div className="section-label">FAQ</div>
-        <div className="faq-grid">
+      <section className="meme-section section-band">
+        <p>THE BULL FACES FORWARD.</p>
+        <h2>THE FLYWHEEL HANDLES THE REAR.</h2>
+        <ArrowDownRight size={48} aria-hidden="true" />
+      </section>
+
+      <section className="burn-section section-band" id="burns">
+        <div>
+          <p className="eyebrow">BUYBACKS + BURNS</p>
+          <h2>
+            THE POSITION GETS BIGGER.
+            <br />
+            THE SUPPLY GETS SMALLER.
+          </h2>
+          <p>
+            Only qualifying realized ANSEM profit can fund $BBL buybacks.
+            Every completed burn must be published with a transaction receipt.
+          </p>
+          <Link className="button ghost" href="/dashboard">
+            Verify Receipts
+            <ArrowRight size={16} aria-hidden="true" />
+          </Link>
+        </div>
+        <BullSignalStack />
+      </section>
+
+      <section className="faq-section section-band" id="faq">
+        <div className="section-heading">
+          <p className="eyebrow">FAQ</p>
+          <h2>BULL, EXPLAINED.</h2>
+        </div>
+        <div className="faq-list">
           {faq.map((item) => (
-            <article className="faq-item" key={item.question}>
+            <article key={item.question}>
               <h3>{item.question}</h3>
               <p>{item.answer}</p>
             </article>
           ))}
         </div>
       </section>
+
+      {EXTERNAL_LINKS.buy ? (
+        <section className="final-cta section-band">
+          <p>ONE BULL. ONE LONG. ONE FLYWHEEL.</p>
+          <a
+            className="button primary"
+            href={EXTERNAL_LINKS.buy}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Buy $BBL
+            <ArrowRight size={17} aria-hidden="true" />
+          </a>
+        </section>
+      ) : null}
 
       <SiteFooter />
     </main>

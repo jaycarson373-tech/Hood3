@@ -1,79 +1,61 @@
-# Longcat
+# BBL - Black Bull Long
 
-Longcat is a Solana native leverage token powered by Hyperliquid. Creator fees are designed to build one public SOL long; qualifying realized
-profits can buy back and permanently burn `$LONGCAT`.
+BBL is an independent Solana community project. Creator fees are designed to
+build one public ANSEM spot position on Hyperliquid. Qualifying realized
+profits may buy back and permanently burn `$BBL`.
 
 ## Routes
 
-- `/` - Longcat launch page with Solana-coded terminal visuals, mechanism, thesis, burns, and FAQ.
-- `/dashboard` - Hyperliquid-facing public terminal for verified SOL position telemetry and receipts.
-- `/thesis` - SOL thesis, risks, and source links.
+- `/` - launch page, live ANSEM price, Black Bull Flywheel, lore, burns, and FAQ
+- `/dashboard` - public position telemetry and transaction receipts
+- `/thesis` - Black Bull lore, thesis, sources, and risks
 
 ## Mechanism
 
-- Fee: creator fees
-- Flow: fees extend the public SOL long; qualifying realized profits buy back and burn `$LONGCAT`
+1. Creator fees are checked every 15 minutes.
+2. Routeable SOL is sent through the account's Unit deposit address.
+3. Unit SOL is sold for managed USDC on Hyperliquid spot.
+4. Managed USDC buys Unit ANSEM spot within explicit limits.
+5. Qualifying realized profit may buy `$BBL`.
+6. Purchased `$BBL` is permanently burned and the receipt is published.
 
-Solana token creation, fee routing, Hyperliquid execution, SOL position
-management, buybacks, and burns should be handled by audited server-side
-automation and published as public terminal receipts.
+This is a spot strategy, not a perpetual futures strategy. ANSEM spot has no
+liquidation price, but it can still lose substantial or total value.
 
-## X Assets And Copy
-
-- Banner: `public/x-banner.png`
-- Avatar: `public/x-avatar.png`
-
-Bio:
-```text
-The longest cat on Solana.
-
-Creator fees scale into a public SOL long on Hyperliquid.
-
-Profits buy back & burn $LONGCAT.
-```
-
-Community description:
-```text
-100% of creator fees are designed to scale into a public SOL long on Hyperliquid.
-
-Qualifying realized profits buy back & permanently burn $LONGCAT.
-```
-
-## Required Frontend Environment
+## Frontend Environment
 
 ```bash
-LAUNCH_STATE=prelaunch
+SITE_URL=
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
+BBL_TOKEN_ADDRESS=
+NEXT_PUBLIC_BBL_HYPERLIQUID_ACCOUNT=
+NEXT_PUBLIC_BBL_BUY_URL=
+NEXT_PUBLIC_BBL_DEXSCREENER_URL=
+NEXT_PUBLIC_BBL_X_URL=
+NEXT_PUBLIC_BBL_COMMUNITY_URL=
 ```
 
-`LAUNCH_STATE` is server-only. Change it to `live` only after verified public
-position and receipt rows are available.
+Unknown links and the BBL contract are hidden. The site never invents a price,
+position, transaction, buyback, or burn.
 
-The frontend only reads browser-safe Supabase views. Keep service-role keys,
-wallet keys, and Hyperliquid signing keys server-side.
+## Worker
 
-## Useful Commands
+Run `supabase/schema.sql` before connecting the worker. Use
+`railway.env.example` as the deployment checklist.
+
+Keep `DRY_RUN=true`, `HYPERLIQUID_MANAGED_SPOT_USDC=false`, and
+`BBL_ANSEM_SPOT_EXECUTION_CONFIRMED=false` until the dedicated account,
+approved API wallet, deposit address, order cap, slippage cap, and dry-run
+receipts have all been reviewed.
+
+## Commands
 
 ```bash
 npm install
 npm run dev
 npm run lint
-npm run build:vercel
 npm run build
-npm run start:railway
 npm run worker:once
 npm test
 ```
-
-## Backend Notes
-
-Run `supabase/schema.sql` in Supabase before connecting live receipts. The
-Railway worker lives in `railway-worker.mjs` and is started with
-`npm run start:railway`. It creates a run every 15 minutes, keeps the 0.05 SOL
-wallet buffer, checks the fee wallet, and writes every claim, bridge, SOL long,
-profit, buyback, and burn stage to Supabase.
-
-Keep `DRY_RUN=true` until Solana wallet authority, fee claiming, bridge routing,
-Hyperliquid order execution, profit-taking, buybacks, burns, risk limits, and
-terminal logging are verified end to end.

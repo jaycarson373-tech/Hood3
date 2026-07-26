@@ -1,7 +1,7 @@
 import {
   BadgeDollarSign,
-  Sparkles,
-  TrendingUp,
+  Flame,
+  Radar,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 
@@ -24,91 +24,91 @@ export type AutomationStep = {
   text: string;
 };
 
-export const solThesisPoints: ThesisPoint[] = [
+export const bullThesisPoints: ThesisPoint[] = [
   {
-    label: "Fast retail rail",
+    label: "Public conviction",
     value: "01",
-    text: "Solana has become one of crypto's clearest retail venues: fast, liquid, meme-native, and relentlessly online.",
-    icon: TrendingUp,
+    text: "Ansem built his reputation by expressing directional Solana trades in public. The Black Bull is the market's shorthand for that posture.",
+    icon: Radar,
   },
   {
-    label: "Native asset",
+    label: "The meme becomes an asset",
     value: "02",
-    text: "SOL is the clean directional expression of Solana network activity, liquidity, and attention.",
-    icon: Sparkles,
+    text: "A community-launched ANSEM token turned the Black Bull identity into a liquid, onchain market with visible ownership and price discovery.",
+    icon: BadgeDollarSign,
   },
   {
-    label: "Hyperliquid execution",
+    label: "The flywheel",
     value: "03",
-    text: "Longcat turns token activity into a transparent Hyperliquid-based SOL long.",
-    icon: BadgeDollarSign,
+    text: "BBL converts creator-fee flow into an accumulating ANSEM spot position, then routes qualifying realized profit toward buybacks and burns.",
+    icon: Flame,
   },
 ];
 
 export const howItWorks = [
   {
-    title: "Creator fees claim",
-    text: "The worker is designed to check and claim creator fees every 15 minutes.",
+    title: "Creator fees are checked",
+    text: "The worker checks the protocol fee wallet on a fixed 15-minute cadence.",
   },
   {
-    title: "SOL bridges to Hyperliquid",
-    text: "Routeable SOL above the 0.05 SOL buffer is queued for Hyperliquid execution.",
+    title: "Collateral reaches Hyperliquid",
+    text: "Routeable SOL is sent through the dedicated Unit deposit rail and converted to managed USDC.",
   },
   {
-    title: "The SOL long scales",
-    text: "The automation is structured to add to the public SOL long and record every order.",
+    title: "The ANSEM position grows",
+    text: "Managed USDC buys ANSEM spot on Hyperliquid within configured size and slippage limits.",
   },
   {
-    title: "Profit buys and burns",
-    text: "Qualifying realized profits bridge back, buy $LONGCAT, and permanently burn the purchased tokens.",
+    title: "Profit can buy and burn",
+    text: "Only qualifying realized profit may buy $BBL and permanently burn the purchased tokens.",
   },
 ];
 
 export const automationSteps: AutomationStep[] = [
   {
     label: "01",
-    title: "Claim fees",
-    text: "Every 15 minutes, the worker checks the fee wallet and records the claim stage.",
+    title: "Collect",
+    text: "Check creator fees and preserve the configured Solana transaction buffer.",
   },
   {
     label: "02",
-    title: "Bridge SOL",
-    text: "It keeps the 0.05 SOL buffer untouched and routes the remainder toward Hyperliquid.",
+    title: "Route",
+    text: "Send routeable SOL to the public Hyperliquid account through Unit.",
   },
   {
     label: "03",
-    title: "Long SOL",
-    text: "The execution rail is structured to scale into SOL and record the public position.",
+    title: "Build",
+    text: "Convert managed collateral into ANSEM spot exposure with bounded execution.",
   },
   {
     label: "04",
-    title: "Take profit + burn",
-    text: "Qualifying profit bridges back, buys $LONGCAT, and publishes permanent burn receipts.",
+    title: "Reduce",
+    text: "Route qualifying realized profit into $BBL market buys and permanent burns.",
   },
 ];
 
 export const risks = [
-  "Leveraged trading can lose money quickly, including through liquidation.",
-  "SOL, Solana memecoins, perp venues, and token markets can face sharp volatility and regulatory review.",
-  "Buybacks and burns only occur when qualifying realized profits exist; they are not guaranteed.",
-  "Execution, liquidity, slippage, automation, and wallet operations need audited controls before full automation.",
+  "ANSEM and $BBL can lose most or all of their value.",
+  "Spot positions avoid liquidation but still carry severe market, liquidity, custody, bridge, and execution risk.",
+  "Buybacks and burns only occur when qualifying realized profits exist; they are never guaranteed.",
+  "The system depends on Solana, Unit, Hyperliquid, token liquidity, wallet controls, and unaudited automation.",
 ];
 
 export const thesisRisks = [
   {
     label: "Market risk",
-    text: "SOL can move against the position. A long thesis is not a guarantee.",
+    text: "The ANSEM position can move sharply against the flywheel.",
   },
   {
-    label: "Liquidation risk",
-    text: "Any leveraged position can be liquidated if collateral and risk controls are not managed.",
+    label: "Concentration risk",
+    text: "Influencer-linked assets can be unusually sensitive to a small number of wallets and narratives.",
   },
   {
     label: "Execution risk",
-    text: "The mechanism depends on swaps, perp execution, buybacks, burns, receipts, and automation working correctly.",
+    text: "Deposits, spot orders, profit realization, buybacks, and burns can fail or incur slippage.",
   },
   {
     label: "Narrative risk",
-    text: "The thesis assumes Solana liquidity, retail attention, and Hyperliquid execution remain strong.",
+    text: "Attention is not permanent. The Black Bull thesis can lose cultural relevance.",
   },
 ];
