@@ -32,7 +32,7 @@ type SupabaseTerminalRow = {
 
 type SupabasePositionRow = {
   recorded_at: string;
-  hyperliquid_account: string;
+  aster_account: string;
   market: string;
   side: string;
   size: string | number;
@@ -42,6 +42,10 @@ type SupabasePositionRow = {
   leverage: string | number;
   unrealized_pnl_usdc: string | number;
   margin_used_usdc: string | number;
+};
+
+type AsterPositionResponse = {
+  position: SupabasePositionRow | null;
 };
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
@@ -85,9 +89,11 @@ function terminalTime(value: string) {
 function formatAssetAmount(value: number, asset: string | null) {
   const symbol = asset?.toUpperCase() ?? "";
 
-  if (symbol === "USDC" || symbol === "USD") return money(value, 2);
+  if (symbol === "USDC" || symbol === "USDT" || symbol === "USD") {
+    return money(value, 2);
+  }
   if (symbol === "SOL") return `${value.toFixed(4)} SOL`;
-  if (symbol === "ANSEM" || symbol === "UANSEM") {
+  if (symbol === "ANSEM") {
     return `${new Intl.NumberFormat("en-US", {
       maximumFractionDigits: 0,
     }).format(value)} ANSEM`;
@@ -120,8 +126,6 @@ export function DashboardClient() {
     useState<SupabasePositionRow | null>(null);
 
   useEffect(() => {
-    if (!supabaseUrl || !supabaseAnonKey) return;
-
     let active = true;
 
     async function readSupabaseViews() {
@@ -130,27 +134,27 @@ export function DashboardClient() {
           apikey: supabaseAnonKey ?? "",
           Authorization: `Bearer ${supabaseAnonKey}`,
         };
-        const [terminalResponse, positionResponse] = await Promise.all([
-          fetch(
-            `${supabaseUrl}/rest/v1/bbl_public_terminal?select=*&order=created_at.desc&limit=30`,
-            { cache: "no-store", headers },
-          ),
-          fetch(
-            `${supabaseUrl}/rest/v1/bbl_latest_position?select=*&market=eq.ANSEM&limit=1`,
-            { cache: "no-store", headers },
-          ),
+        const [terminalResponse, asterResponse] = await Promise.all([
+          supabaseUrl && supabaseAnonKey
+            ? fetch(
+                `${supabaseUrl}/rest/v1/bbl_public_terminal?select=*&order=created_at.desc&limit=30`,
+                { cache: "no-store", headers },
+              )
+            : Promise.resolve(null),
+          fetch("/api/aster-position", { cache: "no-store" }),
         ]);
 
-        if (!terminalResponse.ok || !positionResponse.ok) return;
-
-        const nextTerminalRows =
-          (await terminalResponse.json()) as SupabaseTerminalRow[];
-        const nextPositionRows =
-          (await positionResponse.json()) as SupabasePositionRow[];
-
         if (!active) return;
-        setTerminalRows(nextTerminalRows);
-        setLatestPosition(nextPositionRows[0] ?? null);
+
+        if (terminalResponse?.ok) {
+          setTerminalRows(
+            (await terminalResponse.json()) as SupabaseTerminalRow[],
+          );
+        }
+        if (asterResponse.ok) {
+          const payload = (await asterResponse.json()) as AsterPositionResponse;
+          setLatestPosition(payload.position);
+        }
       } catch {
         // Keep the last verified public state during a transient failure.
       }
@@ -179,7 +183,7 @@ export function DashboardClient() {
     const totalSolRouted = terminalRows
       .filter(
         (row) =>
-          row.stage.toUpperCase() === "BRIDGE" &&
+          row.stage.toUpperCase() === "ROUTE" &&
           row.asset?.toUpperCase() === "SOL",
       )
       .reduce((sum, row) => sum + safeNumber(row.amount), 0);
@@ -217,9 +221,9 @@ export function DashboardClient() {
     if (hasPosition && latestPosition) {
       if (positionSize > 0) {
         metrics.push({
-          label: "ANSEM POSITION",
+          label: "ANSEMUSDT LONG",
           value: formatAssetAmount(positionSize, "ANSEM"),
-          detail: "public spot balance",
+          detail: `${safeNumber(latestPosition.leverage).toFixed(0)}x on Aster`,
         });
       }
       if (positionNotional > 0) {
@@ -319,7 +323,7 @@ export function DashboardClient() {
         <p className="eyebrow">BLACK BULL TERMINAL</p>
         <h1>ONE POSITION. BUILT IN PUBLIC.</h1>
         <p>
-          Creator-fee claims, Unit routes, ANSEM spot orders, realized profit,
+          Creator-fee claims, Aster orders, realized profit,
           $BBL buybacks, and burns appear only after a public receipt exists.
         </p>
         <div className="button-row">
@@ -330,17 +334,17 @@ export function DashboardClient() {
               target="_blank"
               rel="noreferrer"
             >
-              Verify Account
+              Open Aster Market
               <ExternalLink size={17} aria-hidden="true" />
             </a>
           ) : null}
           <a
             className="button ghost"
-            href={ANSEM.hyperliquidSpotUrl}
+            href={ANSEM.asterMarketUrl}
             target="_blank"
             rel="noreferrer"
           >
-            ANSEM Spot
+            ANSEM on Aster
             <ExternalLink size={17} aria-hidden="true" />
           </a>
         </div>
@@ -365,7 +369,7 @@ export function DashboardClient() {
             <h2>NO POSITION PUBLISHED.</h2>
             <p>
               The dashboard remains blank until the execution account publishes
-              a verified ANSEM position or transaction receipt.
+              a verified Aster position or transaction receipt.
             </p>
           </div>
         </section>
@@ -379,12 +383,12 @@ export function DashboardClient() {
             </span>
             <div>
               <p className="eyebrow">PUBLISHED EXPOSURE</p>
-              <h2>CURRENT ANSEM SPOT.</h2>
+              <h2>CURRENT ANSEMUSDT 5X LONG.</h2>
             </div>
           </div>
           <div className="position-readout">
             <div>
-              <span>ANSEM HELD</span>
+              <span>ANSEM POSITION</span>
               <strong>{formatAssetAmount(positionSize, "ANSEM")}</strong>
             </div>
             <div>
@@ -400,14 +404,14 @@ export function DashboardClient() {
               <strong>
                 {safeNumber(latestPosition.mark_price) > 0
                   ? money(safeNumber(latestPosition.mark_price), 6)
-                  : "ANSEM / USDC"}
+                  : "ANSEM / USDT"}
               </strong>
             </div>
           </div>
           <p className="disclosure">
             <ShieldCheck size={18} aria-hidden="true" />
-            Spot exposure has no liquidation price, but the asset can still
-            lose substantial or total value.
+            This 5x position can be liquidated. Entry, mark, leverage, and PnL
+            are read from Aster&apos;s public wallet API.
           </p>
         </section>
       ) : null}
@@ -424,7 +428,7 @@ export function DashboardClient() {
         </div>
         <p className="section-copy">
           The worker is designed to preserve the SOL fee buffer, route managed
-          collateral through Unit, buy ANSEM spot within hard limits, and
+          collateral to Aster, build the ANSEMUSDT 5x long within hard limits, and
           publish every completed stage.
         </p>
         <div className="automation-grid">

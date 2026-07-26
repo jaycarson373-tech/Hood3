@@ -10,7 +10,7 @@ const requiredHomeCopy = [
   "Creator fees build one public",
   "Qualifying realized profits buy back and burn",
   "BLACK BULL TERMINAL",
-  "ANSEM POSITION",
+  "ANSEMUSDT LONG",
   "Enter Dashboard",
   "FEES BACK THE BULL.",
   "THE FLYWHEEL HANDLES THE REAR.",
@@ -73,6 +73,7 @@ test("server-renders the BBL homepage without fabricated activity", async () => 
   );
   assert.match(html, /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/);
   assert.match(html, /https:\/\/x\.com\/BlackBullLong/);
+  assert.match(html, /asterdex\.com\/en\/trade\/pro\/futures\/ANSEMUSDT/);
   assert.doesNotMatch(html, />Buy \$BBL<\/a>/);
   assert.doesNotMatch(html, bannedRenderedCopy);
 });
@@ -123,11 +124,12 @@ test("production assets and BBL configuration are present", async () => {
   assert.match(packageJson, /"name": "black-bull-long"/);
   assert.match(constants, /9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump/);
   assert.match(constants, /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/);
+  assert.match(constants, /0xe7BdaB66180a514bb591E2cD6874e58CE5809488/);
   assert.match(layout, /apple-touch-icon\.png/);
   assert.match(globals, /--gold: #c59b5f/);
   assert.match(visuals, /bbl-logo\.jpg/);
-  assert.match(worker, /BBL_ANSEM_SPOT_EXECUTION_CONFIRMED/);
-  assert.match(worker, /buyAnsemSpot/);
+  assert.match(worker, /BBL_ASTER_EXECUTION_CONFIRMED/);
+  assert.match(worker, /openAsterLong/);
 
   await Promise.all([
     access(new URL("../public/bbl-banner.jpg", import.meta.url)),

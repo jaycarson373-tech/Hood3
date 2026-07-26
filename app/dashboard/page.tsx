@@ -5,7 +5,7 @@ import { DashboardClient } from "./DashboardClient";
 
 const title = "Black Bull Terminal | BBL";
 const description =
-  "Track BBL creator fees, the public ANSEM spot position, qualifying realized profit, $BBL buybacks, and burns.";
+  "Track BBL creator fees, the public ANSEMUSDT 5x long on Aster, qualifying realized profit, $BBL buybacks, and burns.";
 
 export const dynamic = "force-dynamic";
 
@@ -22,8 +22,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: SITE.ogImage,
-        width: 1729,
-        height: 910,
+        width: 1280,
+        height: 426,
         alt: "BBL, Black Bull Long",
       },
     ],

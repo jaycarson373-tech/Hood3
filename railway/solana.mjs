@@ -29,7 +29,7 @@ async function loadSolanaSigner() {
     : loadKeypairSignerFromEnvironmentBase58("BBL_SOL_WALLET_PRIVATE_KEY");
 }
 
-export async function transferSolToHyperliquid({
+export async function transferSol({
   rpcUrl,
   expectedSource,
   destination,

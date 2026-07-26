@@ -19,7 +19,6 @@
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
-    "@nktkas/hyperliquid": "^0.33.2",
     "drizzle-orm": "0.45.2",
     "gill": "^0.14.0",
     "lucide-react": "^1.24.0",

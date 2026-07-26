@@ -13,7 +13,7 @@ import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
 const title = "Black Bull Lore | BBL";
 const description =
-  "The lore and thesis behind BBL, Black Bull Long: public ANSEM exposure, transparent execution, and conditional $BBL buyback burns.";
+  "The lore and thesis behind BBL, Black Bull Long: public ANSEMUSDT 5x exposure on Aster, transparent execution, and conditional $BBL buyback burns.";
 
 export const metadata: Metadata = {
   title,
@@ -28,8 +28,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: SITE.ogImage,
-        width: 1729,
-        height: 910,
+        width: 1280,
+        height: 426,
         alt: "BBL, Black Bull Long",
       },
     ],
@@ -54,7 +54,7 @@ export default function ThesisPage() {
           <h1>THE BULL BEHIND THE BULL.</h1>
           <p>
             A directional trader became a character. The character became an
-            onchain asset. BBL turns that lore into a transparent spot flywheel.
+            onchain asset. BBL turns that lore into a transparent 5x long flywheel.
           </p>
           <div className="button-row">
             <Link className="button primary" href="/dashboard">

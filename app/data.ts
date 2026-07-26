@@ -40,7 +40,7 @@ export const bullThesisPoints: ThesisPoint[] = [
   {
     label: "The flywheel",
     value: "03",
-    text: "BBL converts creator-fee flow into an accumulating ANSEM spot position, then routes qualifying realized profit toward buybacks and burns.",
+    text: "BBL converts creator-fee flow into an accumulating ANSEMUSDT 5x long on Aster, then routes qualifying realized profit toward buybacks and burns.",
     icon: Flame,
   },
 ];
@@ -51,12 +51,12 @@ export const howItWorks = [
     text: "The worker checks the protocol fee wallet on a fixed 15-minute cadence.",
   },
   {
-    title: "Collateral reaches Hyperliquid",
-    text: "Routeable SOL is sent through the dedicated Unit deposit rail and converted to managed USDC.",
+    title: "Collateral reaches Aster",
+    text: "Routeable creator fees are moved into the dedicated Aster execution account.",
   },
   {
     title: "The ANSEM position grows",
-    text: "Managed USDC buys ANSEM spot on Hyperliquid within configured size and slippage limits.",
+    text: "Managed collateral builds the ANSEMUSDT long at 5x within configured size and risk limits.",
   },
   {
     title: "Profit can buy and burn",
@@ -73,12 +73,12 @@ export const automationSteps: AutomationStep[] = [
   {
     label: "02",
     title: "Route",
-    text: "Send routeable SOL to the public Hyperliquid account through Unit.",
+    text: "Route deployable creator fees to the public Aster execution account.",
   },
   {
     label: "03",
     title: "Build",
-    text: "Convert managed collateral into ANSEM spot exposure with bounded execution.",
+    text: "Build the ANSEMUSDT 5x long with bounded execution.",
   },
   {
     label: "04",
@@ -89,9 +89,9 @@ export const automationSteps: AutomationStep[] = [
 
 export const risks = [
   "ANSEM and $BBL can lose most or all of their value.",
-  "Spot positions avoid liquidation but still carry severe market, liquidity, custody, bridge, and execution risk.",
+  "A 5x leveraged position can be liquidated and carries severe market, liquidity, custody, funding, and execution risk.",
   "Buybacks and burns only occur when qualifying realized profits exist; they are never guaranteed.",
-  "The system depends on Solana, Unit, Hyperliquid, token liquidity, wallet controls, and unaudited automation.",
+  "The system depends on Solana, Aster, token liquidity, wallet controls, and unaudited automation.",
 ];
 
 export const thesisRisks = [
@@ -105,7 +105,7 @@ export const thesisRisks = [
   },
   {
     label: "Execution risk",
-    text: "Deposits, spot orders, profit realization, buybacks, and burns can fail or incur slippage.",
+    text: "Deposits, leveraged orders, profit realization, buybacks, and burns can fail or incur slippage.",
   },
   {
     label: "Narrative risk",

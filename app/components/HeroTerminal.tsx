@@ -16,6 +16,11 @@ type PositionRow = {
   size: string | number;
   notional_usdc: string | number;
   entry_price: string | number | null;
+  leverage: string | number;
+};
+
+type AsterPositionResponse = {
+  position: PositionRow | null;
 };
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
@@ -45,8 +50,6 @@ export function HeroTerminal() {
   const [position, setPosition] = useState<PositionRow | null>(null);
 
   useEffect(() => {
-    if (!supabaseUrl || !supabaseAnonKey) return;
-
     let active = true;
 
     async function refresh() {
@@ -55,27 +58,27 @@ export function HeroTerminal() {
           apikey: supabaseAnonKey ?? "",
           Authorization: `Bearer ${supabaseAnonKey}`,
         };
-        const [terminalResponse, positionResponse] = await Promise.all([
-          fetch(
-            `${supabaseUrl}/rest/v1/bbl_public_terminal?select=stage,status,asset,amount&status=eq.succeeded&order=created_at.desc&limit=1000`,
-            { cache: "no-store", headers },
-          ),
-          fetch(
-            `${supabaseUrl}/rest/v1/bbl_latest_position?select=side,size,notional_usdc,entry_price&market=eq.ANSEM&limit=1`,
-            { cache: "no-store", headers },
-          ),
+        const [terminalResponse, asterResponse] = await Promise.all([
+          supabaseUrl && supabaseAnonKey
+            ? fetch(
+                `${supabaseUrl}/rest/v1/bbl_public_terminal?select=stage,status,asset,amount&status=eq.succeeded&order=created_at.desc&limit=1000`,
+                { cache: "no-store", headers },
+              )
+            : Promise.resolve(null),
+          fetch("/api/aster-position", { cache: "no-store" }),
         ]);
 
-        if (!terminalResponse.ok || !positionResponse.ok) return;
-
-        const nextTerminalRows =
-          (await terminalResponse.json()) as TerminalRow[];
-        const nextPositionRows =
-          (await positionResponse.json()) as PositionRow[];
-
         if (!active) return;
-        setTerminalRows(nextTerminalRows);
-        setPosition(nextPositionRows[0] ?? null);
+
+        if (terminalResponse?.ok) {
+          setTerminalRows(
+            (await terminalResponse.json()) as TerminalRow[],
+          );
+        }
+        if (asterResponse.ok) {
+          const payload = (await asterResponse.json()) as AsterPositionResponse;
+          setPosition(payload.position);
+        }
       } catch {
         // Keep the last verified public state during a transient failure.
       }
@@ -94,6 +97,7 @@ export function HeroTerminal() {
     const positionSize = Math.abs(safeNumber(position?.size));
     const positionValue = Math.abs(safeNumber(position?.notional_usdc));
     const entryPrice = safeNumber(position?.entry_price);
+    const leverage = safeNumber(position?.leverage);
     const feesDeployed = terminalRows
       .filter(
         (row) =>
@@ -113,10 +117,10 @@ export function HeroTerminal() {
     return [
       {
         label: "ENGINE STATUS",
-        value: hasPosition ? "BULL BUILDING" : "NO POSITION PUBLISHED",
+        value: hasPosition ? "ASTER LONG LIVE" : "NO POSITION PUBLISHED",
       },
       {
-        label: "ANSEM POSITION",
+        label: "ANSEMUSDT LONG",
         value:
           positionSize > 0
             ? `${tokenAmount(positionSize, 0)} ANSEM`
@@ -126,6 +130,10 @@ export function HeroTerminal() {
         label: "POSITION VALUE",
         value:
           positionValue > 0 ? money(positionValue) : "NO PUBLIC RECEIPT",
+      },
+      {
+        label: "LEVERAGE",
+        value: leverage > 0 ? `${leverage.toFixed(0)}x` : "NO PUBLIC RECEIPT",
       },
       {
         label: "AVERAGE ENTRY",
@@ -143,7 +151,7 @@ export function HeroTerminal() {
   }, [position, terminalRows]);
 
   return (
-    <aside className="hero-terminal" aria-label="Live BBL terminal">
+    <aside className="hero-terminal" aria-label="Live BBL Aster terminal">
       <div className="hero-terminal__head">
         <div>
           <span>PUBLIC FEED</span>

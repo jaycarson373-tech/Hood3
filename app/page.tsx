@@ -17,7 +17,7 @@ import { SiteFooter, SiteHeader } from "./components/SiteChrome";
 const flow = [
   "$BBL trades",
   "creator fees collect",
-  "ANSEM spot grows",
+  "ANSEM 5x long grows",
   "profit is realized",
   "$BBL gets bought",
   "$BBL gets burned",
@@ -27,12 +27,12 @@ const faq = [
   {
     question: "What is BBL?",
     answer:
-      "BBL means Black Bull Long: a community token designed to turn creator fees into a public ANSEM spot position.",
+      "BBL means Black Bull Long: a community token designed to turn creator fees into a public ANSEMUSDT 5x long.",
   },
   {
     question: "Where do creator fees go?",
     answer:
-      "The system is designed to route creator fees into managed collateral that buys ANSEM spot on Hyperliquid, subject to execution limits.",
+      "The system is designed to route creator fees into managed collateral for an ANSEMUSDT 5x long on Aster, subject to execution and risk limits.",
   },
   {
     question: "What happens when profit is realized?",
@@ -76,11 +76,11 @@ export default function Home() {
             </Link>
             <a
               className="button ghost"
-              href={ANSEM.hyperliquidSpotUrl}
+              href={ANSEM.asterMarketUrl}
               target="_blank"
               rel="noreferrer"
             >
-              View ANSEM
+              View on Aster
               <ExternalLink size={16} aria-hidden="true" />
             </a>
           </div>

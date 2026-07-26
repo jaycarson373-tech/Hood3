@@ -50,7 +50,7 @@ export function BullSignalStack() {
     >
       <div>
         <span>POSITION</span>
-        <strong>ANSEM SPOT</strong>
+        <strong>ANSEM 5X LONG</strong>
       </div>
       <div>
         <span>QUALIFYING PROFIT</span>

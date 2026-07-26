@@ -105,7 +105,7 @@ export function SiteFooter() {
         lose substantial or total value. Buybacks and burns require qualifying
         realized profits and are not guaranteed. Nothing here is financial
         advice. BBL is independent and is not affiliated with or endorsed by
-        Ansem, The Black Bull, Hyperliquid, Unit, or any launchpad.
+        Ansem, The Black Bull, Aster, or any launchpad.
       </p>
     </footer>
   );

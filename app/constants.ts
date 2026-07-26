@@ -4,7 +4,7 @@ export const SITE = {
   name: "BBL",
   title: "BBL | Black Bull Long",
   description:
-    "Black Bull Long turns creator fees into a public ANSEM position. Qualifying realized profits buy back and burn $BBL.",
+    "Black Bull Long turns creator fees into a public ANSEMUSDT 5x long on Aster. Qualifying realized profits buy back and burn $BBL.",
   configuredUrl: configuredSiteUrl || null,
   ogImage: "/bbl-banner.jpg",
 } as const;
@@ -16,7 +16,8 @@ export const ANSEM = {
   pairAddress: "FnzKY6x7entQ1eR3D225dQyT7ybfka4PskBMQhb8L3CC",
   dexScreenerUrl:
     "https://dexscreener.com/solana/fnzky6x7entq1er3d225dqyt7ybfka4pskbmqhb8l3cc",
-  hyperliquidSpotUrl: "https://app.hyperliquid.xyz/trade/ANSEM/USDC",
+  asterMarketUrl:
+    "https://www.asterdex.com/en/trade/pro/futures/ANSEMUSDT",
   officialSiteUrl: "https://www.blackbullsol.com/",
   officialXUrl: "https://x.com/blackbullsol",
   ansemXUrl: "https://x.com/blknoiz06",
@@ -27,8 +28,9 @@ export const BBL_CONTRACT_ADDRESS =
   "3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump";
 
 export const EXECUTION = {
-  hyperliquidAccount:
-    process.env.NEXT_PUBLIC_BBL_HYPERLIQUID_ACCOUNT?.trim() || null,
+  asterWallet:
+    process.env.BBL_ASTER_WALLET_ADDRESS?.trim() ||
+    "0xe7BdaB66180a514bb591E2cD6874e58CE5809488",
 } as const;
 
 export const EXTERNAL_LINKS: {
@@ -47,10 +49,8 @@ export const EXTERNAL_LINKS: {
     process.env.NEXT_PUBLIC_BBL_X_URL?.trim() ||
     "https://x.com/BlackBullLong",
   community: process.env.NEXT_PUBLIC_BBL_COMMUNITY_URL?.trim() || null,
-  position: EXECUTION.hyperliquidAccount
-    ? `https://app.hyperliquid.xyz/explorer/address/${EXECUTION.hyperliquidAccount}`
-    : null,
-  ansemMarket: ANSEM.hyperliquidSpotUrl,
+  position: EXECUTION.asterWallet ? ANSEM.asterMarketUrl : null,
+  ansemMarket: ANSEM.asterMarketUrl,
 };
 
 export type SiteLink = {
