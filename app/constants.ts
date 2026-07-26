@@ -23,7 +23,8 @@ export const ANSEM = {
 } as const;
 
 export const BBL_CONTRACT_ADDRESS =
-  process.env.BBL_TOKEN_ADDRESS?.trim() || null;
+  process.env.BBL_TOKEN_ADDRESS?.trim() ||
+  "3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump";
 
 export const EXECUTION = {
   hyperliquidAccount:
@@ -39,8 +40,12 @@ export const EXTERNAL_LINKS: {
   ansemMarket: string;
 } = {
   buy: process.env.NEXT_PUBLIC_BBL_BUY_URL?.trim() || null,
-  dexScreener: process.env.NEXT_PUBLIC_BBL_DEXSCREENER_URL?.trim() || null,
-  x: process.env.NEXT_PUBLIC_BBL_X_URL?.trim() || null,
+  dexScreener:
+    process.env.NEXT_PUBLIC_BBL_DEXSCREENER_URL?.trim() ||
+    `https://dexscreener.com/solana/${BBL_CONTRACT_ADDRESS}`,
+  x:
+    process.env.NEXT_PUBLIC_BBL_X_URL?.trim() ||
+    "https://x.com/BlackBullLong",
   community: process.env.NEXT_PUBLIC_BBL_COMMUNITY_URL?.trim() || null,
   position: EXECUTION.hyperliquidAccount
     ? `https://app.hyperliquid.xyz/explorer/address/${EXECUTION.hyperliquidAccount}`

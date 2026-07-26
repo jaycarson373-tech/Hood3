@@ -1,4 +1,4 @@
-import { ANSEM } from "../../constants";
+import { ANSEM, BBL_CONTRACT_ADDRESS } from "../../constants";
 
 export const dynamic = "force-dynamic";
 
@@ -74,10 +74,9 @@ async function getTokenSnapshot(
 }
 
 export async function GET() {
-  const bblAddress = process.env.BBL_TOKEN_ADDRESS?.trim() || null;
   const [ansem, bbl] = await Promise.all([
     getTokenSnapshot(ANSEM.address, ANSEM.symbol),
-    bblAddress ? getTokenSnapshot(bblAddress, "BBL") : Promise.resolve(null),
+    getTokenSnapshot(BBL_CONTRACT_ADDRESS, "BBL"),
   ]);
 
   return Response.json(

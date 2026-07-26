@@ -71,6 +71,8 @@ test("server-renders the BBL homepage without fabricated activity", async () => 
     html,
     /dexscreener\.com\/solana\/fnzky6x7entq1er3d225dqyt7ybfka4pskbmqhb8l3cc/i,
   );
+  assert.match(html, /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/);
+  assert.match(html, /https:\/\/x\.com\/BlackBullLong/);
   assert.doesNotMatch(html, />Buy \$BBL<\/a>/);
   assert.doesNotMatch(html, bannedRenderedCopy);
 });
@@ -120,6 +122,7 @@ test("production assets and BBL configuration are present", async () => {
 
   assert.match(packageJson, /"name": "black-bull-long"/);
   assert.match(constants, /9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump/);
+  assert.match(constants, /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/);
   assert.match(layout, /apple-touch-icon\.png/);
   assert.match(globals, /--gold: #c59b5f/);
   assert.match(visuals, /bbl-logo\.jpg/);
