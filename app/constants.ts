@@ -1,3 +1,18 @@
+import {
+  ANSEM_CA,
+  ANSEM_MARKET_URL,
+  ANSEM_OFFICIAL_SITE_URL,
+  ANSEM_OFFICIAL_X_URL,
+  ANSEM_PAIR_ADDRESS,
+  ANSEM_X_URL,
+  ASTER_MARKET_URL,
+  CA,
+  DEXSCREENER_URL,
+  POSITION_URL,
+  PUMP_FUN_URL,
+  X_URL,
+} from "../lib/links";
+
 const configuredSiteUrl = process.env.SITE_URL?.trim();
 
 export const SITE = {
@@ -12,20 +27,16 @@ export const SITE = {
 export const ANSEM = {
   name: "The Black Bull",
   symbol: "ANSEM",
-  address: "9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump",
-  pairAddress: "FnzKY6x7entQ1eR3D225dQyT7ybfka4PskBMQhb8L3CC",
-  dexScreenerUrl:
-    "https://dexscreener.com/solana/fnzky6x7entq1er3d225dqyt7ybfka4pskbmqhb8l3cc",
-  asterMarketUrl:
-    "https://www.asterdex.com/en/trade/pro/futures/ANSEMUSDT",
-  officialSiteUrl: "https://www.blackbullsol.com/",
-  officialXUrl: "https://x.com/blackbullsol",
-  ansemXUrl: "https://x.com/blknoiz06",
+  address: ANSEM_CA,
+  pairAddress: ANSEM_PAIR_ADDRESS,
+  dexScreenerUrl: ANSEM_MARKET_URL,
+  asterMarketUrl: ASTER_MARKET_URL,
+  officialSiteUrl: ANSEM_OFFICIAL_SITE_URL,
+  officialXUrl: ANSEM_OFFICIAL_X_URL,
+  ansemXUrl: ANSEM_X_URL,
 } as const;
 
-export const BBL_CONTRACT_ADDRESS =
-  process.env.BBL_TOKEN_ADDRESS?.trim() ||
-  "3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump";
+export const BBL_CONTRACT_ADDRESS = CA;
 
 export const EXECUTION = {
   asterWallet:
@@ -41,16 +52,12 @@ export const EXTERNAL_LINKS: {
   position: string | null;
   ansemMarket: string;
 } = {
-  buy: process.env.NEXT_PUBLIC_BBL_BUY_URL?.trim() || null,
-  dexScreener:
-    process.env.NEXT_PUBLIC_BBL_DEXSCREENER_URL?.trim() ||
-    `https://dexscreener.com/solana/${BBL_CONTRACT_ADDRESS}`,
-  x:
-    process.env.NEXT_PUBLIC_BBL_X_URL?.trim() ||
-    "https://x.com/BlackBullLong",
+  buy: PUMP_FUN_URL,
+  dexScreener: DEXSCREENER_URL,
+  x: X_URL,
   community: process.env.NEXT_PUBLIC_BBL_COMMUNITY_URL?.trim() || null,
-  position: EXECUTION.asterWallet ? ANSEM.asterMarketUrl : null,
-  ansemMarket: ANSEM.asterMarketUrl,
+  position: POSITION_URL,
+  ansemMarket: ANSEM_MARKET_URL,
 };
 
 export type SiteLink = {
@@ -59,7 +66,7 @@ export type SiteLink = {
 };
 
 const optionalLinks: Array<[string, string | null]> = [
-  ["Buy $BBL", EXTERNAL_LINKS.buy],
+  ["Pump.fun", EXTERNAL_LINKS.buy],
   ["DexScreener", EXTERNAL_LINKS.dexScreener],
   ["X", EXTERNAL_LINKS.x],
   ["Community", EXTERNAL_LINKS.community],

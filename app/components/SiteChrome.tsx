@@ -7,6 +7,7 @@ import {
   EXTERNAL_LINKS,
   externalLinks,
 } from "../constants";
+import { PUMP_FUN_URL } from "../../lib/links";
 import { HeaderContract } from "./HeaderContract";
 
 const navLinks = [
@@ -66,6 +67,15 @@ export function SiteHeader() {
               Dashboard
             </Link>
           )}
+          <a
+            className="header-buy-link"
+            href={PUMP_FUN_URL}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Buy $BBL
+            <ExternalLink size={13} aria-hidden="true" />
+          </a>
         </div>
       </div>
     </header>

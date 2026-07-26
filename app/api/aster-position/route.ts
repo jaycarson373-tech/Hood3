@@ -1,4 +1,5 @@
 import { ANSEM, EXECUTION } from "../../constants";
+import { ASTER_PUBLIC_RPC_URL } from "../../../lib/links";
 
 export const dynamic = "force-dynamic";
 
@@ -35,7 +36,7 @@ export async function GET() {
   }
 
   try {
-    const response = await fetch("https://tapi.asterdex.com/info", {
+    const response = await fetch(ASTER_PUBLIC_RPC_URL, {
       method: "POST",
       headers: {
         Accept: "application/json",

@@ -1,4 +1,5 @@
 import { ANSEM, BBL_CONTRACT_ADDRESS } from "../../constants";
+import { DEXSCREENER_TOKEN_PAIRS_API_URL } from "../../../lib/links";
 
 export const dynamic = "force-dynamic";
 
@@ -38,7 +39,7 @@ async function getTokenSnapshot(
 ): Promise<MarketSnapshot | null> {
   try {
     const response = await fetch(
-      `https://api.dexscreener.com/token-pairs/v1/solana/${address}`,
+      `${DEXSCREENER_TOKEN_PAIRS_API_URL}/${address}`,
       {
         headers: { Accept: "application/json" },
         next: { revalidate: 30 },
