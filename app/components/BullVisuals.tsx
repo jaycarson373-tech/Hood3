@@ -29,6 +29,7 @@ export function BullBackdrop({ variant = "landing" }: BullBackdropProps) {
         width={1280}
         height={426}
         sizes="100vw"
+        priority
       />
       <Image
         className="bull-backdrop__mark"

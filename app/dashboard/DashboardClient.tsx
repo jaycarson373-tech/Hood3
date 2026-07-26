@@ -9,7 +9,11 @@ import {
   Terminal,
   TrendingUp,
 } from "lucide-react";
-import { ANSEM, EXTERNAL_LINKS } from "../constants";
+import {
+  ANSEM_MARKET_URL,
+  ASTER_MARKET_URL,
+  POSITION_URL,
+} from "../../lib/links";
 import { automationSteps, howItWorks } from "../data";
 import type { Metric } from "../data";
 import {
@@ -327,24 +331,22 @@ export function DashboardClient() {
           $BBL buybacks, and burns appear only after a public receipt exists.
         </p>
         <div className="button-row">
-          {EXTERNAL_LINKS.position ? (
-            <a
-              className="button primary"
-              href={EXTERNAL_LINKS.position}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Open Aster Market
-              <ExternalLink size={17} aria-hidden="true" />
-            </a>
-          ) : null}
           <a
-            className="button ghost"
-            href={ANSEM.asterMarketUrl}
+            className="button primary"
+            href={ASTER_MARKET_URL}
             target="_blank"
             rel="noreferrer"
           >
-            ANSEM on Aster
+            Open Aster Market
+            <ExternalLink size={17} aria-hidden="true" />
+          </a>
+          <a
+            className="button ghost"
+            href={ANSEM_MARKET_URL}
+            target="_blank"
+            rel="noreferrer"
+          >
+            ANSEM Chart
             <ExternalLink size={17} aria-hidden="true" />
           </a>
         </div>
@@ -363,13 +365,12 @@ export function DashboardClient() {
         </section>
       ) : (
         <section className="dashboard-empty section-band">
-          <span aria-hidden="true">00</span>
           <div>
             <p className="eyebrow">PUBLIC POSITION</p>
-            <h2>NO POSITION PUBLISHED.</h2>
+            <h2>THE BULL IS ARMED.</h2>
             <p>
-              The dashboard remains blank until the execution account publishes
-              a verified Aster position or transaction receipt.
+              Every fee claim, Aster order, buyback, and burn appears here the
+              moment its receipt exists.
             </p>
           </div>
         </section>
@@ -413,6 +414,15 @@ export function DashboardClient() {
             This 5x position can be liquidated. Entry, mark, leverage, and PnL
             are read from Aster&apos;s public wallet API.
           </p>
+          <a
+            className="button ghost position-link"
+            href={POSITION_URL}
+            target="_blank"
+            rel="noreferrer"
+          >
+            View Position
+            <ExternalLink size={17} aria-hidden="true" />
+          </a>
         </section>
       ) : null}
 

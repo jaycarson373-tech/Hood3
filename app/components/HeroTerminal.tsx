@@ -117,35 +117,37 @@ export function HeroTerminal() {
     return [
       {
         label: "ENGINE STATUS",
-        value: hasPosition ? "ASTER LONG LIVE" : "NO POSITION PUBLISHED",
+        value: hasPosition
+          ? "ASTER LONG LIVE"
+          : "ARMED · AWAITING FIRST RECEIPT",
       },
       {
         label: "ANSEMUSDT LONG",
         value:
           positionSize > 0
             ? `${tokenAmount(positionSize, 0)} ANSEM`
-            : "NO PUBLIC RECEIPT",
+            : "—",
       },
       {
         label: "POSITION VALUE",
         value:
-          positionValue > 0 ? money(positionValue) : "NO PUBLIC RECEIPT",
+          positionValue > 0 ? money(positionValue) : "—",
       },
       {
         label: "LEVERAGE",
-        value: leverage > 0 ? `${leverage.toFixed(0)}x` : "NO PUBLIC RECEIPT",
+        value: leverage > 0 ? `${leverage.toFixed(0)}x` : "—",
       },
       {
         label: "AVERAGE ENTRY",
-        value: entryPrice > 0 ? money(entryPrice) : "NO PUBLIC RECEIPT",
+        value: entryPrice > 0 ? money(entryPrice) : "—",
       },
       {
         label: "FEES DEPLOYED",
-        value: feesDeployed > 0 ? `${feesDeployed.toFixed(4)} SOL` : "NO PUBLIC RECEIPT",
+        value: feesDeployed > 0 ? `${feesDeployed.toFixed(4)} SOL` : "—",
       },
       {
         label: "$BBL BURNED",
-        value: tokensBurned > 0 ? tokenAmount(tokensBurned) : "NO PUBLIC RECEIPT",
+        value: tokensBurned > 0 ? tokenAmount(tokensBurned) : "—",
       },
     ];
   }, [position, terminalRows]);

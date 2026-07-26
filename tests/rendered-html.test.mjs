@@ -11,12 +11,13 @@ const requiredHomeCopy = [
   "Qualifying realized profits buy back and burn",
   "BLACK BULL TERMINAL",
   "ANSEMUSDT LONG",
+  "ARMED · AWAITING FIRST RECEIPT",
   "Enter Dashboard",
   "FEES BACK THE BULL.",
   "THE FLYWHEEL HANDLES THE REAR.",
 ];
 const bannedRenderedCopy =
-  /coming soon|placeholder|\bmock\b|\bdemo\b|\bTBD\b|guaranteed yield|passive income|dividends|treasury/i;
+  /coming soon|placeholder|\bmock\b|\bdemo\b|\bTBD\b|guaranteed yield|passive income|dividends|treasury|NO PUBLIC RECEIPT|NO POSITION PUBLISHED|>SYNCING<|>LOADING<|>\$0</i;
 
 async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -74,7 +75,12 @@ test("server-renders the BBL homepage without fabricated activity", async () => 
   assert.match(html, /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/);
   assert.match(html, /https:\/\/x\.com\/BlackBullLong/);
   assert.match(html, /asterdex\.com\/en\/trade\/pro\/futures\/ANSEMUSDT/);
-  assert.doesNotMatch(html, />Buy \$BBL<\/a>/);
+  assert.match(
+    html,
+    /https:\/\/pump\.fun\/coin\/3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/,
+  );
+  assert.match(html, /Buy \$BBL/);
+  assert.match(html, /Pump\.fun/);
   assert.doesNotMatch(html, bannedRenderedCopy);
 });
 
@@ -92,7 +98,13 @@ test("server-renders dashboard and lore routes with route-specific metadata", as
   ]);
 
   assert.match(dashboardHtml, /BLACK BULL TERMINAL/);
-  assert.match(dashboardHtml, /NO POSITION PUBLISHED/);
+  assert.match(dashboardHtml, /THE BULL IS ARMED/);
+  assert.match(
+    dashboardHtml,
+    /Every fee claim, Aster order, buyback, and burn appears here the moment its receipt exists/,
+  );
+  assert.match(dashboardHtml, /Open Aster Market/);
+  assert.match(dashboardHtml, /ANSEM Chart/);
   assert.match(
     dashboardHtml,
     /http:\/\/localhost:3000\/dashboard/,
@@ -111,10 +123,11 @@ test("server-renders dashboard and lore routes with route-specific metadata", as
 });
 
 test("production assets and BBL configuration are present", async () => {
-  const [layout, constants, packageJson, globals, visuals, worker] =
+  const [layout, constants, links, packageJson, globals, visuals, worker] =
     await Promise.all([
     readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
     readFile(new URL("../app/constants.ts", import.meta.url), "utf8"),
+    readFile(new URL("../lib/links.ts", import.meta.url), "utf8"),
     readFile(new URL("../package.json", import.meta.url), "utf8"),
     readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../app/components/BullVisuals.tsx", import.meta.url), "utf8"),
@@ -122,12 +135,18 @@ test("production assets and BBL configuration are present", async () => {
     ]);
 
   assert.match(packageJson, /"name": "black-bull-long"/);
-  assert.match(constants, /9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump/);
-  assert.match(constants, /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/);
+  assert.match(links, /9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump/);
+  assert.match(links, /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/);
+  assert.match(links, /PUMP_FUN_URL/);
+  assert.match(links, /ASTER_ACCOUNT_URL: string \| null = null/);
+  assert.match(links, /POSITION_URL = ASTER_ACCOUNT_URL \?\? ASTER_MARKET_URL/);
   assert.match(constants, /0xe7BdaB66180a514bb591E2cD6874e58CE5809488/);
   assert.match(layout, /apple-touch-icon\.png/);
   assert.match(globals, /--gold: #c59b5f/);
   assert.match(visuals, /bbl-logo\.jpg/);
+  assert.match(visuals, /bull-backdrop__banner/);
+  assert.match(globals, /\.bull-backdrop__banner \{[\s\S]*position: absolute/);
+  assert.match(globals, /\.hero-bull img \{[\s\S]*width: min\(780px, 100%\)/);
   assert.match(worker, /BBL_ASTER_EXECUTION_CONFIRMED/);
   assert.match(worker, /openAsterLong/);
 
