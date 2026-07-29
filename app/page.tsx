@@ -1,214 +1,360 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  ArrowDownRight,
   ArrowRight,
-  ExternalLink,
+  ArrowUpRight,
+  ArrowLeftRight,
+  BarChart3,
+  Flame,
+  History,
+  Landmark,
+  ReceiptText,
+  RefreshCw,
+  ShieldCheck,
+  Sparkles,
+  Wallet,
 } from "lucide-react";
-import { ANSEM, EXTERNAL_LINKS } from "./constants";
-import { HeroTerminal } from "./components/HeroTerminal";
+import { EXTERNAL_LINKS } from "./constants";
+import { ActivityTicker } from "./components/ActivityTicker";
+import { HedgeTerminal } from "./components/HedgeTerminal";
 import { MarketStrip } from "./components/MarketStrip";
-import {
-  BullBackdrop,
-  BullSignalStack,
-} from "./components/BullVisuals";
+import { MemeGallery } from "./components/MemeGallery";
+import { PfpStudio } from "./components/PfpStudio";
 import { SiteFooter, SiteHeader } from "./components/SiteChrome";
+import { mandatePoints, roadmap, strategySteps } from "./data";
 
 const flow = [
-  "$BBL trades",
-  "creator fees collect",
-  "ANSEM 5x long grows",
-  "profit is realized",
-  "$BBL gets bought",
-  "$BBL gets burned",
+  "Creator Fees",
+  "Bridge",
+  "Perpetual Hedge",
+  "Profit",
+  "Bridge Back",
+  "Buyback",
+  "Burn",
+];
+
+const proofLinks = [
+  {
+    label: "Total fees collected",
+    detail: "Verified claim receipts",
+    href: "/dashboard",
+    icon: ReceiptText,
+    external: false,
+  },
+  {
+    label: "Total bridged",
+    detail: "Verified bridge receipts",
+    href: "/dashboard#activity",
+    icon: ArrowLeftRight,
+    external: false,
+  },
+  {
+    label: "Current treasury",
+    detail: "Public execution account",
+    href: EXTERNAL_LINKS.position,
+    icon: Landmark,
+    external: true,
+  },
+  {
+    label: "Current position",
+    detail: "Public execution account",
+    href: EXTERNAL_LINKS.position,
+    icon: ShieldCheck,
+    external: true,
+  },
+  {
+    label: "Current profit",
+    detail: "Published strategy PnL",
+    href: "/dashboard",
+    icon: BarChart3,
+    external: false,
+  },
+  {
+    label: "Total burned",
+    detail: "Permanent burn receipts",
+    href: "/dashboard#activity",
+    icon: Flame,
+    external: false,
+  },
+  {
+    label: "Buyback history",
+    detail: "Published market purchases",
+    href: "/dashboard#activity",
+    icon: RefreshCw,
+    external: false,
+  },
+  {
+    label: "Bridge history",
+    detail: "Published capital routes",
+    href: "/dashboard#activity",
+    icon: History,
+    external: false,
+  },
+  {
+    label: "Wallet address",
+    detail: "Public execution wallet",
+    href: EXTERNAL_LINKS.position,
+    icon: Wallet,
+    external: true,
+  },
+  {
+    label: "Transaction explorer",
+    detail: "Receipt-level proof",
+    href: "/dashboard#activity",
+    icon: ReceiptText,
+    external: false,
+  },
+  {
+    label: "Token contract",
+    detail: "Solana contract market",
+    href: EXTERNAL_LINKS.buy,
+    icon: Landmark,
+    external: true,
+  },
 ];
 
 const faq = [
   {
-    question: "What is BBL?",
+    question: "What is $HEDGE?",
     answer:
-      "BBL means Black Bull Long: a community token designed to turn creator fees into a public ANSEMUSDT 5x long.",
+      "$HEDGE is a speculative Solana community token built around a transparent perpetual trading mandate.",
   },
   {
     question: "Where do creator fees go?",
     answer:
-      "The system is designed to route creator fees into managed collateral for an ANSEMUSDT 5x long on Aster, subject to execution and risk limits.",
+      "The system is designed to route creator fees into managed strategy capital, subject to execution, bridge, and risk controls.",
   },
   {
-    question: "What happens when profit is realized?",
+    question: "What happens to realized profit?",
     answer:
-      "Qualifying realized profit may market-buy $BBL and permanently burn the purchased tokens.",
+      "Qualifying realized profit may return to Solana, market-buy $HEDGE, and permanently burn the purchased tokens.",
   },
   {
-    question: "Are buybacks guaranteed?",
+    question: "Is the hedge guaranteed to profit?",
     answer:
-      "No. ANSEM can lose value, execution can fail, and buybacks only occur when qualifying realized profits exist.",
+      "No. Perpetual positions can lose money or be liquidated. Buybacks and burns only occur when qualifying realized profit exists.",
   },
 ];
 
 export default function Home() {
   return (
-    <main className="site-shell bbl-site">
+    <main className="site-shell hedge-site">
       <SiteHeader />
-      <BullBackdrop />
 
-      <section className="hero-section" id="top">
-        <div className="hero-copy">
-          <p className="eyebrow">THE BLACK BULL FLYWHEEL</p>
+      <section className="hedge-hero" id="top">
+        <Image
+          className="hero-mascot"
+          src="/hedge-logo.jpg"
+          alt="Hedge the Hedgehog in a black suit holding stacks of cash"
+          fill
+          priority
+          sizes="100vw"
+        />
+        <div className="hero-skyline" aria-hidden="true" />
+        <div className="hero-chart" aria-hidden="true">
+          <svg viewBox="0 0 1200 240" preserveAspectRatio="none">
+            <path d="M0 208 L118 198 L214 205 L326 164 L420 177 L535 130 L640 144 L758 88 L852 106 L963 55 L1070 70 L1200 16" />
+          </svg>
+        </div>
+        <div className="floating-bills" aria-hidden="true">
+          <span>$</span>
+          <span>$</span>
+          <span>$</span>
+        </div>
+
+        <div className="hero-content">
+          <p className="eyebrow">HEDGE CAPITAL MANAGEMENT</p>
           <h1>
-            BLACK BULL
-            <span>LONG.</span>
+            HEDGE
+            <span>THE HEDGEHOG</span>
           </h1>
-          <div className="hero-lines">
-            <p>
-              Creator fees build one public <strong>ANSEM</strong> position.
-            </p>
-            <p>
-              Qualifying realized profits buy back and burn{" "}
-              <strong>$BBL</strong>.
-            </p>
-          </div>
-          <p className="hero-joke">Built from the back end.</p>
+          <p className="hero-subtitle">
+            The first perpetual hedge fund on Solana.
+          </p>
           <div className="hero-actions">
-            <Link className="button primary" href="/dashboard">
-              Enter Dashboard
-              <ArrowRight size={17} aria-hidden="true" />
-            </Link>
             <a
-              className="button ghost"
-              href={ANSEM.asterMarketUrl}
+              className="button button-dark"
+              href={EXTERNAL_LINKS.buy}
               target="_blank"
               rel="noreferrer"
             >
-              View on Aster
-              <ExternalLink size={16} aria-hidden="true" />
+              Buy $HEDGE
+              <ArrowUpRight size={16} aria-hidden="true" />
+            </a>
+            <a
+              className="button button-light"
+              href={EXTERNAL_LINKS.chart}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View Chart
+              <BarChart3 size={16} aria-hidden="true" />
             </a>
           </div>
           <MarketStrip />
         </div>
-
-        <div className="hero-visual">
-          <div className="hero-bull">
-            <Image
-              src="/bbl-logo.jpg"
-              alt="A rear-facing Black Bull looking over its shoulder"
-              width={1280}
-              height={1280}
-              priority
-              sizes="(max-width: 760px) 94vw, 52vw"
-            />
-            <span className="bull-caption">FULLY REAR-ALIGNED</span>
-          </div>
-          <HeroTerminal />
-        </div>
       </section>
 
-      <section className="brand-banner-section" aria-label="Black Bull Long">
+      <ActivityTicker />
+
+      <section className="banner-ledger" aria-label="Hedge investment mandate">
         <Image
-          src="/bbl-banner.jpg"
-          alt="Black Bull Long, powered by the ANSEM long flywheel"
+          src="/hedge-banner.jpg"
+          alt="Hedge the Hedgehog investment mandate"
           width={1280}
           height={426}
           sizes="100vw"
         />
       </section>
 
-      <section className="mechanism-section section-band" id="mechanism">
-        <div className="section-heading">
-          <p className="eyebrow">THE MECHANISM</p>
-          <h2>FEES BACK THE BULL.</h2>
+      <section className="strategy-section section-shell" id="strategy">
+        <div className="section-intro">
+          <p className="eyebrow">THE MANDATE</p>
+          <h2>THE FUND HAS ONE JOB.</h2>
           <p>
-            One direction. Public receipts. No imaginary yield.
+            Convert creator-fee flow into transparent market exposure, then
+            convert qualifying wins into permanent supply reduction.
           </p>
         </div>
-        <div className="flywheel-flow">
+
+        <div className="strategy-grid">
+          {strategySteps.map((step) => {
+            const Icon = step.icon;
+
+            return (
+              <article key={step.number}>
+                <div>
+                  <span>{step.number}</span>
+                  <Icon size={19} aria-hidden="true" />
+                </div>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="capital-flow" aria-label="Hedge capital flow">
           {flow.map((step, index) => (
             <div key={step}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <strong>{step}</strong>
+              <span>{step}</span>
               {index < flow.length - 1 ? (
-                <ArrowRight size={17} aria-hidden="true" />
+                <ArrowRight size={16} aria-hidden="true" />
               ) : null}
             </div>
           ))}
         </div>
-        <p className="mechanism-note">
-          Fees create exposure. Qualifying wins create scarcity.
-        </p>
       </section>
 
-      <section className="lore-section section-band" id="lore">
-        <div className="ansem-mark">
-          <Image
-            src="/ansem-token.jpg"
-            alt="The Black Bull ANSEM token mark"
-            width={800}
-            height={800}
-            sizes="(max-width: 700px) 90vw, 420px"
-          />
-          <span>THE ASSET BEHIND THE BULL</span>
-        </div>
-        <div className="lore-copy">
-          <p className="eyebrow">BLACK BULL LORE</p>
-          <h2>CONVICTION BECAME A CHARACTER.</h2>
+      <section className="terminal-section section-shell" id="dashboard">
+        <div className="terminal-copy">
+          <p className="eyebrow">LIVE RISK DESK</p>
+          <h2>THE BOOK. WITHOUT THE BLACK BOX.</h2>
           <p>
-            Ansem became one of Solana&apos;s loudest directional traders.
-            His early WIF call became part of Crypto Twitter lore. The market
-            turned that posture into a name: <strong>the Black Bull.</strong>
+            Position, leverage, PnL, creator-fee receipts, buybacks, and burns
+            appear only when verified public data exists.
           </p>
-          <p>
-            A community-launched ANSEM token then made the identity liquid.
-            BBL is an independent satire built around the same simple instinct:
-            when the bull charges, build the position.
-          </p>
-          <div className="button-row">
-            <Link className="button primary" href="/thesis">
-              Read the Lore
-              <ArrowRight size={17} aria-hidden="true" />
-            </Link>
-            <a
-              className="text-link"
-              href={ANSEM.ansemXUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Ansem on X
-              <ExternalLink size={14} aria-hidden="true" />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section className="meme-section section-band">
-        <p>THE BULL FACES FORWARD.</p>
-        <h2>THE FLYWHEEL HANDLES THE REAR.</h2>
-        <ArrowDownRight size={48} aria-hidden="true" />
-      </section>
-
-      <section className="burn-section section-band" id="burns">
-        <div>
-          <p className="eyebrow">BUYBACKS + BURNS</p>
-          <h2>
-            THE POSITION GETS BIGGER.
-            <br />
-            THE SUPPLY GETS SMALLER.
-          </h2>
-          <p>
-            Only qualifying realized ANSEM profit can fund $BBL buybacks.
-            Every completed burn must be published with a transaction receipt.
-          </p>
-          <Link className="button ghost" href="/dashboard">
-            Verify Receipts
+          <Link className="text-arrow" href="/dashboard">
+            Enter the dashboard
             <ArrowRight size={16} aria-hidden="true" />
           </Link>
         </div>
-        <BullSignalStack />
+        <HedgeTerminal />
       </section>
 
-      <section className="faq-section section-band" id="faq">
-        <div className="section-heading">
-          <p className="eyebrow">FAQ</p>
-          <h2>BULL, EXPLAINED.</h2>
+      <section className="principles-section section-shell">
+        <div className="section-intro">
+          <p className="eyebrow">INVESTMENT COMMITTEE</p>
+          <h2>SUITED. SPIKED. ALIGNED.</h2>
+        </div>
+        <div className="mandate-grid">
+          {mandatePoints.map((point) => {
+            const Icon = point.icon;
+
+            return (
+              <article key={point.value}>
+                <span>{point.value}</span>
+                <Icon size={20} aria-hidden="true" />
+                <h3>{point.label}</h3>
+                <p>{point.text}</p>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="transparency-section section-shell" id="transparency">
+        <div className="section-intro inverse">
+          <p className="eyebrow">TRANSPARENCY</p>
+          <h2>EVERYTHING IS VERIFIABLE.</h2>
+          <p>
+            A financial product should arrive with receipts. Ours live in the
+            open.
+          </p>
+        </div>
+        <div className="proof-links">
+          {proofLinks.map((item) => {
+            const Icon = item.icon;
+
+            return (
+              <a
+                key={item.label}
+                href={item.href}
+                target={item.external ? "_blank" : undefined}
+                rel={item.external ? "noreferrer" : undefined}
+              >
+                <Icon size={19} aria-hidden="true" />
+                <span>
+                  <strong>{item.label}</strong>
+                  <small>{item.detail}</small>
+                </span>
+                <ArrowUpRight size={17} aria-hidden="true" />
+              </a>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="pfp-section section-shell" id="pfp-studio">
+        <div className="section-intro">
+          <p className="eyebrow">BUILD YOUR HEDGE FUND IDENTITY</p>
+          <h2>REPORT TO THE TRADING FLOOR.</h2>
+          <p>
+            Pick a desk, add the accessories, and export your Wall Street
+            Hedge.
+          </p>
+        </div>
+        <PfpStudio />
+      </section>
+
+      <section className="meme-gallery-section section-shell">
+        <div className="section-intro">
+          <p className="eyebrow">MARKET COMMENTARY</p>
+          <h2>THE RESEARCH DESK IS UNSUPERVISED.</h2>
+        </div>
+        <MemeGallery />
+      </section>
+
+      <section className="roadmap-section section-shell" id="roadmap">
+        <div className="section-intro">
+          <p className="eyebrow">FORWARD GUIDANCE</p>
+          <h2>THE QUARTERLY PLAN.</h2>
+        </div>
+        <div className="roadmap">
+          {roadmap.map(([phase, title, detail]) => (
+            <article key={phase}>
+              <span>{phase}</span>
+              <h3>{title}</h3>
+              <p>{detail}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="faq-section section-shell">
+        <div className="section-intro">
+          <p className="eyebrow">RISK DISCLOSURE, BUT READABLE</p>
+          <h2>QUESTIONS FROM COMPLIANCE.</h2>
         </div>
         <div className="faq-list">
           {faq.map((item) => (
@@ -220,20 +366,28 @@ export default function Home() {
         </div>
       </section>
 
-      {EXTERNAL_LINKS.buy ? (
-        <section className="final-cta section-band">
-          <p>ONE BULL. ONE LONG. ONE FLYWHEEL.</p>
+      <section className="closing-section">
+        <Image
+          src="/hedge-banner.jpg"
+          alt=""
+          fill
+          sizes="100vw"
+        />
+        <div>
+          <Sparkles size={22} aria-hidden="true" />
+          <p>HEDGE CAPITAL MANAGEMENT</p>
+          <h2>WE HEDGE. WE GROW. WE BURN.</h2>
           <a
-            className="button primary"
+            className="button button-gold"
             href={EXTERNAL_LINKS.buy}
             target="_blank"
             rel="noreferrer"
           >
-            Buy $BBL
-            <ArrowRight size={17} aria-hidden="true" />
+            Join the fund
+            <Flame size={16} aria-hidden="true" />
           </a>
-        </section>
-      ) : null}
+        </div>
+      </section>
 
       <SiteFooter />
     </main>

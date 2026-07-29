@@ -1,7 +1,10 @@
-import { ANSEM, EXECUTION } from "../../constants";
+import { EXECUTION } from "../../constants";
 import { ASTER_PUBLIC_RPC_URL } from "../../../lib/links";
 
 export const dynamic = "force-dynamic";
+
+const EXECUTION_MARKET =
+  process.env.HEDGE_ASTER_MARKET?.trim().toUpperCase() || "ANSEMUSDT";
 
 type AsterPosition = {
   symbol?: string;
@@ -58,7 +61,7 @@ export async function GET() {
       (group) => group.positions ?? [],
     ) ?? [];
     const rawPosition = positions.find(
-      (position) => position.symbol?.toUpperCase() === "ANSEMUSDT",
+      (position) => position.symbol?.toUpperCase() === EXECUTION_MARKET,
     );
     const amount = numberValue(rawPosition?.positionAmount);
 
@@ -71,7 +74,7 @@ export async function GET() {
       position: {
         recorded_at: new Date().toISOString(),
         aster_account: wallet,
-        market: "ANSEMUSDT",
+        market: EXECUTION_MARKET,
         side: amount > 0 ? "long" : "short",
         size: Math.abs(amount),
         notional_usdc: Math.abs(numberValue(rawPosition.notionalValue)),
@@ -80,7 +83,7 @@ export async function GET() {
         leverage: numberValue(rawPosition.leverage),
         unrealized_pnl_usdc: numberValue(rawPosition.unrealizedProfit),
         margin_used_usdc: Math.abs(numberValue(rawPosition.marginValue)),
-        market_url: ANSEM.asterMarketUrl,
+        market_url: EXECUTION.marketUrl,
       },
     });
   } catch {

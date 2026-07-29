@@ -4,20 +4,19 @@ import test from "node:test";
 
 const projectRoot = new URL("../", import.meta.url);
 const requiredHomeCopy = [
-  "BBL | Black Bull Long",
-  "BLACK BULL",
-  "LONG.",
-  "Creator fees build one public",
-  "Qualifying realized profits buy back and burn",
-  "BLACK BULL TERMINAL",
-  "ANSEMUSDT LONG",
-  "ARMED · AWAITING FIRST RECEIPT",
-  "Enter Dashboard",
-  "FEES BACK THE BULL.",
-  "THE FLYWHEEL HANDLES THE REAR.",
+  "Hedge the Hedgehog | $HEDGE",
+  "HEDGE",
+  "THE HEDGEHOG",
+  "The first perpetual hedge fund on Solana.",
+  "THE FUND HAS ONE JOB.",
+  "Creator Fees",
+  "Perpetual Hedge",
+  "EVERYTHING IS VERIFIABLE.",
+  "BUILD YOUR HEDGE FUND IDENTITY",
+  "Buy $HEDGE",
 ];
 const bannedRenderedCopy =
-  /coming soon|placeholder|\bmock\b|\bdemo\b|\bTBD\b|guaranteed yield|passive income|dividends|treasury|NO PUBLIC RECEIPT|NO POSITION PUBLISHED|>SYNCING<|>LOADING<|>\$0</i;
+  /Black Bull|\bBBL\b|LONGCAT|HOOD3|coming soon|placeholder|\bmock\b|\bdemo\b|\bTBD\b|guaranteed yield|passive income|dividends|NO PUBLIC RECEIPT|NO POSITION PUBLISHED|>SYNCING<|>LOADING<|>\$0/i;
 
 async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -25,7 +24,7 @@ async function render(path = "/") {
   const { default: worker } = await import(workerUrl.href);
 
   return worker.fetch(
-    new Request(`https://blackbulllong.test${path}`, {
+    new Request(`https://hedgethehedgehog.test${path}`, {
       headers: { accept: "text/html" },
     }),
     {
@@ -40,7 +39,7 @@ async function render(path = "/") {
   );
 }
 
-test("server-renders the BBL homepage without fabricated activity", async () => {
+test("server-renders the Hedge homepage without fabricated activity", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
@@ -54,37 +53,30 @@ test("server-renders the BBL homepage without fabricated activity", async () => 
     );
   }
 
-  assert.match(html, /bbl-logo\.jpg/);
+  assert.match(html, /hedge-logo\.jpg/);
+  assert.match(html, /hedge-banner\.jpg/);
   assert.match(
     html,
-    /property=["']og:image["'][^>]+http:\/\/localhost:3000\/bbl-banner\.jpg/i,
+    /property=["']og:image["'][^>]+http:\/\/localhost:3000\/hedge-banner\.jpg/i,
   );
   assert.match(
     html,
-    /name=["']twitter:image["'][^>]+http:\/\/localhost:3000\/bbl-banner\.jpg/i,
+    /name=["']twitter:image["'][^>]+http:\/\/localhost:3000\/hedge-banner\.jpg/i,
   );
   assert.match(
     html,
     /rel=["']canonical["'][^>]+http:\/\/localhost:3000\//i,
   );
   assert.match(html, /rel=["']apple-touch-icon["'][^>]+apple-touch-icon\.png/i);
-  assert.match(
-    html,
-    /dexscreener\.com\/solana\/fnzky6x7entq1er3d225dqyt7ybfka4pskbmqhb8l3cc/i,
-  );
   assert.match(html, /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/);
-  assert.match(html, /https:\/\/x\.com\/BlackBullLong/);
-  assert.match(html, /asterdex\.com\/en\/trade\/pro\/futures\/ANSEMUSDT/);
   assert.match(
     html,
     /https:\/\/pump\.fun\/coin\/3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/,
   );
-  assert.match(html, /Buy \$BBL/);
-  assert.match(html, /Pump\.fun/);
   assert.doesNotMatch(html, bannedRenderedCopy);
 });
 
-test("server-renders dashboard and lore routes with route-specific metadata", async () => {
+test("server-renders dashboard and mandate with route-specific metadata", async () => {
   const [dashboardResponse, thesisResponse] = await Promise.all([
     render("/dashboard"),
     render("/thesis"),
@@ -97,63 +89,51 @@ test("server-renders dashboard and lore routes with route-specific metadata", as
     thesisResponse.text(),
   ]);
 
-  assert.match(dashboardHtml, /BLACK BULL TERMINAL/);
-  assert.match(dashboardHtml, /THE BULL IS ARMED/);
-  assert.match(
-    dashboardHtml,
-    /Every fee claim, Aster order, buyback, and burn appears here the moment its receipt exists/,
-  );
-  assert.match(dashboardHtml, /Open Aster Market/);
-  assert.match(dashboardHtml, /ANSEM Chart/);
-  assert.match(
-    dashboardHtml,
-    /http:\/\/localhost:3000\/dashboard/,
-  );
-  assert.doesNotMatch(dashboardHtml, /TOTAL \$BBL BURNED|TRANSACTION FEED/);
+  assert.match(dashboardHtml, /THE FUND, MARKED TO MARKET/);
+  assert.match(dashboardHtml, /ARMED · AWAITING FIRST RECEIPT/);
+  assert.match(dashboardHtml, /PORTFOLIO TELEMETRY/);
+  assert.match(dashboardHtml, /PUBLIC RECEIPT TAPE/);
+  assert.match(dashboardHtml, /http:\/\/localhost:3000\/dashboard/);
   assert.doesNotMatch(dashboardHtml, bannedRenderedCopy);
 
-  assert.match(thesisHtml, /BLACK BULL LORE/);
-  assert.match(thesisHtml, /THE BULL BEHIND THE BULL/);
+  assert.match(thesisHtml, /THE INVESTMENT MANDATE/);
+  assert.match(thesisHtml, /A MEME COIN WITH/);
+  assert.match(thesisHtml, /THE HEDGE CAN LOSE/);
   assert.match(thesisHtml, /http:\/\/localhost:3000\/thesis/);
-  assert.match(
-    thesisHtml,
-    /Buybacks and burns only occur when qualifying realized profits exist/,
-  );
   assert.doesNotMatch(thesisHtml, bannedRenderedCopy);
 });
 
-test("production assets and BBL configuration are present", async () => {
-  const [layout, constants, links, packageJson, globals, visuals, worker] =
+test("production assets and Hedge configuration are present", async () => {
+  const [layout, constants, links, packageJson, globals, terminal, worker] =
     await Promise.all([
-    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/constants.ts", import.meta.url), "utf8"),
-    readFile(new URL("../lib/links.ts", import.meta.url), "utf8"),
-    readFile(new URL("../package.json", import.meta.url), "utf8"),
-    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
-    readFile(new URL("../app/components/BullVisuals.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../railway-worker.mjs", import.meta.url), "utf8"),
+      readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+      readFile(new URL("../app/constants.ts", import.meta.url), "utf8"),
+      readFile(new URL("../lib/links.ts", import.meta.url), "utf8"),
+      readFile(new URL("../package.json", import.meta.url), "utf8"),
+      readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+      readFile(
+        new URL("../app/components/HedgeTerminal.tsx", import.meta.url),
+        "utf8",
+      ),
+      readFile(new URL("../railway-worker.mjs", import.meta.url), "utf8"),
     ]);
 
-  assert.match(packageJson, /"name": "black-bull-long"/);
-  assert.match(links, /9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvTGpump/);
+  assert.match(packageJson, /"name": "hedge-the-hedgehog"/);
   assert.match(links, /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/);
   assert.match(links, /PUMP_FUN_URL/);
   assert.match(links, /ASTER_ACCOUNT_URL: string \| null = null/);
   assert.match(links, /POSITION_URL = ASTER_ACCOUNT_URL \?\? ASTER_MARKET_URL/);
-  assert.match(constants, /0xe7BdaB66180a514bb591E2cD6874e58CE5809488/);
+  assert.match(constants, /Hedge the Hedgehog/);
   assert.match(layout, /apple-touch-icon\.png/);
-  assert.match(globals, /--gold: #c59b5f/);
-  assert.match(visuals, /bbl-logo\.jpg/);
-  assert.match(visuals, /bull-backdrop__banner/);
-  assert.match(globals, /\.bull-backdrop__banner \{[\s\S]*position: absolute/);
-  assert.match(globals, /\.hero-bull img \{[\s\S]*width: min\(780px, 100%\)/);
-  assert.match(worker, /BBL_ASTER_EXECUTION_CONFIRMED/);
+  assert.match(globals, /--gold: #b58a3d/);
+  assert.match(globals, /\.hedge-hero/);
+  assert.match(globals, /prefers-reduced-motion/);
+  assert.match(terminal, /HEDGE CAPITAL/);
   assert.match(worker, /openAsterLong/);
 
   await Promise.all([
-    access(new URL("../public/bbl-banner.jpg", import.meta.url)),
-    access(new URL("../public/bbl-logo.jpg", import.meta.url)),
-    access(new URL("../public/ansem-token.jpg", import.meta.url)),
+    access(new URL("../public/hedge-banner.jpg", import.meta.url)),
+    access(new URL("../public/hedge-logo.jpg", import.meta.url)),
     access(new URL("../public/favicon.png", import.meta.url)),
     access(new URL("../public/apple-touch-icon.png", import.meta.url)),
   ]);

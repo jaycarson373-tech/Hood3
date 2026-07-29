@@ -1,41 +1,39 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import {
-  ANSEM,
-  BBL_CONTRACT_ADDRESS,
   EXTERNAL_LINKS,
+  HEDGE_CONTRACT_ADDRESS,
   externalLinks,
 } from "../constants";
-import { PUMP_FUN_URL } from "../../lib/links";
 import { HeaderContract } from "./HeaderContract";
 
 const navLinks = [
-  { label: "Flywheel", href: "/#mechanism" },
-  { label: "Bull Lore", href: "/thesis" },
+  { label: "Strategy", href: "/#strategy" },
   { label: "Dashboard", href: "/dashboard" },
-  { label: "Burns", href: "/#burns" },
-  { label: "FAQ", href: "/#faq" },
+  { label: "PFP Studio", href: "/#pfp-studio" },
+  { label: "Transparency", href: "/#transparency" },
+  { label: "Roadmap", href: "/#roadmap" },
 ];
 
 export function SiteHeader() {
   return (
     <header className="site-header">
       <div className="main-nav">
-        <Link className="brand" href="/" aria-label="BBL home">
-          <span className="brand-mark" aria-hidden="true">
+        <Link className="brand" href="/" aria-label="Hedge the Hedgehog home">
+          <span className="brand-mark">
             <Image
-              src="/bbl-logo.jpg"
-              alt=""
-              width={1280}
-              height={1280}
-              sizes="42px"
+              src="/hedge-logo.jpg"
+              alt="Hedge the Hedgehog"
+              width={1254}
+              height={1254}
+              sizes="44px"
               priority
             />
           </span>
           <span className="brand-copy">
-            <strong>BBL</strong>
-            <small>BLACK BULL LONG</small>
+            <strong>HEDGE</strong>
+            <small>THE HEDGEHOG</small>
           </span>
         </Link>
 
@@ -48,33 +46,15 @@ export function SiteHeader() {
         </nav>
 
         <div className="header-actions">
-          {EXTERNAL_LINKS.x ? (
-            <a
-              className="social-link"
-              href={EXTERNAL_LINKS.x}
-              target="_blank"
-              rel="noreferrer"
-              aria-label="Open BBL on X"
-            >
-              X
-              <ExternalLink size={13} aria-hidden="true" />
-            </a>
-          ) : null}
-          {BBL_CONTRACT_ADDRESS ? (
-            <HeaderContract address={BBL_CONTRACT_ADDRESS} />
-          ) : (
-            <Link className="header-dashboard-link" href="/dashboard">
-              Dashboard
-            </Link>
-          )}
+          <HeaderContract address={HEDGE_CONTRACT_ADDRESS} />
           <a
             className="header-buy-link"
-            href={PUMP_FUN_URL}
+            href={EXTERNAL_LINKS.buy}
             target="_blank"
             rel="noreferrer"
           >
-            Buy $BBL
-            <ExternalLink size={13} aria-hidden="true" />
+            Buy $HEDGE
+            <ArrowUpRight size={14} aria-hidden="true" />
           </a>
         </div>
       </div>
@@ -85,37 +65,39 @@ export function SiteHeader() {
 export function SiteFooter() {
   return (
     <footer className="site-footer">
-      <div className="footer-top">
-        <div className="footer-brand">
-          <strong>BBL</strong>
-          <span>Black Bull Long.</span>
+      <div className="footer-masthead">
+        <div>
+          <strong>HEDGE</strong>
+          <span>THE HEDGEHOG</span>
         </div>
-        <div className="source-links">
+        <p>The first perpetual hedge fund on Solana.</p>
+      </div>
+      <div className="footer-grid">
+        <div>
+          <span className="footer-label">OFFICE</span>
+          <p>Wall Street discipline.<br />Solana settlement.<br />Hedgehog management.</p>
+        </div>
+        <nav className="source-links" aria-label="External links">
           <Link href="/dashboard">Dashboard</Link>
-          <Link href="/thesis">Bull Lore</Link>
-          <a href={ANSEM.dexScreenerUrl} target="_blank" rel="noreferrer">
-            ANSEM Market
-            <ExternalLink size={14} aria-hidden="true" />
-          </a>
+          <Link href="/thesis">Mandate</Link>
           {externalLinks.map((source) => (
             <a
-              key={source.href}
+              key={`${source.label}-${source.href}`}
               href={source.href}
               target="_blank"
               rel="noreferrer"
             >
               {source.label}
-              <ExternalLink size={14} aria-hidden="true" />
+              <ArrowUpRight size={13} aria-hidden="true" />
             </a>
           ))}
-        </div>
+        </nav>
       </div>
       <p className="footer-disclaimer">
-        $BBL is a highly speculative community token. ANSEM and $BBL can
-        lose substantial or total value. Buybacks and burns require qualifying
-        realized profits and are not guaranteed. Nothing here is financial
-        advice. BBL is independent and is not affiliated with or endorsed by
-        Ansem, The Black Bull, Aster, or any launchpad.
+        $HEDGE is a highly speculative community token. Perpetual trading can
+        result in partial or total loss, including liquidation. Buybacks and
+        burns require qualifying realized profits and are not guaranteed.
+        Nothing on this website is financial advice.
       </p>
     </footer>
   );

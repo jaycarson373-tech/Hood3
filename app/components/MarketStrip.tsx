@@ -11,8 +11,7 @@ type Snapshot = {
 };
 
 type MarketPayload = {
-  ansem: Snapshot | null;
-  bbl: Snapshot | null;
+  hedge: Snapshot | null;
 };
 
 function price(value: number) {
@@ -30,41 +29,8 @@ function price(value: number) {
   })}`;
 }
 
-function compactMoney(value: number | null) {
-  if (value === null) return null;
-
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-    notation: "compact",
-    maximumFractionDigits: 1,
-  }).format(value);
-}
-
-function MarketCell({ market }: { market: Snapshot }) {
-  const change = market.change24h;
-
-  return (
-    <a
-      className="market-cell"
-      href={market.marketUrl || undefined}
-      target="_blank"
-      rel="noreferrer"
-      aria-label={`View ${market.symbol} market`}
-    >
-      <span>${market.symbol} PRICE</span>
-      <strong>{price(market.priceUsd)}</strong>
-      <small className={change !== null && change < 0 ? "negative" : "positive"}>
-        {change === null
-          ? compactMoney(market.marketCapUsd)
-          : `${change >= 0 ? "+" : ""}${change.toFixed(2)}% 24H`}
-      </small>
-    </a>
-  );
-}
-
 export function MarketStrip() {
-  const [markets, setMarkets] = useState<MarketPayload | null>(null);
+  const [market, setMarket] = useState<Snapshot | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -74,9 +40,9 @@ export function MarketStrip() {
         const response = await fetch("/api/market", { cache: "no-store" });
         if (!response.ok) return;
         const payload = (await response.json()) as MarketPayload;
-        if (active) setMarkets(payload);
+        if (active) setMarket(payload.hedge);
       } catch {
-        // Keep the last confirmed quote during a transient market-data failure.
+        // Retain the last verified quote during a transient provider failure.
       }
     }
 
@@ -89,12 +55,24 @@ export function MarketStrip() {
     };
   }, []);
 
-  if (!markets?.ansem && !markets?.bbl) return null;
+  if (!market) return null;
 
   return (
-    <div className="market-strip" aria-label="Live token prices">
-      {markets.ansem ? <MarketCell market={markets.ansem} /> : null}
-      {markets.bbl ? <MarketCell market={markets.bbl} /> : null}
-    </div>
+    <a
+      className="market-strip"
+      href={market.marketUrl || undefined}
+      target="_blank"
+      rel="noreferrer"
+      aria-label="View the HEDGE market"
+    >
+      <span>LIVE / $HEDGE</span>
+      <strong>{price(market.priceUsd)}</strong>
+      {market.change24h !== null ? (
+        <small className={market.change24h < 0 ? "negative" : "positive"}>
+          {market.change24h >= 0 ? "+" : ""}
+          {market.change24h.toFixed(2)}% / 24H
+        </small>
+      ) : null}
+    </a>
   );
 }

@@ -1,42 +1,32 @@
-# BBL - Black Bull Long
+# Hedge the Hedgehog
 
-BBL is an independent Solana community project. Creator fees are designed to
-build one public ANSEMUSDT 5x long on Aster. Qualifying realized
-profits may buy back and permanently burn `$BBL`.
+Hedge the Hedgehog is a Solana community project built around a transparent
+perpetual strategy. Creator-fee flow is designed to form managed strategy
+capital. Qualifying realized profit may buy and permanently burn `$HEDGE`.
 
 ## Routes
 
-- `/` - launch page, live ANSEM price, Black Bull Flywheel, lore, burns, and FAQ
-- `/dashboard` - public position telemetry and transaction receipts
-- `/thesis` - Black Bull lore, thesis, sources, and risks
+- `/` - launch experience, strategy, live terminal, PFP studio, and roadmap
+- `/dashboard` - public position telemetry and verified transaction receipts
+- `/thesis` - investment mandate and risk disclosures
 
-## Mechanism
+## Data integrity
 
-1. Creator fees are checked every 15 minutes.
-2. Routeable creator fees move to the dedicated Aster execution account.
-3. Managed collateral builds the ANSEMUSDT long at 5x.
-4. The public Aster wallet is read directly for position telemetry.
-5. Qualifying realized profit may buy `$BBL`.
-6. Purchased `$BBL` is permanently burned and the receipt is published.
+The frontend reads the existing public market, position, and receipt
+integrations. It does not invent a price, position, transaction, buyback, or
+burn. Missing public data is represented with an em dash or a launch-ready
+empty state.
 
-This is a leveraged perpetual strategy. The position can lose money or be
-liquidated.
-
-## Frontend Environment
+## Frontend environment
 
 Use `vercel.env.example` as the Vercel environment checklist.
 
-Unknown links and the BBL contract are hidden. The site never invents a price,
-position, transaction, buyback, or burn.
-
 ## Worker
 
-Run `supabase/schema.sql` before connecting the worker. Use
-`railway.env.example` as the Railway environment checklist. The included
-`railway.json` starts the worker process automatically.
-
-Keep `DRY_RUN=true` until the dedicated Aster account, API credentials,
-funding path, order cap, leverage, and dry-run receipts have all been reviewed.
+The existing Railway worker and Supabase schema are intentionally preserved for
+backward compatibility. Use `railway.env.example` as the Railway environment
+checklist and keep `DRY_RUN=true` until execution credentials, risk limits,
+funding paths, and dry-run receipts have all been reviewed.
 
 ## Commands
 

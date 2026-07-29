@@ -1,4 +1,4 @@
-import { ANSEM, BBL_CONTRACT_ADDRESS } from "../../constants";
+import { HEDGE_CONTRACT_ADDRESS } from "../../constants";
 import { DEXSCREENER_TOKEN_PAIRS_API_URL } from "../../../lib/links";
 
 export const dynamic = "force-dynamic";
@@ -75,13 +75,10 @@ async function getTokenSnapshot(
 }
 
 export async function GET() {
-  const [ansem, bbl] = await Promise.all([
-    getTokenSnapshot(ANSEM.address, ANSEM.symbol),
-    getTokenSnapshot(BBL_CONTRACT_ADDRESS, "BBL"),
-  ]);
+  const hedge = await getTokenSnapshot(HEDGE_CONTRACT_ADDRESS, "HEDGE");
 
   return Response.json(
-    { ansem, bbl },
+    { hedge },
     {
       headers: {
         "Cache-Control":

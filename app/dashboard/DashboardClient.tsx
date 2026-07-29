@@ -2,26 +2,21 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  CircleDollarSign,
+  ArrowUpRight,
+  CheckCircle2,
   ExternalLink,
-  ListChecks,
+  Radio,
+  ReceiptText,
   ShieldCheck,
-  Terminal,
-  TrendingUp,
 } from "lucide-react";
 import {
-  ANSEM_MARKET_URL,
   ASTER_MARKET_URL,
+  DEXSCREENER_URL,
   POSITION_URL,
 } from "../../lib/links";
-import { automationSteps, howItWorks } from "../data";
-import type { Metric } from "../data";
-import {
-  BullBackdrop,
-  MetricGrid,
-} from "../components/BullVisuals";
+import { automationSteps } from "../data";
 
-type SupabaseTerminalRow = {
+type TerminalRow = {
   id: number;
   created_at: string;
   stage: string;
@@ -34,7 +29,7 @@ type SupabaseTerminalRow = {
   scan_url: string | null;
 };
 
-type SupabasePositionRow = {
+type PositionRow = {
   recorded_at: string;
   aster_account: string;
   market: string;
@@ -48,16 +43,23 @@ type SupabasePositionRow = {
   margin_used_usdc: string | number;
 };
 
-type AsterPositionResponse = {
-  position: SupabasePositionRow | null;
+type PositionResponse = {
+  position: PositionRow | null;
+};
+
+type DashboardMetric = {
+  label: string;
+  value: string;
+  detail: string;
+  tone?: "positive" | "negative";
 };
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-function safeNumber(value: unknown, fallback = 0) {
+function safeNumber(value: unknown) {
   const parsed = Number(value);
-  return Number.isFinite(parsed) ? parsed : fallback;
+  return Number.isFinite(parsed) ? parsed : 0;
 }
 
 function money(value: number, maximumFractionDigits = 2) {
@@ -69,17 +71,14 @@ function money(value: number, maximumFractionDigits = 2) {
 }
 
 function signedMoney(value: number) {
-  const formatted = money(Math.abs(value), 2);
-  return value < 0 ? `-${formatted}` : formatted;
-}
-
-function shortHash(hash: string) {
-  return `${hash.slice(0, 8)}...${hash.slice(-6)}`;
+  const formatted = money(Math.abs(value));
+  if (value > 0) return `+${formatted}`;
+  if (value < 0) return `-${formatted}`;
+  return formatted;
 }
 
 function terminalTime(value: string) {
   const date = new Date(value);
-
   if (Number.isNaN(date.getTime())) return value;
 
   return new Intl.DateTimeFormat("en-US", {
@@ -90,27 +89,8 @@ function terminalTime(value: string) {
   }).format(date);
 }
 
-function formatAssetAmount(value: number, asset: string | null) {
-  const symbol = asset?.toUpperCase() ?? "";
-
-  if (symbol === "USDC" || symbol === "USDT" || symbol === "USD") {
-    return money(value, 2);
-  }
-  if (symbol === "SOL") return `${value.toFixed(4)} SOL`;
-  if (symbol === "ANSEM") {
-    return `${new Intl.NumberFormat("en-US", {
-      maximumFractionDigits: 0,
-    }).format(value)} ANSEM`;
-  }
-  if (symbol === "BBL" || symbol === "$BBL") {
-    return `${new Intl.NumberFormat("en-US", {
-      maximumFractionDigits: 2,
-    }).format(value)} $BBL`;
-  }
-
-  return new Intl.NumberFormat("en-US", {
-    maximumFractionDigits: 4,
-  }).format(value);
+function shortHash(hash: string) {
+  return `${hash.slice(0, 8)}...${hash.slice(-6)}`;
 }
 
 function safeExternalUrl(value: string | null) {
@@ -124,24 +104,67 @@ function safeExternalUrl(value: string | null) {
   }
 }
 
+function displayAsset(asset: string | null) {
+  const normalized = asset?.toUpperCase();
+  if (!normalized) return "";
+  if (normalized === "BBL" || normalized === "$BBL") return "$HEDGE";
+  return normalized.startsWith("$") ? normalized : normalized;
+}
+
+function eventLabel(stage: string) {
+  const normalized = stage.toUpperCase();
+  const labels: Record<string, string> = {
+    CLAIM: "Creator fees claimed",
+    ROUTE: "Strategy capital routed",
+    BRIDGE: "Bridge confirmed",
+    DEPOSIT: "Execution account funded",
+    OPEN: "Position order recorded",
+    POSITION: "Position updated",
+    PROFIT: "Realized profit recorded",
+    BUYBACK: "$HEDGE buyback completed",
+    BURN: "$HEDGE burn completed",
+  };
+
+  return labels[normalized] ?? "Strategy receipt recorded";
+}
+
+function amountLabel(row: TerminalRow) {
+  const amount = safeNumber(row.amount);
+  if (!(amount > 0)) return null;
+  const asset = displayAsset(row.asset);
+
+  if (asset === "USD" || asset === "USDC" || asset === "USDT") {
+    return money(amount);
+  }
+  if (asset === "SOL") return `${amount.toFixed(4)} SOL`;
+  if (asset === "$HEDGE") {
+    return `${new Intl.NumberFormat("en-US", {
+      maximumFractionDigits: 2,
+    }).format(amount)} $HEDGE`;
+  }
+
+  return `${new Intl.NumberFormat("en-US", {
+    maximumFractionDigits: 4,
+  }).format(amount)}${asset ? ` ${asset}` : ""}`;
+}
+
 export function DashboardClient() {
-  const [terminalRows, setTerminalRows] = useState<SupabaseTerminalRow[]>([]);
-  const [latestPosition, setLatestPosition] =
-    useState<SupabasePositionRow | null>(null);
+  const [terminalRows, setTerminalRows] = useState<TerminalRow[]>([]);
+  const [position, setPosition] = useState<PositionRow | null>(null);
 
   useEffect(() => {
     let active = true;
 
-    async function readSupabaseViews() {
+    async function refresh() {
       try {
         const headers = {
           apikey: supabaseAnonKey ?? "",
           Authorization: `Bearer ${supabaseAnonKey}`,
         };
-        const [terminalResponse, asterResponse] = await Promise.all([
+        const [terminalResponse, positionResponse] = await Promise.all([
           supabaseUrl && supabaseAnonKey
             ? fetch(
-                `${supabaseUrl}/rest/v1/bbl_public_terminal?select=*&order=created_at.desc&limit=30`,
+                `${supabaseUrl}/rest/v1/bbl_public_terminal?select=*&order=created_at.desc&limit=40`,
                 { cache: "no-store", headers },
               )
             : Promise.resolve(null),
@@ -149,23 +172,20 @@ export function DashboardClient() {
         ]);
 
         if (!active) return;
-
         if (terminalResponse?.ok) {
-          setTerminalRows(
-            (await terminalResponse.json()) as SupabaseTerminalRow[],
-          );
+          setTerminalRows((await terminalResponse.json()) as TerminalRow[]);
         }
-        if (asterResponse.ok) {
-          const payload = (await asterResponse.json()) as AsterPositionResponse;
-          setLatestPosition(payload.position);
+        if (positionResponse.ok) {
+          const payload = (await positionResponse.json()) as PositionResponse;
+          setPosition(payload.position);
         }
       } catch {
-        // Keep the last verified public state during a transient failure.
+        // Keep the last verified public state during transient provider failures.
       }
     }
 
-    void readSupabaseViews();
-    const timer = window.setInterval(readSupabaseViews, 15_000);
+    void refresh();
+    const timer = window.setInterval(refresh, 15_000);
 
     return () => {
       active = false;
@@ -173,275 +193,226 @@ export function DashboardClient() {
     };
   }, []);
 
-  const positionNotional = Math.abs(
-    safeNumber(latestPosition?.notional_usdc),
-  );
-  const positionSize = Math.abs(safeNumber(latestPosition?.size));
-  const hasPosition = Boolean(
-    latestPosition && (positionNotional > 0 || positionSize > 0),
-  );
-  const positionPnl = safeNumber(latestPosition?.unrealized_pnl_usdc);
-
-  const dashboardStats = useMemo(() => {
-    const metrics: Metric[] = [];
-    const totalSolRouted = terminalRows
-      .filter(
-        (row) =>
-          row.stage.toUpperCase() === "ROUTE" &&
-          row.asset?.toUpperCase() === "SOL",
+  const data = useMemo(() => {
+    const positionValue = Math.abs(safeNumber(position?.notional_usdc));
+    const collateral = Math.abs(safeNumber(position?.margin_used_usdc));
+    const unrealizedPnl = safeNumber(position?.unrealized_pnl_usdc);
+    const leverage = safeNumber(position?.leverage);
+    const entryPrice = safeNumber(position?.entry_price);
+    const markPrice = safeNumber(position?.mark_price);
+    const successfulRows = terminalRows.filter(
+      (row) => row.status.toLowerCase() === "succeeded",
+    );
+    const claimed = successfulRows
+      .filter((row) => row.stage.toUpperCase() === "CLAIM")
+      .reduce((sum, row) => sum + safeNumber(row.amount), 0);
+    const bridged = successfulRows
+      .filter((row) =>
+        ["BRIDGE", "ROUTE", "DEPOSIT"].includes(row.stage.toUpperCase()),
       )
       .reduce((sum, row) => sum + safeNumber(row.amount), 0);
-    const totalFeesClaimed = terminalRows
-      .filter(
-        (row) =>
-          row.stage.toUpperCase() === "CLAIM" &&
-          row.asset?.toUpperCase() === "SOL",
-      )
+    const realized = successfulRows
+      .filter((row) => row.stage.toUpperCase() === "PROFIT")
       .reduce((sum, row) => sum + safeNumber(row.amount), 0);
-    const profitRows = terminalRows.filter(
-      (row) =>
-        row.stage.toUpperCase() === "PROFIT" &&
-        safeNumber(row.amount) > 0,
-    );
-    const realizedProfit = profitRows.reduce(
-      (sum, row) => sum + safeNumber(row.amount),
-      0,
-    );
-    const buybackCount = terminalRows.filter(
+    const buybacks = successfulRows.filter(
       (row) => row.stage.toUpperCase() === "BUYBACK",
-    ).length;
-    const burnRows = terminalRows.filter(
-      (row) =>
-        row.stage.toUpperCase() === "BURN" &&
-        safeNumber(row.amount) > 0,
     );
-    const tokensBurned = burnRows.reduce(
-      (sum, row) => sum + safeNumber(row.amount),
-      0,
-    );
-    const lastUpdate =
-      latestPosition?.recorded_at || terminalRows[0]?.created_at || null;
+    const burned = successfulRows
+      .filter((row) => row.stage.toUpperCase() === "BURN")
+      .reduce((sum, row) => sum + safeNumber(row.amount), 0);
+    const currentBuyback = buybacks[0] ? safeNumber(buybacks[0].amount) : 0;
+    const treasuryRoi = collateral > 0 ? (unrealizedPnl / collateral) * 100 : 0;
+    const hasPosition = positionValue > 0;
+    const lastUpdate = position?.recorded_at ?? terminalRows[0]?.created_at;
 
-    if (hasPosition && latestPosition) {
-      if (positionSize > 0) {
-        metrics.push({
-          label: "ANSEMUSDT LONG",
-          value: formatAssetAmount(positionSize, "ANSEM"),
-          detail: `${safeNumber(latestPosition.leverage).toFixed(0)}x on Aster`,
-        });
-      }
-      if (positionNotional > 0) {
-        metrics.push({
-          label: "POSITION VALUE",
-          value: money(positionNotional),
-          detail: "latest published value",
-        });
-      }
-      if (safeNumber(latestPosition.entry_price) > 0) {
-        metrics.push({
-          label: "AVERAGE ENTRY",
-          value: money(safeNumber(latestPosition.entry_price), 6),
-          detail: "published cost basis",
-        });
-      }
-      if (safeNumber(latestPosition.mark_price) > 0) {
-        metrics.push({
-          label: "ANSEM PRICE",
-          value: money(safeNumber(latestPosition.mark_price), 6),
-          detail: "latest published mark",
-        });
-      }
-      if (safeNumber(latestPosition.entry_price) > 0) {
-        metrics.push({
-          label: "UNREALIZED PNL",
-          value: signedMoney(positionPnl),
-          detail: "published position estimate",
-        });
-      }
-    }
-
-    if (totalSolRouted > 0) {
-      metrics.push({
-        label: "TOTAL SOL ROUTED",
-        value: `${totalSolRouted.toFixed(4)} SOL`,
-        detail: "published transfer receipts",
-      });
-    }
-    if (totalFeesClaimed > 0) {
-      metrics.push({
-        label: "TOTAL FEES DEPLOYED",
-        value: `${totalFeesClaimed.toFixed(4)} SOL`,
-        detail: "published claim receipts",
-      });
-    }
-    if (realizedProfit > 0) {
-      metrics.push({
+    const metrics: DashboardMetric[] = [
+      {
+        label: "CURRENT POSITION",
+        value: hasPosition ? money(positionValue) : "—",
+        detail: hasPosition ? "published notional" : "Verified data required",
+      },
+      {
+        label: "STRATEGY COLLATERAL",
+        value: collateral > 0 ? money(collateral) : "—",
+        detail: collateral > 0 ? "margin in use" : "Verified data required",
+      },
+      {
+        label: "UNREALIZED PNL",
+        value: hasPosition ? signedMoney(unrealizedPnl) : "—",
+        detail: hasPosition ? "live position estimate" : "Verified data required",
+        tone:
+          hasPosition && unrealizedPnl !== 0
+            ? unrealizedPnl > 0
+              ? "positive"
+              : "negative"
+            : undefined,
+      },
+      {
         label: "REALIZED PROFIT",
-        value: formatAssetAmount(
-          realizedProfit,
-          profitRows[0]?.asset ?? null,
-        ),
-        detail: "published profit receipts",
-      });
-    }
-    if (buybackCount > 0) {
-      metrics.push({
-        label: "TOTAL BUYBACKS",
-        value: String(buybackCount),
-        detail: "published transactions",
-      });
-    }
-    if (tokensBurned > 0) {
-      metrics.push({
-        label: "TOTAL $BBL BURNED",
-        value: formatAssetAmount(
-          tokensBurned,
-          burnRows[0]?.asset ?? "BBL",
-        ),
-        detail: "published burn receipts",
-      });
-    }
-    if (lastUpdate) {
-      metrics.push({
-        label: "LAST PUBLIC UPDATE",
-        value: terminalTime(lastUpdate),
-        detail: "latest receipt timestamp",
-      });
-    }
+        value: realized > 0 ? money(realized) : "—",
+        detail: realized > 0 ? "published profit receipts" : "Verified data required",
+      },
+      {
+        label: "TOTAL BRIDGED",
+        value: bridged > 0 ? `${bridged.toFixed(4)} SOL` : "—",
+        detail: bridged > 0 ? "published route receipts" : "Verified data required",
+      },
+      {
+        label: "BRIDGE QUEUE",
+        value: "—",
+        detail: "Displayed when a public queue exists",
+      },
+      {
+        label: "$HEDGE BURNED",
+        value:
+          burned > 0
+            ? new Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 2,
+              }).format(burned)
+            : "—",
+        detail: burned > 0 ? "published burn receipts" : "Verified data required",
+      },
+      {
+        label: "CURRENT BUYBACK",
+        value: currentBuyback > 0 ? money(currentBuyback) : "—",
+        detail: currentBuyback > 0 ? "latest published receipt" : "Verified data required",
+      },
+      {
+        label: "LIFETIME BUYBACKS",
+        value: buybacks.length > 0 ? String(buybacks.length) : "—",
+        detail: buybacks.length > 0 ? "published transactions" : "Verified data required",
+      },
+      {
+        label: "LIFETIME FEES",
+        value: claimed > 0 ? `${claimed.toFixed(4)} SOL` : "—",
+        detail: claimed > 0 ? "published claim receipts" : "Verified data required",
+      },
+      {
+        label: "STRATEGY ROI",
+        value: collateral > 0 ? `${treasuryRoi.toFixed(2)}%` : "—",
+        detail: collateral > 0 ? "unrealized PnL / collateral" : "Verified data required",
+        tone:
+          collateral > 0 && treasuryRoi !== 0
+            ? treasuryRoi > 0
+              ? "positive"
+              : "negative"
+            : undefined,
+      },
+      {
+        label: "MARKET BIAS",
+        value: hasPosition ? position?.side.toUpperCase() ?? "—" : "—",
+        detail: hasPosition ? "current published side" : "Verified data required",
+      },
+      {
+        label: "FUNDING RATE",
+        value: "—",
+        detail: "Displayed when a public rate exists",
+      },
+      {
+        label: "AVERAGE ENTRY",
+        value: entryPrice > 0 ? money(entryPrice, 6) : "—",
+        detail: entryPrice > 0 ? "published cost basis" : "Verified data required",
+      },
+      {
+        label: "CURRENT MARK",
+        value: markPrice > 0 ? money(markPrice, 6) : "—",
+        detail: markPrice > 0 ? "latest exchange mark" : "Verified data required",
+      },
+      {
+        label: "LEVERAGE",
+        value: leverage > 0 ? `${leverage.toFixed(1)}x` : "—",
+        detail: leverage > 0 ? "published account leverage" : "Verified data required",
+      },
+      {
+        label: "LAST UPDATE",
+        value: lastUpdate ? terminalTime(lastUpdate) : "—",
+        detail: lastUpdate ? "latest verified receipt" : "Verified data required",
+      },
+      {
+        label: "CURRENT EXCHANGE",
+        value: "ASTER",
+        detail: "execution venue",
+      },
+    ];
 
-    return metrics;
-  }, [
-    hasPosition,
-    latestPosition,
-    positionNotional,
-    positionPnl,
-    positionSize,
-    terminalRows,
-  ]);
+    return { hasPosition, metrics };
+  }, [position, terminalRows]);
 
   return (
     <>
-      <BullBackdrop variant="dashboard" />
-
-      <section className="page-hero dashboard-hero">
-        <p className="eyebrow">BLACK BULL TERMINAL</p>
-        <h1>ONE POSITION. BUILT IN PUBLIC.</h1>
-        <p>
-          Creator-fee claims, Aster orders, realized profit,
-          $BBL buybacks, and burns appear only after a public receipt exists.
-        </p>
-        <div className="button-row">
-          <a
-            className="button primary"
-            href={ASTER_MARKET_URL}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Open Aster Market
-            <ExternalLink size={17} aria-hidden="true" />
-          </a>
-          <a
-            className="button ghost"
-            href={ANSEM_MARKET_URL}
-            target="_blank"
-            rel="noreferrer"
-          >
-            ANSEM Chart
-            <ExternalLink size={17} aria-hidden="true" />
-          </a>
+      <section className="dashboard-hero">
+        <div>
+          <p className="eyebrow">HEDGE CAPITAL / RISK DESK</p>
+          <h1>THE FUND, MARKED TO MARKET.</h1>
+          <p>
+            Every creator-fee claim, position update, buyback, and burn appears
+            when its verified receipt exists.
+          </p>
+          <div className="button-row">
+            <a
+              className="button button-dark"
+              href={ASTER_MARKET_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Open Exchange
+              <ExternalLink size={16} aria-hidden="true" />
+            </a>
+            <a
+              className="button button-light"
+              href={DEXSCREENER_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              $HEDGE Chart
+              <ExternalLink size={16} aria-hidden="true" />
+            </a>
+          </div>
+        </div>
+        <div className="dashboard-seal">
+          <ShieldCheck size={28} aria-hidden="true" />
+          <span>PUBLIC MANDATE</span>
+          <strong>
+            {data.hasPosition
+              ? "POSITION PUBLISHED"
+              : "ARMED · AWAITING FIRST RECEIPT"}
+          </strong>
         </div>
       </section>
 
-      {dashboardStats.length ? (
-        <section className="dashboard-metrics section-band">
-          <div className="section-heading split-heading">
-            <div>
-              <p className="eyebrow">VERIFIED TELEMETRY</p>
-              <h2>THE BULL, BY THE NUMBERS.</h2>
-            </div>
-            <p>Verified receipts only. No invented position.</p>
-          </div>
-          <MetricGrid metrics={dashboardStats} />
-        </section>
-      ) : (
-        <section className="dashboard-empty section-band">
+      <section className="dashboard-ledger">
+        <div className="dashboard-section-head">
           <div>
-            <p className="eyebrow">PUBLIC POSITION</p>
-            <h2>THE BULL IS ARMED.</h2>
-            <p>
-              Every fee claim, Aster order, buyback, and burn appears here the
-              moment its receipt exists.
-            </p>
+            <p className="eyebrow">LIVE DASHBOARD</p>
+            <h2>PORTFOLIO TELEMETRY</h2>
           </div>
-        </section>
-      )}
-
-      {hasPosition && latestPosition ? (
-        <section className="position-section section-band">
-          <div className="section-heading">
-            <span className="icon-chip">
-              <TrendingUp size={18} aria-hidden="true" />
-            </span>
-            <div>
-              <p className="eyebrow">PUBLISHED EXPOSURE</p>
-              <h2>CURRENT ANSEMUSDT 5X LONG.</h2>
-            </div>
-          </div>
-          <div className="position-readout">
-            <div>
-              <span>ANSEM POSITION</span>
-              <strong>{formatAssetAmount(positionSize, "ANSEM")}</strong>
-            </div>
-            <div>
-              <span>POSITION VALUE</span>
-              <strong>{money(positionNotional)}</strong>
-            </div>
-            <div>
-              <span>
-                {safeNumber(latestPosition.mark_price) > 0
-                  ? "MARK PRICE"
-                  : "MARKET"}
-              </span>
-              <strong>
-                {safeNumber(latestPosition.mark_price) > 0
-                  ? money(safeNumber(latestPosition.mark_price), 6)
-                  : "ANSEM / USDT"}
-              </strong>
-            </div>
-          </div>
-          <p className="disclosure">
-            <ShieldCheck size={18} aria-hidden="true" />
-            This 5x position can be liquidated. Entry, mark, leverage, and PnL
-            are read from Aster&apos;s public wallet API.
-          </p>
-          <a
-            className="button ghost position-link"
-            href={POSITION_URL}
-            target="_blank"
-            rel="noreferrer"
-          >
-            View Position
-            <ExternalLink size={17} aria-hidden="true" />
-          </a>
-        </section>
-      ) : null}
-
-      <section className="automation-section section-band">
-        <div className="section-heading">
-          <span className="icon-chip">
-            <ListChecks size={18} aria-hidden="true" />
+          <span>
+            <Radio size={15} aria-hidden="true" />
+            PUBLIC DATA
           </span>
-          <div>
-            <p className="eyebrow">AUTOMATION RAIL</p>
-            <h2>CHECKED EVERY 15 MINUTES.</h2>
-          </div>
         </div>
-        <p className="section-copy">
-          The worker is designed to preserve the SOL fee buffer, route managed
-          collateral to Aster, build the ANSEMUSDT 5x long within hard limits, and
-          publish every completed stage.
-        </p>
-        <div className="automation-grid">
+        <div className="dashboard-stat-grid" aria-live="polite">
+          {data.metrics.map((metric) => (
+            <article key={metric.label}>
+              <span>{metric.label}</span>
+              <strong className={metric.tone}>{metric.value}</strong>
+              <small>{metric.detail}</small>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="execution-section section-shell">
+        <div className="section-intro">
+          <p className="eyebrow">OPERATIONS</p>
+          <h2>THE AUTOMATION RAIL.</h2>
+          <p>
+            The worker checks creator fees on a fixed cadence, routes managed
+            capital, maintains the configured position, and publishes completed
+            stages.
+          </p>
+        </div>
+        <div className="execution-steps">
           {automationSteps.map((step) => (
             <article key={step.label}>
               <span>{step.label}</span>
@@ -450,70 +421,71 @@ export function DashboardClient() {
             </article>
           ))}
         </div>
-
-        {terminalRows.length ? (
-          <div className="terminal-panel">
-            <div className="terminal-head">
-              <div>
-                <p className="eyebrow">PUBLIC RECEIPTS</p>
-                <h2>TRANSACTION FEED.</h2>
-              </div>
-              <Terminal size={20} aria-hidden="true" />
-            </div>
-            <div className="terminal-log" aria-label="BBL transaction terminal">
-              {terminalRows.map((event) => {
-                const receiptUrl = safeExternalUrl(event.scan_url);
-
-                return (
-                  <div className="terminal-row" key={event.id}>
-                    <span>{terminalTime(event.created_at)}</span>
-                    <strong>{event.stage}</strong>
-                    <em>{event.status.toUpperCase()}</em>
-                    <p>
-                      {event.action}
-                      <small>
-                        {event.message ?? "Receipt recorded"}
-                        {event.tx_hash && receiptUrl ? (
-                          <>
-                            {" "}
-                            <a
-                              href={receiptUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              {shortHash(event.tx_hash)}
-                            </a>
-                          </>
-                        ) : null}
-                      </small>
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        ) : null}
       </section>
 
-      <section className="how-section section-band">
-        <div className="section-heading">
-          <span className="icon-chip">
-            <CircleDollarSign size={18} aria-hidden="true" />
-          </span>
+      <section className="activity-section section-shell" id="activity">
+        <div className="dashboard-section-head">
           <div>
-            <p className="eyebrow">HOW IT WORKS</p>
-            <h2>FROM FEE TO BLACK BULL.</h2>
+            <p className="eyebrow">LIVE ACTIVITY</p>
+            <h2>PUBLIC RECEIPT TAPE</h2>
           </div>
+          <ReceiptText size={20} aria-hidden="true" />
         </div>
-        <div className="how-grid">
-          {howItWorks.map((step, index) => (
-            <article key={step.title}>
-              <span>{String(index + 1).padStart(2, "0")}</span>
-              <h3>{step.title}</h3>
-              <p>{step.text}</p>
-            </article>
-          ))}
-        </div>
+
+        {terminalRows.length ? (
+          <div className="receipt-table">
+            <div className="receipt-table-head">
+              <span>TIME</span>
+              <span>EVENT</span>
+              <span>AMOUNT</span>
+              <span>PROOF</span>
+            </div>
+            {terminalRows.map((event) => {
+              const receiptUrl = safeExternalUrl(event.scan_url);
+              const amount = amountLabel(event);
+
+              return (
+                <div className="receipt-row" key={event.id}>
+                  <time dateTime={event.created_at}>
+                    {terminalTime(event.created_at)}
+                  </time>
+                  <span>
+                    <CheckCircle2 size={15} aria-hidden="true" />
+                    {eventLabel(event.stage)}
+                  </span>
+                  <strong>{amount ?? "—"}</strong>
+                  {event.tx_hash && receiptUrl ? (
+                    <a href={receiptUrl} target="_blank" rel="noreferrer">
+                      {shortHash(event.tx_hash)}
+                      <ArrowUpRight size={13} aria-hidden="true" />
+                    </a>
+                  ) : (
+                    <span>—</span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="receipt-empty">
+            <ReceiptText size={22} aria-hidden="true" />
+            <h3>THE DESK IS ARMED.</h3>
+            <p>
+              The first verified fee claim, position, buyback, or burn will be
+              published here.
+            </p>
+          </div>
+        )}
+
+        <a
+          className="position-proof-link"
+          href={POSITION_URL}
+          target="_blank"
+          rel="noreferrer"
+        >
+          View public execution account
+          <ArrowUpRight size={16} aria-hidden="true" />
+        </a>
       </section>
     </>
   );

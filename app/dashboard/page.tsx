@@ -3,9 +3,9 @@ import { SITE } from "../constants";
 import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 import { DashboardClient } from "./DashboardClient";
 
-const title = "Black Bull Terminal | BBL";
+const title = "Hedge Capital Dashboard | $HEDGE";
 const description =
-  "Track BBL creator fees, the public ANSEMUSDT 5x long on Aster, qualifying realized profit, $BBL buybacks, and burns.";
+  "Track verified creator-fee receipts, public perpetual exposure, qualifying realized profit, $HEDGE buybacks, and burns.";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
         url: SITE.ogImage,
         width: 1280,
         height: 426,
-        alt: "BBL, Black Bull Long",
+        alt: "Hedge the Hedgehog capital dashboard",
       },
     ],
   },
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 
 export default function DashboardPage() {
   return (
-    <main className="site-shell bbl-site dashboard-site">
+    <main className="site-shell hedge-site dashboard-site">
       <SiteHeader />
       <DashboardClient />
       <SiteFooter />
