@@ -10,8 +10,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import {
-  ASTER_MARKET_URL,
   DEXSCREENER_URL,
+  HYPERLIQUID_TRADE_URL,
   POSITION_URL,
 } from "../../lib/links";
 import { automationSteps } from "../data";
@@ -29,22 +29,33 @@ type TerminalRow = {
   scan_url: string | null;
 };
 
-type PositionRow = {
+type ShortPosition = {
   recorded_at: string;
-  aster_account: string;
   market: string;
-  side: string;
-  size: string | number;
-  notional_usdc: string | number;
-  entry_price: string | number | null;
-  mark_price: string | number | null;
-  leverage: string | number;
-  unrealized_pnl_usdc: string | number;
-  margin_used_usdc: string | number;
+  dex: string;
+  side: "short";
+  size: number;
+  notional_usd: number;
+  entry_price: number | null;
+  mark_price: number | null;
+  leverage: number | null;
+  unrealized_pnl_usd: number;
+  margin_used_usd: number;
+  liquidation_price: number | null;
 };
 
-type PositionResponse = {
-  position: PositionRow | null;
+type ShortBookResponse = {
+  configured: boolean;
+  account: string | null;
+  account_url: string | null;
+  positions: ShortPosition[];
+  summary: {
+    short_count: number;
+    total_short_notional_usd: number;
+    total_margin_used_usd: number;
+    total_unrealized_pnl_usd: number;
+    account_value_usd: number;
+  } | null;
 };
 
 type DashboardMetric = {
@@ -108,24 +119,28 @@ function displayAsset(asset: string | null) {
   const normalized = asset?.toUpperCase();
   if (!normalized) return "";
   if (normalized === "BBL" || normalized === "$BBL") return "$HEDGE";
-  return normalized.startsWith("$") ? normalized : normalized;
+  return normalized;
+}
+
+function marketLabel(market: string) {
+  return market.includes(":") ? market.split(":").at(-1) ?? market : market;
 }
 
 function eventLabel(stage: string) {
   const normalized = stage.toUpperCase();
   const labels: Record<string, string> = {
     CLAIM: "Creator fees claimed",
-    ROUTE: "Strategy capital routed",
+    ROUTE: "Short-book capital routed",
     BRIDGE: "Bridge confirmed",
-    DEPOSIT: "Execution account funded",
-    OPEN: "Position order recorded",
-    POSITION: "Position updated",
-    PROFIT: "Realized profit recorded",
+    DEPOSIT: "Hyperliquid account funded",
+    OPEN: "Short order recorded",
+    POSITION: "Short book updated",
+    PROFIT: "Realized short profit recorded",
     BUYBACK: "$HEDGE buyback completed",
     BURN: "$HEDGE burn completed",
   };
 
-  return labels[normalized] ?? "Strategy receipt recorded";
+  return labels[normalized] ?? "Short-book receipt recorded";
 }
 
 function amountLabel(row: TerminalRow) {
@@ -150,7 +165,13 @@ function amountLabel(row: TerminalRow) {
 
 export function DashboardClient() {
   const [terminalRows, setTerminalRows] = useState<TerminalRow[]>([]);
-  const [position, setPosition] = useState<PositionRow | null>(null);
+  const [shortBook, setShortBook] = useState<ShortBookResponse>({
+    configured: false,
+    account: null,
+    account_url: null,
+    positions: [],
+    summary: null,
+  });
 
   useEffect(() => {
     let active = true;
@@ -168,7 +189,7 @@ export function DashboardClient() {
                 { cache: "no-store", headers },
               )
             : Promise.resolve(null),
-          fetch("/api/aster-position", { cache: "no-store" }),
+          fetch("/api/hyperliquid-positions", { cache: "no-store" }),
         ]);
 
         if (!active) return;
@@ -176,8 +197,7 @@ export function DashboardClient() {
           setTerminalRows((await terminalResponse.json()) as TerminalRow[]);
         }
         if (positionResponse.ok) {
-          const payload = (await positionResponse.json()) as PositionResponse;
-          setPosition(payload.position);
+          setShortBook((await positionResponse.json()) as ShortBookResponse);
         }
       } catch {
         // Keep the last verified public state during transient provider failures.
@@ -194,12 +214,12 @@ export function DashboardClient() {
   }, []);
 
   const data = useMemo(() => {
-    const positionValue = Math.abs(safeNumber(position?.notional_usdc));
-    const collateral = Math.abs(safeNumber(position?.margin_used_usdc));
-    const unrealizedPnl = safeNumber(position?.unrealized_pnl_usdc);
-    const leverage = safeNumber(position?.leverage);
-    const entryPrice = safeNumber(position?.entry_price);
-    const markPrice = safeNumber(position?.mark_price);
+    const summary = shortBook.summary;
+    const shortNotional = safeNumber(summary?.total_short_notional_usd);
+    const marginUsed = safeNumber(summary?.total_margin_used_usd);
+    const unrealizedPnl = safeNumber(summary?.total_unrealized_pnl_usd);
+    const accountValue = safeNumber(summary?.account_value_usd);
+    const shortCount = safeNumber(summary?.short_count);
     const successfulRows = terminalRows.filter(
       (row) => row.status.toLowerCase() === "succeeded",
     );
@@ -221,27 +241,47 @@ export function DashboardClient() {
       .filter((row) => row.stage.toUpperCase() === "BURN")
       .reduce((sum, row) => sum + safeNumber(row.amount), 0);
     const currentBuyback = buybacks[0] ? safeNumber(buybacks[0].amount) : 0;
-    const treasuryRoi = collateral > 0 ? (unrealizedPnl / collateral) * 100 : 0;
-    const hasPosition = positionValue > 0;
-    const lastUpdate = position?.recorded_at ?? terminalRows[0]?.created_at;
+    const weightedLeverage =
+      shortNotional > 0
+        ? shortBook.positions.reduce(
+            (sum, position) =>
+              sum +
+              safeNumber(position.notional_usd) *
+                safeNumber(position.leverage),
+            0,
+          ) / shortNotional
+        : 0;
+    const grossExposure =
+      accountValue > 0 ? (shortNotional / accountValue) * 100 : 0;
+    const hasShorts = shortNotional > 0;
+    const lastPositionUpdate = shortBook.positions
+      .map((position) => position.recorded_at)
+      .sort()
+      .at(-1);
+    const lastUpdate = lastPositionUpdate ?? terminalRows[0]?.created_at;
 
     const metrics: DashboardMetric[] = [
       {
-        label: "CURRENT POSITION",
-        value: hasPosition ? money(positionValue) : "—",
-        detail: hasPosition ? "published notional" : "Verified data required",
+        label: "CURRENT SHORT BOOK",
+        value: hasShorts ? money(shortNotional) : "—",
+        detail: hasShorts ? "published gross notional" : "Verified data required",
       },
       {
-        label: "STRATEGY COLLATERAL",
-        value: collateral > 0 ? money(collateral) : "—",
-        detail: collateral > 0 ? "margin in use" : "Verified data required",
+        label: "OPEN SHORTS",
+        value: shortCount > 0 ? String(shortCount) : "—",
+        detail: shortCount > 0 ? "published equity perps" : "Verified data required",
       },
       {
-        label: "UNREALIZED PNL",
-        value: hasPosition ? signedMoney(unrealizedPnl) : "—",
-        detail: hasPosition ? "live position estimate" : "Verified data required",
+        label: "ACCOUNT VALUE",
+        value: accountValue > 0 ? money(accountValue) : "—",
+        detail: accountValue > 0 ? "Hyperliquid account value" : "Verified data required",
+      },
+      {
+        label: "UNREALIZED SHORT PNL",
+        value: hasShorts ? signedMoney(unrealizedPnl) : "—",
+        detail: hasShorts ? "live short-book estimate" : "Verified data required",
         tone:
-          hasPosition && unrealizedPnl !== 0
+          hasShorts && unrealizedPnl !== 0
             ? unrealizedPnl > 0
               ? "positive"
               : "negative"
@@ -288,74 +328,59 @@ export function DashboardClient() {
         detail: claimed > 0 ? "published claim receipts" : "Verified data required",
       },
       {
-        label: "STRATEGY ROI",
-        value: collateral > 0 ? `${treasuryRoi.toFixed(2)}%` : "—",
-        detail: collateral > 0 ? "unrealized PnL / collateral" : "Verified data required",
-        tone:
-          collateral > 0 && treasuryRoi !== 0
-            ? treasuryRoi > 0
-              ? "positive"
-              : "negative"
-            : undefined,
+        label: "GROSS SHORT EXPOSURE",
+        value: grossExposure > 0 ? `${grossExposure.toFixed(1)}%` : "—",
+        detail: grossExposure > 0 ? "short notional / account value" : "Verified data required",
       },
       {
-        label: "MARKET BIAS",
-        value: hasPosition ? position?.side.toUpperCase() ?? "—" : "—",
-        detail: hasPosition ? "current published side" : "Verified data required",
+        label: "AVERAGE LEVERAGE",
+        value: weightedLeverage > 0 ? `${weightedLeverage.toFixed(1)}x` : "—",
+        detail: weightedLeverage > 0 ? "notional-weighted leverage" : "Verified data required",
       },
       {
         label: "FUNDING RATE",
         value: "—",
-        detail: "Displayed when a public rate exists",
+        detail: "Displayed when verified rate data exists",
       },
       {
-        label: "AVERAGE ENTRY",
-        value: entryPrice > 0 ? money(entryPrice, 6) : "—",
-        detail: entryPrice > 0 ? "published cost basis" : "Verified data required",
-      },
-      {
-        label: "CURRENT MARK",
-        value: markPrice > 0 ? money(markPrice, 6) : "—",
-        detail: markPrice > 0 ? "latest exchange mark" : "Verified data required",
-      },
-      {
-        label: "LEVERAGE",
-        value: leverage > 0 ? `${leverage.toFixed(1)}x` : "—",
-        detail: leverage > 0 ? "published account leverage" : "Verified data required",
+        label: "MARGIN USED",
+        value: marginUsed > 0 ? money(marginUsed) : "—",
+        detail: marginUsed > 0 ? "published short-book margin" : "Verified data required",
       },
       {
         label: "LAST UPDATE",
         value: lastUpdate ? terminalTime(lastUpdate) : "—",
-        detail: lastUpdate ? "latest verified receipt" : "Verified data required",
+        detail: lastUpdate ? "latest verified update" : "Verified data required",
       },
       {
-        label: "CURRENT EXCHANGE",
-        value: "ASTER",
-        detail: "execution venue",
+        label: "CURRENT VENUE",
+        value: "HYPERLIQUID",
+        detail: "public perpetual markets",
       },
     ];
 
-    return { hasPosition, metrics };
-  }, [position, terminalRows]);
+    return { hasShorts, metrics };
+  }, [shortBook, terminalRows]);
 
   return (
     <>
       <section className="dashboard-hero">
         <div>
-          <p className="eyebrow">HEDGE CAPITAL / RISK DESK</p>
-          <h1>THE FUND, MARKED TO MARKET.</h1>
+          <p className="eyebrow">HEDGE CAPITAL / SHORT DESK</p>
+          <h1>THE SHORT BOOK, MARKED TO MARKET.</h1>
           <p>
-            Every creator-fee claim, position update, buyback, and burn appears
-            when its verified receipt exists.
+            The mandate shorts selected AI and technology blue chips on
+            Hyperliquid. Every position, creator-fee claim, buyback, and burn is
+            published when verified data exists.
           </p>
           <div className="button-row">
             <a
               className="button button-dark"
-              href={ASTER_MARKET_URL}
+              href={HYPERLIQUID_TRADE_URL}
               target="_blank"
               rel="noreferrer"
             >
-              Open Exchange
+              Open Hyperliquid
               <ExternalLink size={16} aria-hidden="true" />
             </a>
             <a
@@ -371,10 +396,10 @@ export function DashboardClient() {
         </div>
         <div className="dashboard-seal">
           <ShieldCheck size={28} aria-hidden="true" />
-          <span>PUBLIC MANDATE</span>
+          <span>PUBLIC SHORT MANDATE</span>
           <strong>
-            {data.hasPosition
-              ? "POSITION PUBLISHED"
+            {data.hasShorts
+              ? "SHORT BOOK PUBLISHED"
               : "ARMED · AWAITING FIRST RECEIPT"}
           </strong>
         </div>
@@ -384,7 +409,7 @@ export function DashboardClient() {
         <div className="dashboard-section-head">
           <div>
             <p className="eyebrow">LIVE DASHBOARD</p>
-            <h2>PORTFOLIO TELEMETRY</h2>
+            <h2>SHORT-BOOK TELEMETRY</h2>
           </div>
           <span>
             <Radio size={15} aria-hidden="true" />
@@ -402,14 +427,78 @@ export function DashboardClient() {
         </div>
       </section>
 
+      {shortBook.positions.length ? (
+        <section className="short-book-section section-shell">
+          <div className="dashboard-section-head">
+            <div>
+              <p className="eyebrow">OPEN POSITIONS</p>
+              <h2>THE AI SHORT BOOK</h2>
+            </div>
+            <span>{shortBook.positions.length} VERIFIED SHORTS</span>
+          </div>
+          <div className="short-book-table">
+            <div className="short-book-head">
+              <span>MARKET</span>
+              <span>NOTIONAL</span>
+              <span>ENTRY</span>
+              <span>MARK</span>
+              <span>LEVERAGE</span>
+              <span>PNL</span>
+              <span>LIQUIDATION</span>
+            </div>
+            {shortBook.positions.map((position) => (
+              <div
+                className="short-book-row"
+                key={`${position.dex}-${position.market}`}
+              >
+                <strong>
+                  {marketLabel(position.market)}
+                  <small>{position.dex.toUpperCase()}</small>
+                </strong>
+                <span>{money(safeNumber(position.notional_usd))}</span>
+                <span>
+                  {safeNumber(position.entry_price) > 0
+                    ? money(safeNumber(position.entry_price), 4)
+                    : "—"}
+                </span>
+                <span>
+                  {safeNumber(position.mark_price) > 0
+                    ? money(safeNumber(position.mark_price), 4)
+                    : "—"}
+                </span>
+                <span>
+                  {safeNumber(position.leverage) > 0
+                    ? `${safeNumber(position.leverage).toFixed(1)}x`
+                    : "—"}
+                </span>
+                <span
+                  className={
+                    safeNumber(position.unrealized_pnl_usd) >= 0
+                      ? "positive"
+                      : "negative"
+                  }
+                >
+                  {signedMoney(safeNumber(position.unrealized_pnl_usd))}
+                </span>
+                <span>
+                  {safeNumber(position.liquidation_price) > 0
+                    ? money(safeNumber(position.liquidation_price), 4)
+                    : "—"}
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       <section className="execution-section section-shell">
         <div className="section-intro">
-          <p className="eyebrow">OPERATIONS</p>
-          <h2>THE AUTOMATION RAIL.</h2>
+          <p className="eyebrow">THE MANDATE</p>
+          <h2>FEES BECOME SHORT EXPOSURE.</h2>
           <p>
-            The worker checks creator fees on a fixed cadence, routes managed
-            capital, maintains the configured position, and publishes completed
-            stages.
+            Deployable creator fees route toward a public Hyperliquid account.
+            The mandate builds selected AI and technology equity shorts within
+            explicit leverage, concentration, and liquidation limits.
           </p>
         </div>
         <div className="execution-steps">
@@ -469,21 +558,21 @@ export function DashboardClient() {
         ) : (
           <div className="receipt-empty">
             <ReceiptText size={22} aria-hidden="true" />
-            <h3>THE DESK IS ARMED.</h3>
+            <h3>THE SHORT DESK IS ARMED.</h3>
             <p>
-              The first verified fee claim, position, buyback, or burn will be
-              published here.
+              The first verified fee claim, Hyperliquid short, buyback, or burn
+              will be published here.
             </p>
           </div>
         )}
 
         <a
           className="position-proof-link"
-          href={POSITION_URL}
+          href={shortBook.account_url || POSITION_URL}
           target="_blank"
           rel="noreferrer"
         >
-          View public execution account
+          View public Hyperliquid account
           <ArrowUpRight size={16} aria-hidden="true" />
         </a>
       </section>

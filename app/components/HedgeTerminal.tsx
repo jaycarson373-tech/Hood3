@@ -11,20 +11,23 @@ type TerminalRow = {
   amount: string | number | null;
 };
 
-type PositionRow = {
+type ShortPosition = {
   market: string;
-  side: string;
-  size: string | number;
-  notional_usdc: string | number;
-  entry_price: string | number | null;
-  mark_price: string | number | null;
-  leverage: string | number;
-  unrealized_pnl_usdc: string | number;
-  margin_used_usdc: string | number;
+  notional_usd: number;
+  entry_price: number | null;
+  leverage: number | null;
+  unrealized_pnl_usd: number;
+  margin_used_usd: number;
 };
 
-type PositionResponse = {
-  position: PositionRow | null;
+type ShortBookResponse = {
+  positions: ShortPosition[];
+  summary: {
+    short_count: number;
+    total_short_notional_usd: number;
+    total_margin_used_usd: number;
+    total_unrealized_pnl_usd: number;
+  } | null;
 };
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.replace(/\/$/, "");
@@ -43,9 +46,16 @@ function money(value: number, digits = 2) {
   }).format(value);
 }
 
+function marketLabel(market: string) {
+  return market.includes(":") ? market.split(":").at(-1) ?? market : market;
+}
+
 export function HedgeTerminal() {
   const [terminalRows, setTerminalRows] = useState<TerminalRow[]>([]);
-  const [position, setPosition] = useState<PositionRow | null>(null);
+  const [shortBook, setShortBook] = useState<ShortBookResponse>({
+    positions: [],
+    summary: null,
+  });
 
   useEffect(() => {
     let active = true;
@@ -63,7 +73,7 @@ export function HedgeTerminal() {
                 { cache: "no-store", headers },
               )
             : Promise.resolve(null),
-          fetch("/api/aster-position", { cache: "no-store" }),
+          fetch("/api/hyperliquid-positions", { cache: "no-store" }),
         ]);
 
         if (!active) return;
@@ -71,8 +81,7 @@ export function HedgeTerminal() {
           setTerminalRows((await terminalResponse.json()) as TerminalRow[]);
         }
         if (positionResponse.ok) {
-          const payload = (await positionResponse.json()) as PositionResponse;
-          setPosition(payload.position);
+          setShortBook((await positionResponse.json()) as ShortBookResponse);
         }
       } catch {
         // Preserve the last verified public state during transient failures.
@@ -89,50 +98,66 @@ export function HedgeTerminal() {
   }, []);
 
   const metrics = useMemo(() => {
-    const notional = Math.abs(safeNumber(position?.notional_usdc));
-    const margin = Math.abs(safeNumber(position?.margin_used_usdc));
-    const entry = safeNumber(position?.entry_price);
-    const pnl = safeNumber(position?.unrealized_pnl_usdc);
-    const leverage = safeNumber(position?.leverage);
+    const summary = shortBook.summary;
+    const notional = safeNumber(summary?.total_short_notional_usd);
+    const margin = safeNumber(summary?.total_margin_used_usd);
+    const pnl = safeNumber(summary?.total_unrealized_pnl_usd);
+    const shortCount = safeNumber(summary?.short_count);
+    const topShort = [...shortBook.positions].sort(
+      (a, b) => safeNumber(b.notional_usd) - safeNumber(a.notional_usd),
+    )[0];
+    const weightedLeverage =
+      notional > 0
+        ? shortBook.positions.reduce(
+            (sum, position) =>
+              sum +
+              safeNumber(position.notional_usd) *
+                safeNumber(position.leverage),
+            0,
+          ) / notional
+        : 0;
     const fees = terminalRows
       .filter((row) => row.stage.toUpperCase() === "CLAIM")
       .reduce((sum, row) => sum + safeNumber(row.amount), 0);
     const burned = terminalRows
       .filter((row) => row.stage.toUpperCase() === "BURN")
       .reduce((sum, row) => sum + safeNumber(row.amount), 0);
-    const hasPosition = notional > 0;
+    const hasShorts = notional > 0;
 
     return [
       {
         label: "SYSTEM",
-        value: hasPosition ? "HEDGE ACTIVE" : "ARMED · AWAITING RECEIPT",
+        value: hasShorts ? "SHORT BOOK ACTIVE" : "ARMED · AWAITING RECEIPT",
       },
       {
-        label: "CURRENT POSITION",
-        value: hasPosition ? money(notional) : "—",
+        label: "CURRENT SHORT BOOK",
+        value: hasShorts ? money(notional) : "—",
       },
       {
-        label: "LONG EXPOSURE",
-        value: hasPosition && position?.side === "long" ? money(notional) : "—",
+        label: "OPEN SHORTS",
+        value: shortCount > 0 ? String(shortCount) : "—",
       },
       {
-        label: "SHORT EXPOSURE",
-        value: hasPosition && position?.side === "short" ? money(notional) : "—",
+        label: "TOP SHORT",
+        value: topShort ? marketLabel(topShort.market) : "—",
       },
       {
-        label: "LEVERAGE",
-        value: leverage > 0 ? `${leverage.toFixed(0)}x` : "—",
+        label: "AVERAGE LEVERAGE",
+        value: weightedLeverage > 0 ? `${weightedLeverage.toFixed(1)}x` : "—",
       },
       {
-        label: "AVERAGE ENTRY",
-        value: entry > 0 ? money(entry, 6) : "—",
+        label: "TOP SHORT ENTRY",
+        value:
+          safeNumber(topShort?.entry_price) > 0
+            ? money(safeNumber(topShort?.entry_price), 4)
+            : "—",
       },
       {
         label: "UNREALIZED PNL",
-        value: hasPosition ? money(pnl) : "—",
+        value: hasShorts ? money(pnl) : "—",
       },
       {
-        label: "HEDGE VALUE",
+        label: "MARGIN USED",
         value: margin > 0 ? money(margin) : "—",
       },
       {
@@ -144,14 +169,14 @@ export function HedgeTerminal() {
         value: burned > 0 ? burned.toLocaleString("en-US") : "—",
       },
     ];
-  }, [position, terminalRows]);
+  }, [shortBook, terminalRows]);
 
   return (
-    <aside className="hedge-terminal" aria-label="Live Hedge treasury terminal">
+    <aside className="hedge-terminal" aria-label="Live Hyperliquid short book">
       <div className="terminal-titlebar">
         <div>
-          <span>HEDGE CAPITAL / LIVE</span>
-          <strong>PERPETUAL MANDATE</strong>
+          <span>HEDGE CAPITAL / HYPERLIQUID</span>
+          <strong>AI SHORT MANDATE</strong>
         </div>
         <Radio size={17} aria-hidden="true" />
       </div>
@@ -164,7 +189,7 @@ export function HedgeTerminal() {
         ))}
       </div>
       <Link className="button button-dark terminal-link" href="/dashboard">
-        Open Live Dashboard
+        Open Short Book
         <ArrowRight size={16} aria-hidden="true" />
       </Link>
     </aside>

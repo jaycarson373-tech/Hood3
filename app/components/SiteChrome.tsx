@@ -9,7 +9,7 @@ import {
 import { HeaderContract } from "./HeaderContract";
 
 const navLinks = [
-  { label: "Strategy", href: "/#strategy" },
+  { label: "Short Book", href: "/#strategy" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "PFP Studio", href: "/#pfp-studio" },
   { label: "Transparency", href: "/#transparency" },
@@ -70,12 +70,12 @@ export function SiteFooter() {
           <strong>HEDGE</strong>
           <span>THE HEDGEHOG</span>
         </div>
-        <p>The first perpetual hedge fund on Solana.</p>
+        <p>The first perpetual short fund on Solana.</p>
       </div>
       <div className="footer-grid">
         <div>
           <span className="footer-label">OFFICE</span>
-          <p>Wall Street discipline.<br />Solana settlement.<br />Hedgehog management.</p>
+          <p>AI excess, hedged.<br />Hyperliquid execution.<br />Solana settlement.</p>
         </div>
         <nav className="source-links" aria-label="External links">
           <Link href="/dashboard">Dashboard</Link>
@@ -94,8 +94,8 @@ export function SiteFooter() {
         </nav>
       </div>
       <p className="footer-disclaimer">
-        $HEDGE is a highly speculative community token. Perpetual trading can
-        result in partial or total loss, including liquidation. Buybacks and
+        $HEDGE is a highly speculative community token. Short positions face
+        theoretically unlimited upside risk and can be liquidated. Buybacks and
         burns require qualifying realized profits and are not guaranteed.
         Nothing on this website is financial advice.
       </p>

@@ -15,17 +15,17 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 function eventLabel(stage: string) {
   const labels: Record<string, string> = {
     CLAIM: "Creator fees claimed",
-    ROUTE: "Strategy capital routed",
+    ROUTE: "Short-book capital routed",
     BRIDGE: "Bridge confirmed",
-    DEPOSIT: "Execution account funded",
-    OPEN: "Position order recorded",
-    POSITION: "Position updated",
-    PROFIT: "Realized profit recorded",
+    DEPOSIT: "Hyperliquid account funded",
+    OPEN: "Short order recorded",
+    POSITION: "Short book updated",
+    PROFIT: "Realized short profit recorded",
     BUYBACK: "$HEDGE buyback completed",
     BURN: "$HEDGE burn completed",
   };
 
-  return labels[stage.toUpperCase()] ?? "Strategy receipt recorded";
+  return labels[stage.toUpperCase()] ?? "Short-book receipt recorded";
 }
 
 function amountLabel(row: ActivityRow) {

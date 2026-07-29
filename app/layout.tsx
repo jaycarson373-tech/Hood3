@@ -59,7 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: SITE.ogImage,
           width: 1280,
           height: 426,
-          alt: "Hedge the Hedgehog, the first perpetual hedge fund on Solana",
+          alt: "Hedge the Hedgehog, the first perpetual short fund on Solana",
         },
       ],
     },

@@ -25,13 +25,13 @@ export const mandatePoints: MandatePoint[] = [
   {
     label: "Capital formation",
     value: "01",
-    text: "Creator fees form the capital base for a transparent perpetual strategy.",
+    text: "Creator fees form the capital base for a transparent Hyperliquid short book.",
     icon: Landmark,
   },
   {
-    label: "Risk-managed execution",
+    label: "Short the excess",
     value: "02",
-    text: "Position sizing, leverage, and receipts remain visible whenever verified data exists.",
+    text: "The mandate targets AI and technology blue chips it identifies as materially overvalued.",
     icon: Scale,
   },
   {
@@ -46,13 +46,13 @@ export const strategySteps = [
   {
     number: "01",
     title: "Fees fund the mandate",
-    text: "Creator fees are checked on a fixed cadence and routed into managed strategy capital.",
+    text: "Creator fees are checked on a fixed cadence and routed into the public Hyperliquid account.",
     icon: BriefcaseBusiness,
   },
   {
     number: "02",
-    title: "Treasury opens the hedge",
-    text: "The execution account maintains a public perpetual position within configured limits.",
+    title: "The fund opens shorts",
+    text: "Capital builds disclosed short positions in selected AI and technology blue chips.",
     icon: ShieldCheck,
   },
   {
@@ -72,12 +72,12 @@ export const automationSteps = [
   {
     label: "02",
     title: "Bridge",
-    text: "Route deployable capital to the public execution account.",
+    text: "Route deployable capital to the public Hyperliquid account.",
   },
   {
     label: "03",
-    title: "Hedge",
-    text: "Maintain the perpetual position within bounded execution parameters.",
+    title: "Short",
+    text: "Open and maintain selected equity perpetual shorts within explicit risk limits.",
   },
   {
     label: "04",
@@ -87,14 +87,15 @@ export const automationSteps = [
 ];
 
 export const roadmap = [
-  ["Phase I", "Build Treasury", "Establish transparent fee routing and public receipts."],
-  ["Phase II", "Scale Hedge", "Grow strategy capital inside explicit risk limits."],
+  ["Phase I", "Fund the Book", "Establish transparent fee routing and public receipts."],
+  ["Phase II", "Scale Shorts", "Grow disclosed AI and technology shorts inside explicit risk limits."],
   ["Phase III", "Buybacks", "Convert qualifying realized profit into permanent supply reduction."],
   ["Phase IV", "Institutional Domination", "Make the best-dressed hedge fund on Solana impossible to ignore."],
 ];
 
 export const risks = [
-  "Perpetual positions can lose money or be liquidated.",
+  "Short positions can lose money quickly or be liquidated when the underlying market rises.",
+  "A concentrated AI and technology short book can experience correlated losses and short squeezes.",
   "Bridges, exchanges, wallets, and automation can fail or experience delays.",
   "Buybacks and burns require qualifying realized profit and are never guaranteed.",
   "$HEDGE is a highly speculative community token and can lose most or all of its value.",

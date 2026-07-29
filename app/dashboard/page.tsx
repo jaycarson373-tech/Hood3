@@ -5,7 +5,7 @@ import { DashboardClient } from "./DashboardClient";
 
 const title = "Hedge Capital Dashboard | $HEDGE";
 const description =
-  "Track verified creator-fee receipts, public perpetual exposure, qualifying realized profit, $HEDGE buybacks, and burns.";
+  "Track the public Hyperliquid AI equity short book, creator-fee receipts, qualifying realized profit, $HEDGE buybacks, and burns.";
 
 export const dynamic = "force-dynamic";
 

@@ -2,18 +2,23 @@ export const CA = "3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump";
 
 export const PUMP_FUN_URL = `https://pump.fun/coin/${CA}`;
 export const DEXSCREENER_URL = `https://dexscreener.com/solana/${CA}`;
-export const ASTER_MARKET_URL =
-  "https://www.asterdex.com/en/trade/pro/futures/ANSEMUSDT";
+export const HYPERLIQUID_TRADE_URL = "https://app.hyperliquid.xyz/trade";
+export const HYPERLIQUID_EXPLORER_URL =
+  "https://app.hyperliquid.xyz/explorer";
+export const HYPERLIQUID_INFO_URL = "https://api.hyperliquid.xyz/info";
+export const HYPERLIQUID_ACCOUNT_URL = (account: string) =>
+  `${HYPERLIQUID_EXPLORER_URL}/address/${account}`;
 
-// TODO: Replace with Aster's public account URL when one is available.
-export const ASTER_ACCOUNT_URL: string | null = null;
-export const POSITION_URL = ASTER_ACCOUNT_URL ?? ASTER_MARKET_URL;
+const configuredHyperliquidAccount =
+  process.env.NEXT_PUBLIC_HEDGE_HYPERLIQUID_ACCOUNT?.trim() || null;
+export const POSITION_URL = configuredHyperliquidAccount
+  ? HYPERLIQUID_ACCOUNT_URL(configuredHyperliquidAccount)
+  : HYPERLIQUID_EXPLORER_URL;
 
 export const X_URL =
   process.env.NEXT_PUBLIC_HEDGE_X_URL?.trim() || null;
 export const COMMUNITY_URL =
   process.env.NEXT_PUBLIC_HEDGE_COMMUNITY_URL?.trim() || null;
 
-export const ASTER_PUBLIC_RPC_URL = "https://tapi.asterdex.com/info";
 export const DEXSCREENER_TOKEN_PAIRS_API_URL =
   "https://api.dexscreener.com/token-pairs/v1/solana";

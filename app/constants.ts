@@ -1,8 +1,8 @@
 import {
-  ASTER_MARKET_URL,
   CA,
   COMMUNITY_URL,
   DEXSCREENER_URL,
+  HYPERLIQUID_TRADE_URL,
   POSITION_URL,
   PUMP_FUN_URL,
   X_URL,
@@ -14,7 +14,7 @@ export const SITE = {
   name: "Hedge the Hedgehog",
   title: "Hedge the Hedgehog | $HEDGE",
   description:
-    "The first perpetual hedge fund on Solana. Creator fees fund a transparent perpetual strategy; qualifying profits buy back and burn $HEDGE.",
+    "The first perpetual short fund on Solana. Creator fees fund a public Hyperliquid short book focused on overvalued AI and technology blue chips; qualifying profits buy back and burn $HEDGE.",
   configuredUrl: configuredSiteUrl || null,
   ogImage: "/hedge-banner.jpg",
 } as const;
@@ -22,11 +22,11 @@ export const SITE = {
 export const HEDGE_CONTRACT_ADDRESS = CA;
 
 export const EXECUTION = {
-  asterWallet:
-    process.env.HEDGE_ASTER_WALLET_ADDRESS?.trim() ||
-    process.env.BBL_ASTER_WALLET_ADDRESS?.trim() ||
-    "0xe7BdaB66180a514bb591E2cD6874e58CE5809488",
-  marketUrl: ASTER_MARKET_URL,
+  hyperliquidAccount:
+    process.env.HEDGE_HYPERLIQUID_ACCOUNT?.trim() ||
+    process.env.NEXT_PUBLIC_HEDGE_HYPERLIQUID_ACCOUNT?.trim() ||
+    null,
+  marketUrl: HYPERLIQUID_TRADE_URL,
 } as const;
 
 export const EXTERNAL_LINKS = {
@@ -35,7 +35,7 @@ export const EXTERNAL_LINKS = {
   x: X_URL,
   community: COMMUNITY_URL,
   position: POSITION_URL,
-  exchange: ASTER_MARKET_URL,
+  exchange: HYPERLIQUID_TRADE_URL,
 } as const;
 
 export type SiteLink = {

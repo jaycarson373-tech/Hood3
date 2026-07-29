@@ -12,7 +12,7 @@ import { SiteFooter, SiteHeader } from "../components/SiteChrome";
 
 const title = "Investment Mandate | Hedge the Hedgehog";
 const description =
-  "The public mandate behind $HEDGE: creator-fee capital formation, transparent perpetual execution, and conditional buyback burns.";
+  "The public mandate behind $HEDGE: creator-fee capital formation, disclosed AI equity shorts on Hyperliquid, and conditional buyback burns.";
 
 export const metadata: Metadata = {
   title,
@@ -58,8 +58,8 @@ export default function ThesisPage() {
           <p className="eyebrow">HEDGE CAPITAL MANAGEMENT</p>
           <h1>THE INVESTMENT MANDATE.</h1>
           <p>
-            Transparent capital formation. Public risk. Conditional supply
-            reduction.
+            Short overvalued AI blue chips. Publish the risk. Burn $HEDGE with
+            qualifying realized gains.
           </p>
           <div className="button-row">
             <Link className="button button-gold" href="/dashboard">
@@ -87,9 +87,10 @@ export default function ThesisPage() {
           AN INVESTMENT COMMITTEE.
         </h2>
         <p>
-          The mandate is designed to route creator-fee flow into managed
-          perpetual exposure. When qualifying realized profit exists, it may
-          return to Solana to buy and permanently burn $HEDGE.
+          Creator-fee flow is designed to build a disclosed portfolio of
+          Hyperliquid shorts in AI and technology companies the mandate
+          identifies as overvalued. Qualifying realized short profit may return
+          to Solana to buy and permanently burn $HEDGE.
         </p>
       </section>
 
@@ -114,7 +115,7 @@ export default function ThesisPage() {
         <div>
           <ShieldAlert size={24} aria-hidden="true" />
           <p className="eyebrow">RISK COMMITTEE</p>
-          <h2>THE HEDGE CAN LOSE.</h2>
+          <h2>THE SHORT CAN GET SQUEEZED.</h2>
         </div>
         <ol>
           {risks.map((risk) => (
@@ -124,7 +125,7 @@ export default function ThesisPage() {
       </section>
 
       <section className="mandate-close section-shell">
-        <p>THE FIRST PERPETUAL HEDGE FUND ON SOLANA.</p>
+        <p>THE FIRST PERPETUAL SHORT FUND ON SOLANA.</p>
         <Link className="text-arrow" href="/dashboard">
           Review the public book
           <ArrowRight size={16} aria-hidden="true" />

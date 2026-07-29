@@ -26,8 +26,8 @@ import { mandatePoints, roadmap, strategySteps } from "./data";
 const flow = [
   "Creator Fees",
   "Bridge",
-  "Perpetual Hedge",
-  "Profit",
+  "AI Blue-Chip Shorts",
+  "Realized Short Profit",
   "Bridge Back",
   "Buyback",
   "Burn",
@@ -49,22 +49,22 @@ const proofLinks = [
     external: false,
   },
   {
-    label: "Current treasury",
-    detail: "Public execution account",
+    label: "Short collateral",
+    detail: "Public Hyperliquid account",
     href: EXTERNAL_LINKS.position,
     icon: Landmark,
     external: true,
   },
   {
-    label: "Current position",
-    detail: "Public execution account",
+    label: "Open shorts",
+    detail: "Public Hyperliquid account",
     href: EXTERNAL_LINKS.position,
     icon: ShieldCheck,
     external: true,
   },
   {
     label: "Current profit",
-    detail: "Published strategy PnL",
+    detail: "Published short-book PnL",
     href: "/dashboard",
     icon: BarChart3,
     external: false,
@@ -117,12 +117,12 @@ const faq = [
   {
     question: "What is $HEDGE?",
     answer:
-      "$HEDGE is a speculative Solana community token built around a transparent perpetual trading mandate.",
+      "$HEDGE is a speculative Solana community token built around a transparent Hyperliquid short book.",
   },
   {
     question: "Where do creator fees go?",
     answer:
-      "The system is designed to route creator fees into managed strategy capital, subject to execution, bridge, and risk controls.",
+      "The system is designed to route creator fees into a public Hyperliquid account that shorts selected AI and technology blue chips, subject to execution and risk controls.",
   },
   {
     question: "What happens to realized profit?",
@@ -130,9 +130,14 @@ const faq = [
       "Qualifying realized profit may return to Solana, market-buy $HEDGE, and permanently burn the purchased tokens.",
   },
   {
-    question: "Is the hedge guaranteed to profit?",
+    question: "What does the fund short?",
     answer:
-      "No. Perpetual positions can lose money or be liquidated. Buybacks and burns only occur when qualifying realized profit exists.",
+      "The mandate focuses on AI and technology blue chips it identifies as overvalued. The exact markets, position sizes, leverage, and receipts are published when verified data exists.",
+  },
+  {
+    question: "Are the shorts guaranteed to profit?",
+    answer:
+      "No. Equity perpetual shorts can lose money, get squeezed, or be liquidated. Buybacks and burns only occur when qualifying realized profit exists.",
   },
 ];
 
@@ -169,7 +174,11 @@ export default function Home() {
             <span>THE HEDGEHOG</span>
           </h1>
           <p className="hero-subtitle">
-            The first perpetual hedge fund on Solana.
+            The first perpetual short fund on Solana.
+          </p>
+          <p className="hero-mandate">
+            Creator fees fund a public Hyperliquid short book focused on
+            overvalued AI and technology blue chips.
           </p>
           <div className="hero-actions">
             <a
@@ -212,8 +221,8 @@ export default function Home() {
           <p className="eyebrow">THE MANDATE</p>
           <h2>THE FUND HAS ONE JOB.</h2>
           <p>
-            Convert creator-fee flow into transparent market exposure, then
-            convert qualifying wins into permanent supply reduction.
+            Short the AI premium in public. Convert qualifying realized gains
+            into permanent $HEDGE supply reduction.
           </p>
         </div>
 
@@ -234,7 +243,7 @@ export default function Home() {
           })}
         </div>
 
-        <div className="capital-flow" aria-label="Hedge capital flow">
+        <div className="capital-flow" aria-label="Hedge short-book capital flow">
           {flow.map((step, index) => (
             <div key={step}>
               <span>{step}</span>
@@ -249,10 +258,11 @@ export default function Home() {
       <section className="terminal-section section-shell" id="dashboard">
         <div className="terminal-copy">
           <p className="eyebrow">LIVE RISK DESK</p>
-          <h2>THE BOOK. WITHOUT THE BLACK BOX.</h2>
+          <h2>THE SHORT BOOK. WITHOUT THE BLACK BOX.</h2>
           <p>
-            Position, leverage, PnL, creator-fee receipts, buybacks, and burns
-            appear only when verified public data exists.
+            Every AI equity short, leverage setting, PnL update, creator-fee
+            receipt, buyback, and burn appears only when verified public data
+            exists.
           </p>
           <Link className="text-arrow" href="/dashboard">
             Enter the dashboard
@@ -265,7 +275,7 @@ export default function Home() {
       <section className="principles-section section-shell">
         <div className="section-intro">
           <p className="eyebrow">INVESTMENT COMMITTEE</p>
-          <h2>SUITED. SPIKED. ALIGNED.</h2>
+          <h2>HEDGE THE AI EUPHORIA.</h2>
         </div>
         <div className="mandate-grid">
           {mandatePoints.map((point) => {
@@ -288,8 +298,8 @@ export default function Home() {
           <p className="eyebrow">TRANSPARENCY</p>
           <h2>EVERYTHING IS VERIFIABLE.</h2>
           <p>
-            A financial product should arrive with receipts. Ours live in the
-            open.
+            The public Hyperliquid account exposes every open short. The receipt
+            tape exposes every completed capital movement.
           </p>
         </div>
         <div className="proof-links">
@@ -376,7 +386,7 @@ export default function Home() {
         <div>
           <Sparkles size={22} aria-hidden="true" />
           <p>HEDGE CAPITAL MANAGEMENT</p>
-          <h2>WE HEDGE. WE GROW. WE BURN.</h2>
+          <h2>WE SHORT. WE HEDGE. WE BURN.</h2>
           <a
             className="button button-gold"
             href={EXTERNAL_LINKS.buy}

@@ -7,16 +7,17 @@ const requiredHomeCopy = [
   "Hedge the Hedgehog | $HEDGE",
   "HEDGE",
   "THE HEDGEHOG",
-  "The first perpetual hedge fund on Solana.",
+  "The first perpetual short fund on Solana.",
   "THE FUND HAS ONE JOB.",
   "Creator Fees",
-  "Perpetual Hedge",
+  "AI Blue-Chip Shorts",
+  "THE SHORT BOOK. WITHOUT THE BLACK BOX.",
   "EVERYTHING IS VERIFIABLE.",
   "BUILD YOUR HEDGE FUND IDENTITY",
   "Buy $HEDGE",
 ];
 const bannedRenderedCopy =
-  /Black Bull|\bBBL\b|LONGCAT|HOOD3|coming soon|placeholder|\bmock\b|\bdemo\b|\bTBD\b|guaranteed yield|passive income|dividends|NO PUBLIC RECEIPT|NO POSITION PUBLISHED|>SYNCING<|>LOADING<|>\$0/i;
+  /Black Bull|\bBBL\b|LONGCAT|HOOD3|Aster|ANSEM|LONG EXPOSURE|managed strategy|coming soon|placeholder|\bmock\b|\bdemo\b|\bTBD\b|guaranteed yield|passive income|dividends|NO PUBLIC RECEIPT|NO POSITION PUBLISHED|>SYNCING<|>LOADING<|>\$0/i;
 
 async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -89,16 +90,16 @@ test("server-renders dashboard and mandate with route-specific metadata", async 
     thesisResponse.text(),
   ]);
 
-  assert.match(dashboardHtml, /THE FUND, MARKED TO MARKET/);
+  assert.match(dashboardHtml, /THE SHORT BOOK, MARKED TO MARKET/);
   assert.match(dashboardHtml, /ARMED · AWAITING FIRST RECEIPT/);
-  assert.match(dashboardHtml, /PORTFOLIO TELEMETRY/);
+  assert.match(dashboardHtml, /SHORT-BOOK TELEMETRY/);
   assert.match(dashboardHtml, /PUBLIC RECEIPT TAPE/);
   assert.match(dashboardHtml, /http:\/\/localhost:3000\/dashboard/);
   assert.doesNotMatch(dashboardHtml, bannedRenderedCopy);
 
   assert.match(thesisHtml, /THE INVESTMENT MANDATE/);
   assert.match(thesisHtml, /A MEME COIN WITH/);
-  assert.match(thesisHtml, /THE HEDGE CAN LOSE/);
+  assert.match(thesisHtml, /THE SHORT CAN GET SQUEEZED/);
   assert.match(thesisHtml, /http:\/\/localhost:3000\/thesis/);
   assert.doesNotMatch(thesisHtml, bannedRenderedCopy);
 });
@@ -121,15 +122,25 @@ test("production assets and Hedge configuration are present", async () => {
   assert.match(packageJson, /"name": "hedge-the-hedgehog"/);
   assert.match(links, /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/);
   assert.match(links, /PUMP_FUN_URL/);
-  assert.match(links, /ASTER_ACCOUNT_URL: string \| null = null/);
-  assert.match(links, /POSITION_URL = ASTER_ACCOUNT_URL \?\? ASTER_MARKET_URL/);
+  assert.match(links, /HYPERLIQUID_INFO_URL/);
+  assert.match(links, /HYPERLIQUID_ACCOUNT_URL/);
+  assert.match(links, /POSITION_URL/);
   assert.match(constants, /Hedge the Hedgehog/);
   assert.match(layout, /apple-touch-icon\.png/);
   assert.match(globals, /--gold: #b58a3d/);
   assert.match(globals, /\.hedge-hero/);
   assert.match(globals, /prefers-reduced-motion/);
   assert.match(terminal, /HEDGE CAPITAL/);
+  assert.match(terminal, /AI SHORT MANDATE/);
+  // The execution worker is intentionally unchanged in this display-only pass.
   assert.match(worker, /openAsterLong/);
+
+  const hyperliquidRoute = await readFile(
+    new URL("../app/api/hyperliquid-positions/route.ts", import.meta.url),
+    "utf8",
+  );
+  assert.match(hyperliquidRoute, /clearinghouseState/);
+  assert.match(hyperliquidRoute, /signedSize < 0/);
 
   await Promise.all([
     access(new URL("../public/hedge-banner.jpg", import.meta.url)),
