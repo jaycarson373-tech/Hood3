@@ -21,6 +21,7 @@ type ShortPosition = {
 };
 
 type ShortBookResponse = {
+  configured: boolean;
   account: string | null;
   account_url: string | null;
   positions: ShortPosition[];
@@ -56,6 +57,7 @@ function marketLabel(market: string) {
 export function HedgeTerminal() {
   const [terminalRows, setTerminalRows] = useState<TerminalRow[]>([]);
   const [shortBook, setShortBook] = useState<ShortBookResponse>({
+    configured: false,
     account: null,
     account_url: null,
     positions: [],
@@ -74,7 +76,7 @@ export function HedgeTerminal() {
         const [terminalResponse, positionResponse] = await Promise.all([
           supabaseUrl && supabaseAnonKey
             ? fetch(
-                `${supabaseUrl}/rest/v1/bbl_public_terminal?select=stage,status,asset,amount&status=eq.succeeded&order=created_at.desc&limit=1000`,
+                `${supabaseUrl}/rest/v1/hedge_public_terminal?select=stage,status,asset,amount&status=eq.succeeded&order=created_at.desc&limit=1000`,
                 { cache: "no-store", headers },
               )
             : Promise.resolve(null),
@@ -145,7 +147,11 @@ export function HedgeTerminal() {
     return [
       {
         label: "SYSTEM",
-        value: hasShorts ? "SHORT BOOK ACTIVE" : "ARMED · AWAITING RECEIPT",
+        value: hasShorts
+          ? "SHORT BOOK ACTIVE"
+          : shortBook.configured
+            ? "ACCOUNT CONNECTED · FLAT"
+            : "AWAITING ACCOUNT",
       },
       {
         label: "CURRENT SHORT BOOK",

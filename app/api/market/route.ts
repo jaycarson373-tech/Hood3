@@ -75,7 +75,9 @@ async function getTokenSnapshot(
 }
 
 export async function GET() {
-  const hedge = await getTokenSnapshot(HEDGE_CONTRACT_ADDRESS, "HEDGE");
+  const hedge = HEDGE_CONTRACT_ADDRESS
+    ? await getTokenSnapshot(HEDGE_CONTRACT_ADDRESS, "HEDGE")
+    : null;
 
   return Response.json(
     { hedge },

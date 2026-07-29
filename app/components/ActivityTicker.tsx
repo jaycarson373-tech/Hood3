@@ -31,9 +31,7 @@ function eventLabel(stage: string) {
 function amountLabel(row: ActivityRow) {
   const amount = Number(row.amount);
   if (!Number.isFinite(amount) || amount <= 0) return null;
-  const rawAsset = row.asset?.toUpperCase() ?? "";
-  const asset =
-    rawAsset === "BBL" || rawAsset === "$BBL" ? "$HEDGE" : rawAsset;
+  const asset = row.asset?.toUpperCase() ?? "";
 
   if (asset === "USD" || asset === "USDC" || asset === "USDT") {
     return new Intl.NumberFormat("en-US", {
@@ -60,7 +58,7 @@ export function ActivityTicker() {
 
       try {
         const response = await fetch(
-          `${supabaseUrl}/rest/v1/bbl_public_terminal?select=id,stage,asset,amount&status=eq.succeeded&order=created_at.desc&limit=12`,
+          `${supabaseUrl}/rest/v1/hedge_public_terminal?select=id,stage,asset,amount&status=eq.succeeded&order=created_at.desc&limit=12`,
           {
             cache: "no-store",
             headers: {
@@ -92,7 +90,7 @@ export function ActivityTicker() {
   const tickerRows = [...rows, ...rows];
 
   return (
-    <aside className="activity-ticker" aria-label="Verified strategy activity">
+    <aside className="activity-ticker" aria-label="Verified short-book activity">
       <span className="activity-ticker-label">LIVE TAPE</span>
       <div className="activity-ticker-window">
         <div className="activity-ticker-track">

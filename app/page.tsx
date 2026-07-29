@@ -111,7 +111,7 @@ const proofLinks = [
     icon: Landmark,
     external: true,
   },
-];
+].flatMap((link) => (link.href ? [link] : []));
 
 const faq = [
   {
@@ -150,7 +150,7 @@ export default function Home() {
         <Image
           className="hero-mascot"
           src="/hedge-logo.jpg"
-          alt="Hedge the Hedgehog in a black suit holding stacks of cash"
+          alt="Hedge the Hedgehog in a black suit against a green market board"
           fill
           priority
           sizes="100vw"
@@ -181,24 +181,32 @@ export default function Home() {
             overvalued AI and technology blue chips.
           </p>
           <div className="hero-actions">
-            <a
-              className="button button-dark"
-              href={EXTERNAL_LINKS.buy}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Buy $HEDGE
-              <ArrowUpRight size={16} aria-hidden="true" />
-            </a>
-            <a
-              className="button button-light"
-              href={EXTERNAL_LINKS.chart}
-              target="_blank"
-              rel="noreferrer"
-            >
-              View Chart
-              <BarChart3 size={16} aria-hidden="true" />
-            </a>
+            {EXTERNAL_LINKS.buy ? (
+              <a
+                className="button button-dark"
+                href={EXTERNAL_LINKS.buy}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Buy $HEDGE
+                <ArrowUpRight size={16} aria-hidden="true" />
+              </a>
+            ) : null}
+            {EXTERNAL_LINKS.chart ? (
+              <a
+                className="button button-light"
+                href={EXTERNAL_LINKS.chart}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View Chart
+                <BarChart3 size={16} aria-hidden="true" />
+              </a>
+            ) : null}
+            <Link className="button button-light" href="/dashboard">
+              View Short Book
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
           </div>
           <MarketStrip />
         </div>
@@ -309,7 +317,7 @@ export default function Home() {
             return (
               <a
                 key={item.label}
-                href={item.href}
+                href={item.href ?? undefined}
                 target={item.external ? "_blank" : undefined}
                 rel={item.external ? "noreferrer" : undefined}
               >
@@ -387,15 +395,22 @@ export default function Home() {
           <Sparkles size={22} aria-hidden="true" />
           <p>HEDGE CAPITAL MANAGEMENT</p>
           <h2>WE SHORT. WE HEDGE. WE BURN.</h2>
-          <a
-            className="button button-gold"
-            href={EXTERNAL_LINKS.buy}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Join the fund
-            <Flame size={16} aria-hidden="true" />
-          </a>
+          {EXTERNAL_LINKS.buy ? (
+            <a
+              className="button button-gold"
+              href={EXTERNAL_LINKS.buy}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Join the fund
+              <Flame size={16} aria-hidden="true" />
+            </a>
+          ) : (
+            <Link className="button button-gold" href="/dashboard">
+              View the public book
+              <ArrowRight size={16} aria-hidden="true" />
+            </Link>
+          )}
         </div>
       </section>
 

@@ -1,7 +1,10 @@
-export const CA = "3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump";
+export const CA =
+  process.env.NEXT_PUBLIC_HEDGE_TOKEN_ADDRESS?.trim() || null;
 
-export const PUMP_FUN_URL = `https://pump.fun/coin/${CA}`;
-export const DEXSCREENER_URL = `https://dexscreener.com/solana/${CA}`;
+export const PUMP_FUN_URL = CA ? `https://pump.fun/coin/${CA}` : null;
+export const DEXSCREENER_URL = CA
+  ? `https://dexscreener.com/solana/${CA}`
+  : null;
 export const HYPERLIQUID_TRADE_URL = "https://app.hyperliquid.xyz/trade";
 export const HYPERLIQUID_EXPLORER_URL =
   "https://app.hyperliquid.xyz/explorer";

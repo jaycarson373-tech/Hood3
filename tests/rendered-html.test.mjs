@@ -14,7 +14,7 @@ const requiredHomeCopy = [
   "THE SHORT BOOK. WITHOUT THE BLACK BOX.",
   "EVERYTHING IS VERIFIABLE.",
   "BUILD YOUR HEDGE FUND IDENTITY",
-  "Buy $HEDGE",
+  "View Short Book",
 ];
 const bannedRenderedCopy =
   /Black Bull|\bBBL\b|LONGCAT|HOOD3|Aster|ANSEM|LONG EXPOSURE|managed strategy|coming soon|placeholder|\bmock\b|\bdemo\b|\bTBD\b|guaranteed yield|passive income|dividends|NO PUBLIC RECEIPT|NO POSITION PUBLISHED|>SYNCING<|>LOADING<|>\$0/i;
@@ -68,11 +68,10 @@ test("server-renders the Hedge homepage without fabricated activity", async () =
     html,
     /rel=["']canonical["'][^>]+http:\/\/localhost:3000\//i,
   );
-  assert.match(html, /rel=["']apple-touch-icon["'][^>]+apple-touch-icon\.png/i);
-  assert.match(html, /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/);
-  assert.match(
+  assert.match(html, /rel=["']apple-touch-icon["'][^>]+hedge-logo\.jpg/i);
+  assert.doesNotMatch(
     html,
-    /https:\/\/pump\.fun\/coin\/3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/,
+    /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/,
   );
   assert.doesNotMatch(html, bannedRenderedCopy);
 });
@@ -91,7 +90,7 @@ test("server-renders dashboard and mandate with route-specific metadata", async 
   ]);
 
   assert.match(dashboardHtml, /THE SHORT BOOK, MARKED TO MARKET/);
-  assert.match(dashboardHtml, /ARMED · AWAITING FIRST RECEIPT/);
+  assert.match(dashboardHtml, /ARMED · AWAITING ACCOUNT/);
   assert.match(dashboardHtml, /SHORT-BOOK TELEMETRY/);
   assert.match(dashboardHtml, /PUBLIC RECEIPT TAPE/);
   assert.match(dashboardHtml, /http:\/\/localhost:3000\/dashboard/);
@@ -105,7 +104,7 @@ test("server-renders dashboard and mandate with route-specific metadata", async 
 });
 
 test("production assets and Hedge configuration are present", async () => {
-  const [layout, constants, links, packageJson, globals, terminal, worker] =
+  const [layout, constants, links, packageJson, globals, terminal, worker, schema] =
     await Promise.all([
       readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
       readFile(new URL("../app/constants.ts", import.meta.url), "utf8"),
@@ -117,23 +116,30 @@ test("production assets and Hedge configuration are present", async () => {
         "utf8",
       ),
       readFile(new URL("../railway-worker.mjs", import.meta.url), "utf8"),
+      readFile(new URL("../supabase/schema.sql", import.meta.url), "utf8"),
     ]);
 
   assert.match(packageJson, /"name": "hedge-the-hedgehog"/);
-  assert.match(links, /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/);
+  assert.match(links, /NEXT_PUBLIC_HEDGE_TOKEN_ADDRESS/);
   assert.match(links, /PUMP_FUN_URL/);
   assert.match(links, /HYPERLIQUID_INFO_URL/);
   assert.match(links, /HYPERLIQUID_ACCOUNT_URL/);
   assert.match(links, /POSITION_URL/);
   assert.match(constants, /Hedge the Hedgehog/);
-  assert.match(layout, /apple-touch-icon\.png/);
+  assert.match(layout, /hedge-logo\.jpg/);
   assert.match(globals, /--gold: #b58a3d/);
+  assert.match(globals, /--market-green: #119447/);
   assert.match(globals, /\.hedge-hero/);
   assert.match(globals, /prefers-reduced-motion/);
   assert.match(terminal, /HEDGE CAPITAL/);
   assert.match(terminal, /AI SHORT MANDATE/);
-  // The execution worker is intentionally unchanged in this display-only pass.
-  assert.match(worker, /openAsterLong/);
+  assert.match(worker, /HEDGE_HYPERLIQUID_EXECUTION_ENDPOINT/);
+  assert.match(worker, /hedge_terminal_events/);
+  assert.doesNotMatch(worker, /Aster|ANSEM|\bBBL\b/);
+  assert.match(schema, /create table if not exists public\.hedge_bridges/);
+  assert.match(schema, /create table if not exists public\.hedge_buybacks/);
+  assert.match(schema, /create table if not exists public\.hedge_burns/);
+  assert.match(schema, /create or replace view public\.hedge_public_terminal/);
 
   const hyperliquidRoute = await readFile(
     new URL("../app/api/hyperliquid-positions/route.ts", import.meta.url),
@@ -145,8 +151,6 @@ test("production assets and Hedge configuration are present", async () => {
   await Promise.all([
     access(new URL("../public/hedge-banner.jpg", import.meta.url)),
     access(new URL("../public/hedge-logo.jpg", import.meta.url)),
-    access(new URL("../public/favicon.png", import.meta.url)),
-    access(new URL("../public/apple-touch-icon.png", import.meta.url)),
   ]);
   await assert.rejects(access(new URL("app/_sites-preview", projectRoot)));
 });

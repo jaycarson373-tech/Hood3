@@ -1,18 +1,16 @@
-# BBL Supabase Wiring
+# Hedge Supabase Wiring
 
-Run `supabase/schema.sql` in the Supabase SQL editor before connecting Railway.
+Run `schema.sql` once in the Supabase SQL editor. It creates:
 
-The browser only reads:
+- `hedge_public_terminal` for verified creator-fee, bridge, short-order,
+  buyback, and burn receipts
+- `hedge_latest_positions` for archived Hyperliquid short snapshots
+- `hedge_public_totals` for verified lifetime fee, bridge, buyback, and burn
+  totals
 
-- `bbl_public_terminal` for published transaction receipts
-- `bbl_latest_position` for archived ANSEMUSDT position snapshots
+The browser uses only the Supabase anon key. The Railway worker uses the
+service-role key and must never expose it to Vercel or the browser.
 
-Keep the service-role key and all execution keys
-server-side.
-
-Use `vercel.env.example` for the browser-facing environment and
-`railway.env.example` for the private worker environment.
-
-Live execution is fail-closed. It requires explicit Aster execution approval,
-managed USDT approval, a positive per-run collateral cap, and leverage fixed
-at 5x.
+The schema is idempotent and does not delete legacy tables. Live execution is
+fail-closed and requires explicit adapter credentials, addresses, allowlisted
+markets, capital limits, leverage limits, and `HEDGE_LIVE_EXECUTION_CONFIRMED`.

@@ -118,8 +118,7 @@ function safeExternalUrl(value: string | null) {
 function displayAsset(asset: string | null) {
   const normalized = asset?.toUpperCase();
   if (!normalized) return "";
-  if (normalized === "BBL" || normalized === "$BBL") return "$HEDGE";
-  return normalized;
+  return normalized === "HEDGE" ? "$HEDGE" : normalized;
 }
 
 function marketLabel(market: string) {
@@ -185,7 +184,7 @@ export function DashboardClient() {
         const [terminalResponse, positionResponse] = await Promise.all([
           supabaseUrl && supabaseAnonKey
             ? fetch(
-                `${supabaseUrl}/rest/v1/bbl_public_terminal?select=*&order=created_at.desc&limit=40`,
+                `${supabaseUrl}/rest/v1/hedge_public_terminal?select=*&order=created_at.desc&limit=40`,
                 { cache: "no-store", headers },
               )
             : Promise.resolve(null),
@@ -391,15 +390,17 @@ export function DashboardClient() {
                 : "Open Hyperliquid"}
               <ExternalLink size={16} aria-hidden="true" />
             </a>
-            <a
-              className="button button-light"
-              href={DEXSCREENER_URL}
-              target="_blank"
-              rel="noreferrer"
-            >
-              $HEDGE Chart
-              <ExternalLink size={16} aria-hidden="true" />
-            </a>
+            {DEXSCREENER_URL ? (
+              <a
+                className="button button-light"
+                href={DEXSCREENER_URL}
+                target="_blank"
+                rel="noreferrer"
+              >
+                $HEDGE Chart
+                <ExternalLink size={16} aria-hidden="true" />
+              </a>
+            ) : null}
           </div>
         </div>
         <div className="dashboard-seal">
@@ -408,7 +409,9 @@ export function DashboardClient() {
           <strong>
             {data.hasShorts
               ? "SHORT BOOK PUBLISHED"
-              : "ARMED · AWAITING FIRST RECEIPT"}
+              : shortBook.configured
+                ? "ACCOUNT CONNECTED · FLAT"
+                : "ARMED · AWAITING ACCOUNT"}
           </strong>
         </div>
       </section>

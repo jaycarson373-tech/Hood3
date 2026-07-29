@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import {
   EXTERNAL_LINKS,
+  EXECUTION,
   HEDGE_CONTRACT_ADDRESS,
   externalLinks,
 } from "../constants";
@@ -46,16 +47,31 @@ export function SiteHeader() {
         </nav>
 
         <div className="header-actions">
-          <HeaderContract address={HEDGE_CONTRACT_ADDRESS} />
-          <a
-            className="header-buy-link"
-            href={EXTERNAL_LINKS.buy}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Buy $HEDGE
-            <ArrowUpRight size={14} aria-hidden="true" />
-          </a>
+          {EXECUTION.hyperliquidAccount ? (
+            <a
+              className="header-position-link"
+              href={EXTERNAL_LINKS.position}
+              target="_blank"
+              rel="noreferrer"
+            >
+              HL Account
+              <ArrowUpRight size={14} aria-hidden="true" />
+            </a>
+          ) : null}
+          {HEDGE_CONTRACT_ADDRESS ? (
+            <HeaderContract address={HEDGE_CONTRACT_ADDRESS} />
+          ) : null}
+          {EXTERNAL_LINKS.buy ? (
+            <a
+              className="header-buy-link"
+              href={EXTERNAL_LINKS.buy}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Buy $HEDGE
+              <ArrowUpRight size={14} aria-hidden="true" />
+            </a>
+          ) : null}
         </div>
       </div>
     </header>

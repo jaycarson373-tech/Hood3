@@ -38,13 +38,12 @@ export async function generateMetadata(): Promise<Metadata> {
       canonical: "/",
     },
     icons: {
-      icon: [{ url: "/favicon.png", type: "image/png", sizes: "512x512" }],
-      shortcut: "/favicon.png",
+      icon: [{ url: "/hedge-logo.jpg", type: "image/jpeg" }],
+      shortcut: "/hedge-logo.jpg",
       apple: [
         {
-          url: "/apple-touch-icon.png",
-          type: "image/png",
-          sizes: "180x180",
+          url: "/hedge-logo.jpg",
+          type: "image/jpeg",
         },
       ],
     },

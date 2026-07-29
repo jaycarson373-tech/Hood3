@@ -66,15 +66,17 @@ export default function ThesisPage() {
               Open Dashboard
               <ArrowRight size={16} aria-hidden="true" />
             </Link>
-            <a
-              className="button button-inverse"
-              href={EXTERNAL_LINKS.chart}
-              target="_blank"
-              rel="noreferrer"
-            >
-              View $HEDGE
-              <ArrowUpRight size={16} aria-hidden="true" />
-            </a>
+            {EXTERNAL_LINKS.chart ? (
+              <a
+                className="button button-inverse"
+                href={EXTERNAL_LINKS.chart}
+                target="_blank"
+                rel="noreferrer"
+              >
+                View $HEDGE
+                <ArrowUpRight size={16} aria-hidden="true" />
+              </a>
+            ) : null}
           </div>
         </div>
       </section>

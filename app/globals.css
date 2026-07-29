@@ -11,7 +11,10 @@
   --gold: #b58a3d;
   --gold-dark: #806022;
   --gold-light: #ead9b7;
-  --positive: #18794e;
+  --market-green: #119447;
+  --market-green-dark: #076c33;
+  --market-green-soft: #daf3e2;
+  --positive: var(--market-green-dark);
   --negative: #b42318;
   --header-height: 72px;
   --content-width: 1280px;
@@ -190,6 +193,7 @@ img {
 }
 
 .contract-chip,
+.header-position-link,
 .header-buy-link {
   display: inline-flex;
   align-items: center;
@@ -226,6 +230,21 @@ img {
 
 .contract-chip:hover {
   border-color: var(--gold);
+  transform: translateY(-1px);
+}
+
+.header-position-link {
+  gap: 7px;
+  padding: 0 12px;
+  color: var(--market-green-dark);
+  border: 1px solid rgba(17, 148, 71, 0.35);
+  background: var(--market-green-soft);
+}
+
+.header-position-link:hover {
+  color: var(--white);
+  border-color: var(--market-green);
+  background: var(--market-green-dark);
   transform: translateY(-1px);
 }
 
@@ -441,11 +460,12 @@ img {
 
 .hero-chart path {
   fill: none;
-  stroke: var(--gold);
+  stroke: var(--market-green);
   stroke-width: 3;
   vector-effect: non-scaling-stroke;
   stroke-dasharray: 1500;
   stroke-dashoffset: 1500;
+  filter: drop-shadow(0 4px 9px rgba(17, 148, 71, 0.28));
   animation: chartDraw 2.2s var(--ease) 400ms forwards;
 }
 
@@ -542,13 +562,13 @@ img {
   width: fit-content;
   margin-top: 26px;
   padding: 10px 12px;
-  border-left: 2px solid var(--gold);
+  border-left: 2px solid var(--market-green);
   background: rgba(255, 255, 255, 0.74);
   font-family: var(--font-geist-mono), monospace;
 }
 
 .market-strip span {
-  color: var(--gold-dark);
+  color: var(--market-green-dark);
   font-size: 9px;
   font-weight: 800;
 }
@@ -581,7 +601,8 @@ img {
   align-self: stretch;
   min-width: 112px;
   color: var(--black);
-  background: var(--gold-light);
+  color: var(--market-green-dark);
+  background: var(--market-green-soft);
   font-size: 9px;
   font-weight: 800;
 }
@@ -1446,6 +1467,7 @@ img {
 
 /* Dashboard */
 .dashboard-hero {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 60px;
@@ -1455,6 +1477,38 @@ img {
   margin: 0 auto;
   padding: 96px var(--page-pad) 70px;
   border-bottom: 1px solid var(--gray-300);
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.dashboard-hero::before {
+  position: absolute;
+  z-index: -1;
+  right: -3%;
+  bottom: 0;
+  width: 52%;
+  height: 180px;
+  opacity: 0.1;
+  background: var(--market-green);
+  clip-path: polygon(
+    0 88%,
+    8% 82%,
+    15% 86%,
+    23% 68%,
+    31% 73%,
+    39% 55%,
+    48% 62%,
+    57% 42%,
+    66% 49%,
+    76% 24%,
+    85% 30%,
+    93% 12%,
+    100% 4%,
+    100% 100%,
+    0 100%
+  );
+  content: "";
+  pointer-events: none;
 }
 
 .dashboard-hero h1 {
@@ -1521,7 +1575,7 @@ img {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  color: var(--gold-dark);
+  color: var(--market-green-dark);
   font-family: var(--font-geist-mono), monospace;
   font-size: 9px;
   font-weight: 700;
@@ -1536,6 +1590,7 @@ img {
   grid-template-columns: repeat(4, minmax(0, 1fr));
   border-top: 1px solid var(--gray-300);
   border-left: 1px solid var(--gray-300);
+  box-shadow: inset 0 3px 0 var(--market-green);
 }
 
 .dashboard-stat-grid article {
@@ -2209,6 +2264,12 @@ img {
   .header-buy-link {
     min-height: 34px;
     padding: 0 11px;
+    font-size: 10px;
+  }
+
+  .header-position-link {
+    min-height: 34px;
+    padding: 0 10px;
     font-size: 10px;
   }
 

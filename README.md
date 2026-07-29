@@ -7,7 +7,7 @@ Qualifying realized short profit may buy and permanently burn `$HEDGE`.
 
 ## Routes
 
-- `/` - launch experience, strategy, live terminal, PFP studio, and roadmap
+- `/` - launch experience, short-book mechanism, live terminal, PFP studio, and roadmap
 - `/dashboard` - public position telemetry and verified transaction receipts
 - `/thesis` - investment mandate and risk disclosures
 
@@ -24,11 +24,15 @@ Use `vercel.env.example` as the Vercel environment checklist.
 
 ## Worker
 
-The existing Railway worker and Supabase schema are intentionally preserved for
-backward compatibility. The worker does not execute this Hyperliquid AI-short
-mandate yet. Keep `DRY_RUN=true` until a dedicated Hyperliquid account, market
-allowlist, leverage limits, position caps, funding paths, and dry-run receipts
-have all been reviewed.
+The Railway worker monitors the configured public Hyperliquid account and
+publishes verified position snapshots and receipts to the `hedge_*` Supabase
+tables. Fund-moving steps are delegated to authenticated signing adapters.
+
+Keep `DRY_RUN=true` until the token mint, creator-fee wallet, Hyperliquid
+account, Solana exit wallet, short-market allowlist, adapter credentials,
+capital caps, leverage limit, and dry-run receipts have all been reviewed.
+The worker refuses live mode unless `HEDGE_LIVE_EXECUTION_CONFIRMED=true` and
+every required guardrail is configured.
 
 ## Commands
 
