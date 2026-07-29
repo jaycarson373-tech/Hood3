@@ -47,6 +47,18 @@ export function SiteHeader() {
         </nav>
 
         <div className="header-actions">
+          {EXTERNAL_LINKS.x ? (
+            <a
+              className="header-social-link"
+              href={EXTERNAL_LINKS.x}
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Hedge the Hedgehog on X"
+            >
+              X
+              <ArrowUpRight size={14} aria-hidden="true" />
+            </a>
+          ) : null}
           {EXECUTION.hyperliquidAccount ? (
             <a
               className="header-position-link"

@@ -15,6 +15,7 @@ const requiredHomeCopy = [
   "EVERYTHING IS VERIFIABLE.",
   "BUILD YOUR HEDGE FUND IDENTITY",
   "View Short Book",
+  "Buy $HEDGE",
 ];
 const bannedRenderedCopy =
   /Black Bull|\bBBL\b|LONGCAT|HOOD3|Aster|ANSEM|LONG EXPOSURE|managed strategy|coming soon|placeholder|\bmock\b|\bdemo\b|\bTBD\b|guaranteed yield|passive income|dividends|NO PUBLIC RECEIPT|NO POSITION PUBLISHED|>SYNCING<|>LOADING<|>\$0/i;
@@ -69,6 +70,15 @@ test("server-renders the Hedge homepage without fabricated activity", async () =
     /rel=["']canonical["'][^>]+http:\/\/localhost:3000\//i,
   );
   assert.match(html, /rel=["']apple-touch-icon["'][^>]+hedge-logo\.jpg/i);
+  assert.match(
+    html,
+    /HTv34hJtJLrC62FXt8ea8rhv3YkaBCovVEmmHR6xpump/,
+  );
+  assert.match(
+    html,
+    /https:\/\/pump\.fun\/coin\/HTv34hJtJLrC62FXt8ea8rhv3YkaBCovVEmmHR6xpump/,
+  );
+  assert.match(html, /https:\/\/x\.com\/Hedge_Sol_/);
   assert.doesNotMatch(
     html,
     /3LdsM35gCW2u99taAN6kKChhkGNR5yMDzAb15vcRpump/,
@@ -121,6 +131,8 @@ test("production assets and Hedge configuration are present", async () => {
 
   assert.match(packageJson, /"name": "hedge-the-hedgehog"/);
   assert.match(links, /NEXT_PUBLIC_HEDGE_TOKEN_ADDRESS/);
+  assert.match(links, /HTv34hJtJLrC62FXt8ea8rhv3YkaBCovVEmmHR6xpump/);
+  assert.match(links, /https:\/\/x\.com\/Hedge_Sol_/);
   assert.match(links, /PUMP_FUN_URL/);
   assert.match(links, /HYPERLIQUID_INFO_URL/);
   assert.match(links, /HYPERLIQUID_ACCOUNT_URL/);

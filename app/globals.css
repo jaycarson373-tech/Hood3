@@ -193,6 +193,7 @@ img {
 }
 
 .contract-chip,
+.header-social-link,
 .header-position-link,
 .header-buy-link {
   display: inline-flex;
@@ -230,6 +231,21 @@ img {
 
 .contract-chip:hover {
   border-color: var(--gold);
+  transform: translateY(-1px);
+}
+
+.header-social-link {
+  gap: 6px;
+  padding: 0 10px;
+  color: var(--ink);
+  border: 1px solid var(--gray-300);
+  background: var(--white);
+}
+
+.header-social-link:hover {
+  color: var(--white);
+  border-color: var(--black);
+  background: var(--black);
   transform: translateY(-1px);
 }
 
@@ -655,7 +671,9 @@ img {
 }
 
 .banner-ledger img {
+  display: block;
   width: 100%;
+  height: auto;
   max-height: 430px;
   object-fit: cover;
   object-position: center;
@@ -2267,6 +2285,7 @@ img {
     font-size: 10px;
   }
 
+  .header-social-link,
   .header-position-link {
     min-height: 34px;
     padding: 0 10px;
