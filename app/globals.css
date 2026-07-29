@@ -830,9 +830,16 @@ img {
   font-size: 14px;
 }
 
-.terminal-link {
-  width: calc(100% - 44px);
+.terminal-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
   margin: 22px;
+}
+
+.terminal-link {
+  width: 100%;
+  margin: 0;
   color: var(--black);
   border-color: var(--gold);
   background: var(--gold-light);
@@ -841,6 +848,12 @@ img {
 .terminal-link:hover {
   border-color: var(--white);
   background: var(--white);
+}
+
+.terminal-account-link {
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: transparent;
 }
 
 .principles-section {
@@ -2331,8 +2344,8 @@ img {
     font-size: 12px;
   }
 
-  .terminal-link {
-    width: calc(100% - 30px);
+  .terminal-actions {
+    grid-template-columns: 1fr;
     margin: 15px;
   }
 

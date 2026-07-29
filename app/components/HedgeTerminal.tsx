@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Radio } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Radio } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 type TerminalRow = {
@@ -21,12 +21,15 @@ type ShortPosition = {
 };
 
 type ShortBookResponse = {
+  account: string | null;
+  account_url: string | null;
   positions: ShortPosition[];
   summary: {
     short_count: number;
     total_short_notional_usd: number;
     total_margin_used_usd: number;
     total_unrealized_pnl_usd: number;
+    account_value_usd: number;
   } | null;
 };
 
@@ -53,6 +56,8 @@ function marketLabel(market: string) {
 export function HedgeTerminal() {
   const [terminalRows, setTerminalRows] = useState<TerminalRow[]>([]);
   const [shortBook, setShortBook] = useState<ShortBookResponse>({
+    account: null,
+    account_url: null,
     positions: [],
     summary: null,
   });
@@ -102,6 +107,7 @@ export function HedgeTerminal() {
     const notional = safeNumber(summary?.total_short_notional_usd);
     const margin = safeNumber(summary?.total_margin_used_usd);
     const pnl = safeNumber(summary?.total_unrealized_pnl_usd);
+    const accountValue = safeNumber(summary?.account_value_usd);
     const shortCount = safeNumber(summary?.short_count);
     const topShort = [...shortBook.positions].sort(
       (a, b) => safeNumber(b.notional_usd) - safeNumber(a.notional_usd),
@@ -117,7 +123,19 @@ export function HedgeTerminal() {
           ) / notional
         : 0;
     const fees = terminalRows
-      .filter((row) => row.stage.toUpperCase() === "CLAIM")
+      .filter(
+        (row) =>
+          row.stage.toUpperCase() === "CLAIM" &&
+          row.asset?.toUpperCase() === "SOL",
+      )
+      .reduce((sum, row) => sum + safeNumber(row.amount), 0);
+    const bridged = terminalRows
+      .filter(
+        (row) =>
+          row.stage.toUpperCase() === "BRIDGE" &&
+          row.status.toLowerCase() === "succeeded" &&
+          row.asset?.toUpperCase() === "SOL",
+      )
       .reduce((sum, row) => sum + safeNumber(row.amount), 0);
     const burned = terminalRows
       .filter((row) => row.stage.toUpperCase() === "BURN")
@@ -161,6 +179,14 @@ export function HedgeTerminal() {
         value: margin > 0 ? money(margin) : "—",
       },
       {
+        label: "ACCOUNT VALUE",
+        value: accountValue > 0 ? money(accountValue) : "—",
+      },
+      {
+        label: "TOTAL BRIDGED",
+        value: bridged > 0 ? `${bridged.toFixed(4)} SOL` : "—",
+      },
+      {
         label: "FEES COLLECTED",
         value: fees > 0 ? `${fees.toFixed(4)} SOL` : "—",
       },
@@ -188,10 +214,23 @@ export function HedgeTerminal() {
           </div>
         ))}
       </div>
-      <Link className="button button-dark terminal-link" href="/dashboard">
-        Open Short Book
-        <ArrowRight size={16} aria-hidden="true" />
-      </Link>
+      <div className="terminal-actions">
+        <Link className="button button-dark terminal-link" href="/dashboard">
+          Open Short Book
+          <ArrowRight size={16} aria-hidden="true" />
+        </Link>
+        {shortBook.account_url ? (
+          <a
+            className="button button-dark terminal-link terminal-account-link"
+            href={shortBook.account_url}
+            target="_blank"
+            rel="noreferrer"
+          >
+            View Account
+            <ArrowUpRight size={16} aria-hidden="true" />
+          </a>
+        ) : null}
+      </div>
     </aside>
   );
 }

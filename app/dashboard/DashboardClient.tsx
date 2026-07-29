@@ -224,11 +224,17 @@ export function DashboardClient() {
       (row) => row.status.toLowerCase() === "succeeded",
     );
     const claimed = successfulRows
-      .filter((row) => row.stage.toUpperCase() === "CLAIM")
+      .filter(
+        (row) =>
+          row.stage.toUpperCase() === "CLAIM" &&
+          row.asset?.toUpperCase() === "SOL",
+      )
       .reduce((sum, row) => sum + safeNumber(row.amount), 0);
     const bridged = successfulRows
-      .filter((row) =>
-        ["BRIDGE", "ROUTE", "DEPOSIT"].includes(row.stage.toUpperCase()),
+      .filter(
+        (row) =>
+          row.stage.toUpperCase() === "BRIDGE" &&
+          row.asset?.toUpperCase() === "SOL",
       )
       .reduce((sum, row) => sum + safeNumber(row.amount), 0);
     const realized = successfulRows
@@ -376,11 +382,13 @@ export function DashboardClient() {
           <div className="button-row">
             <a
               className="button button-dark"
-              href={HYPERLIQUID_TRADE_URL}
+              href={shortBook.account_url || HYPERLIQUID_TRADE_URL}
               target="_blank"
               rel="noreferrer"
             >
-              Open Hyperliquid
+              {shortBook.account_url
+                ? "View Hyperliquid Account"
+                : "Open Hyperliquid"}
               <ExternalLink size={16} aria-hidden="true" />
             </a>
             <a
